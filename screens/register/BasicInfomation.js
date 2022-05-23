@@ -106,7 +106,7 @@ export default BasicInfomation;
 
 const styles = StyleSheet.create({
   property: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "700",
   },
   textContainer: {

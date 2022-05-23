@@ -5,27 +5,52 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import Title from "../../components/Title";
-import ProfileImg from "../../img/profile.svg";
-import ShadowInput from "../../components/ShadowInput";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
-import Check from "../../components/Check";
 import BackButton from "../../components/BackButton";
+import * as ImagePicker from "expo-image-picker";
+import BigProfile from "../../components/BigProfile";
 
 const ProfilePhoto = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [photoUrl, setPhotoUrl] = useState("");
 
   useEffect(() => {
-    if (photoUrl !== "" && age !== "") {
+    if (photoUrl !== "") {
       setButtonDisabled(false);
     }
-  }, [photoUrl, age]);
+  }, [photoUrl]);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("권한을 승인해주십시오.");
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.2,
+    });
+    if (!result.cancelled) {
+      setPhotoUrl(result.base64);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,7 +62,20 @@ const ProfilePhoto = () => {
         >
           <View style={styles.container}>
             <Title text="가입하기" percent="3 / 8" />
-            <View style={styles.inputContainer}></View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.property}>프로필 사진</Text>
+              <TouchableOpacity onPress={pickImage}>
+                {photoUrl ? (
+                  <BigProfile uri={`data:img/png;base64, ${photoUrl}`} />
+                ) : (
+                  <View style={styles.circle}></View>
+                )}
+              </TouchableOpacity>
+              <Text style={styles.ask}>프로필 사진을 설정해주세요!</Text>
+              <Text style={styles.ask}>
+                되도록 얼굴이 나온 사진으로 하는 것이 좋습니다!
+              </Text>
+            </View>
             <View style={styles.buttonContainer}>
               <Button text="다음으로" disabled={buttonDisabled} />
               <BackButton text="이전으로" />
@@ -53,7 +91,7 @@ export default ProfilePhoto;
 
 const styles = StyleSheet.create({
   property: {
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "700",
   },
   textContainer: {
@@ -78,7 +116,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
   },
   sexContainer: {
     display: "flex",
@@ -86,5 +124,12 @@ const styles = StyleSheet.create({
     width: 300,
     padding: 20,
     justifyContent: "space-evenly",
+  },
+  circle: {
+    margin: 12,
+    width: 250,
+    height: 250,
+    backgroundColor: colors.darkgray,
+    borderRadius: 125,
   },
 });
