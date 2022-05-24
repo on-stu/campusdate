@@ -19,19 +19,20 @@ import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 
-const options = categories.hobbies;
+const options = categories.ideals;
 
-const MyHobbies = ({ navigation }) => {
+const WhoAmI = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [hobbies, setHobbies] = useState([]);
+  const [ideals, setIdeals] = useState([]);
 
   useEffect(() => {
-    if (hobbies.length > 0) {
+    if (ideals.length > 0) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [hobbies]);
+    // console.log(ideals.length);
+  }, [ideals]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,27 +44,27 @@ const MyHobbies = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="가입하기" percent="4 / 8" />
+              <Title text="가입하기" percent="6 / 8" />
               <View style={styles.subTitle}>
-                <Text style={styles.ask}>어떤 취미를 가지고 계세요?</Text>
-                <Text style={styles.property}>나의 취미</Text>
+                <Text style={styles.ask}>자기소개를 해볼까요?</Text>
+                <Text style={styles.property}>나는 이런 사람이에요.</Text>
               </View>
             </View>
             <View style={styles.options}>
               {options.map((option, i) => {
-                if (hobbies.includes(option)) {
+                if (ideals.includes(option)) {
                   return (
                     <Option
                       text={option}
                       key={i}
-                      isChecked={hobbies.includes(option)}
+                      isChecked={ideals.includes(option)}
                       onPress={() => {
-                        if (hobbies.includes(option)) {
-                          setHobbies((prev) =>
+                        if (ideals.includes(option)) {
+                          setIdeals((prev) =>
                             prev.filter((elm) => elm !== option)
                           );
                         } else {
-                          setHobbies((prev) => [...prev, option]);
+                          setIdeals((prev) => prev.concat(option));
                         }
                       }}
                     />
@@ -77,14 +78,14 @@ const MyHobbies = ({ navigation }) => {
                   <Check
                     text={option}
                     key={i}
-                    isChecked={hobbies.includes(option)}
+                    isChecked={ideals.includes(option)}
                     onPress={() => {
-                      if (hobbies.includes(option)) {
-                        setHobbies((prev) =>
+                      if (ideals.includes(option)) {
+                        setIdeals((prev) =>
                           prev.filter((elm) => elm !== option)
                         );
                       } else {
-                        setHobbies((prev) => prev.concat(option));
+                        setIdeals((prev) => prev.concat(option));
                       }
                     }}
                   />
@@ -95,7 +96,7 @@ const MyHobbies = ({ navigation }) => {
               <Button
                 text="다음으로"
                 disabled={buttonDisabled}
-                onPress={() => navigation.navigate("MyIdeals")}
+                onPress={() => navigation.navigate("MyIntroduction")}
               />
               <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
@@ -106,7 +107,7 @@ const MyHobbies = ({ navigation }) => {
   );
 };
 
-export default MyHobbies;
+export default WhoAmI;
 
 const styles = StyleSheet.create({
   property: {

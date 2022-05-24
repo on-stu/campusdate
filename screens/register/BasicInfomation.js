@@ -17,7 +17,7 @@ import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
 import BackButton from "../../components/BackButton";
 
-const BasicInfomation = () => {
+const BasicInfomation = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [nickname, setNickname] = useState("");
   const [sex, setSex] = useState("male");
@@ -92,8 +92,12 @@ const BasicInfomation = () => {
               </View>
             </View>
             <View style={styles.buttonContainer}>
-              <Button text="다음으로" disabled={buttonDisabled} />
-              <BackButton text="이전으로" />
+              <Button
+                text="다음으로"
+                disabled={buttonDisabled}
+                onPress={() => navigation.navigate("ProfilePhoto")}
+              />
+              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>

@@ -17,7 +17,7 @@ import BackButton from "../../components/BackButton";
 import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
 
-const ProfilePhoto = () => {
+const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [photoUrl, setPhotoUrl] = useState("");
 
@@ -45,10 +45,11 @@ const ProfilePhoto = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.2,
+      quality: 0.1,
     });
     if (!result.cancelled) {
       setPhotoUrl(result.base64);
+      console.log(result.base64.length);
     }
   };
 
@@ -77,8 +78,12 @@ const ProfilePhoto = () => {
               </Text>
             </View>
             <View style={styles.buttonContainer}>
-              <Button text="다음으로" disabled={buttonDisabled} />
-              <BackButton text="이전으로" />
+              <Button
+                text="다음으로"
+                disabled={buttonDisabled}
+                onPress={() => navigation.navigate("MyHobbies")}
+              />
+              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>

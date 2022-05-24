@@ -3,9 +3,9 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import colors from "../lib/colors.json";
 
-const BackButton = ({ text }) => {
+const BackButton = ({ text, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.button}>
         <Text style={styles.text}>{text}</Text>
       </View>

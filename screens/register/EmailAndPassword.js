@@ -14,7 +14,7 @@ import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-const EmailAndPassword = () => {
+const EmailAndPassword = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,7 +69,11 @@ const EmailAndPassword = () => {
               />
             </View>
             <View style={styles.buttonContainer}>
-              <Button text="다음으로" disabled={buttonDisabled} />
+              <Button
+                text="다음으로"
+                disabled={buttonDisabled}
+                onPress={() => navigation.navigate("BasicInfomation")}
+              />
             </View>
           </View>
         </TouchableWithoutFeedback>

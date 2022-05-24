@@ -21,7 +21,7 @@ import Option from "../../components/Option";
 
 const options = categories.ideals;
 
-const MyIdeals = () => {
+const MyIdeals = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [ideals, setIdeals] = useState([]);
 
@@ -93,8 +93,12 @@ const MyIdeals = () => {
               })}
             </ScrollView>
             <View style={styles.buttonContainer}>
-              <Button text="다음으로" disabled={buttonDisabled} />
-              <BackButton text="이전으로" />
+              <Button
+                text="다음으로"
+                disabled={buttonDisabled}
+                onPress={() => navigation.navigate("WhoAmI")}
+              />
+              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -130,7 +134,6 @@ const styles = StyleSheet.create({
   },
   options: {
     paddingHorizontal: 30,
-    paddingVertical: 10,
     width: Dimensions.get("screen").width,
     display: "flex",
     flexDirection: "row",

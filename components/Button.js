@@ -5,7 +5,11 @@ import colors from "../lib/colors.json";
 
 const Button = ({ onPress, disabled, text }) => {
   return (
-    <TouchableOpacity style={styles.container} disabled={disabled}>
+    <TouchableOpacity
+      style={styles.container}
+      disabled={disabled}
+      onPress={onPress}
+    >
       <View style={disabled ? styles.disabled : styles.button}>
         <Text style={styles.text}>{text}</Text>
       </View>

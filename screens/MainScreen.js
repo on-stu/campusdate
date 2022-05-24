@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import React from "react";
 import LogoImg from "../img/LOGO.svg";
 import ShadowInput from "../components/ShadowInput";
@@ -13,7 +13,7 @@ import {
 import colors from "../lib/colors.json";
 import { TouchableOpacity } from "react-native";
 
-const MainScreen = () => {
+const MainScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -48,7 +48,9 @@ const MainScreen = () => {
               <View style={styles.textContainer}>
                 <View style={styles.eachText}>
                   <Text style={styles.text}>계정이 없으신가요?</Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("EmailAndPassword")}
+                  >
                     <Text style={styles.underline}>가입하기</Text>
                   </TouchableOpacity>
                 </View>

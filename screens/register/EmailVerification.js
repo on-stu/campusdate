@@ -13,25 +13,23 @@ import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
-import Check from "../../components/Check";
 import BackButton from "../../components/BackButton";
-import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
-import Option from "../../components/Option";
+import { Picker } from "@react-native-picker/picker";
 
-const options = categories.hobbies;
-
-const MyHobbies = ({ navigation }) => {
+const EmailVerification = () => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [hobbies, setHobbies] = useState([]);
+  const [ideals, setIdeals] = useState([]);
+  const [selectedLanguage, setSelectedLanguage] = useState();
 
   useEffect(() => {
-    if (hobbies.length > 0) {
+    if (ideals.length > 0) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [hobbies]);
+    // console.log(ideals.length);
+  }, [ideals]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,61 +41,17 @@ const MyHobbies = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="가입하기" percent="4 / 8" />
+              <Title text="가입하기" percent="8 / 8" />
               <View style={styles.subTitle}>
-                <Text style={styles.ask}>어떤 취미를 가지고 계세요?</Text>
-                <Text style={styles.property}>나의 취미</Text>
+                <Text style={styles.ask}>마지막 단계에요,</Text>
+                <Text style={styles.ask}>
+                  대학교 웹 메일로 학교 인증을 해주세요!
+                </Text>
               </View>
             </View>
-            <View style={styles.options}>
-              {options.map((option, i) => {
-                if (hobbies.includes(option)) {
-                  return (
-                    <Option
-                      text={option}
-                      key={i}
-                      isChecked={hobbies.includes(option)}
-                      onPress={() => {
-                        if (hobbies.includes(option)) {
-                          setHobbies((prev) =>
-                            prev.filter((elm) => elm !== option)
-                          );
-                        } else {
-                          setHobbies((prev) => [...prev, option]);
-                        }
-                      }}
-                    />
-                  );
-                }
-              })}
-            </View>
-            <ScrollView contentContainerStyle={styles.subTitle}>
-              {options.map((option, i) => {
-                return (
-                  <Check
-                    text={option}
-                    key={i}
-                    isChecked={hobbies.includes(option)}
-                    onPress={() => {
-                      if (hobbies.includes(option)) {
-                        setHobbies((prev) =>
-                          prev.filter((elm) => elm !== option)
-                        );
-                      } else {
-                        setHobbies((prev) => prev.concat(option));
-                      }
-                    }}
-                  />
-                );
-              })}
-            </ScrollView>
             <View style={styles.buttonContainer}>
-              <Button
-                text="다음으로"
-                disabled={buttonDisabled}
-                onPress={() => navigation.navigate("MyIdeals")}
-              />
-              <BackButton text="이전으로" onPress={() => navigation.pop()} />
+              <Button text="다음으로" disabled={buttonDisabled} />
+              <BackButton text="이전으로" />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -106,7 +60,7 @@ const MyHobbies = ({ navigation }) => {
   );
 };
 
-export default MyHobbies;
+export default EmailVerification;
 
 const styles = StyleSheet.create({
   property: {
@@ -133,6 +87,7 @@ const styles = StyleSheet.create({
   },
   options: {
     paddingHorizontal: 30,
+    paddingVertical: 10,
     width: Dimensions.get("screen").width,
     display: "flex",
     flexDirection: "row",
