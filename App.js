@@ -1,4 +1,4 @@
-import MainScreen from "./screens/MainScreen";
+import LoginScreen from "./screens/LoginScreen";
 import BasicInfomation from "./screens/register/BasicInfomation";
 import EmailAndPassword from "./screens/register/EmailAndPassword";
 import EmailVerification from "./screens/register/EmailVerification";
@@ -9,6 +9,7 @@ import ProfilePhoto from "./screens/register/ProfilePhoto";
 import { createStackNavigator } from "@react-navigation/stack";
 import WhoAmI from "./screens/register/WhoAmI";
 import { NavigationContainer } from "@react-navigation/native";
+import BottomTab from "./screens/bottomTabs/BottomTab";
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Main" component={MainScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="EmailAndPassword" component={EmailAndPassword} />
         <Stack.Screen name="BasicInfomation" component={BasicInfomation} />
         <Stack.Screen name="ProfilePhoto" component={ProfilePhoto} />
@@ -25,6 +26,7 @@ export default function App() {
         <Stack.Screen name="WhoAmI" component={WhoAmI} />
         <Stack.Screen name="MyIntroduction" component={MyIntroduction} />
         <Stack.Screen name="EmailVerification" component={EmailVerification} />
+        <Stack.Screen name="BottomTab" component={BottomTab} />
       </Stack.Navigator>
     </NavigationContainer>
   );

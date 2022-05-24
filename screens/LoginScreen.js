@@ -13,7 +13,7 @@ import {
 import colors from "../lib/colors.json";
 import { TouchableOpacity } from "react-native";
 
-const MainScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -44,7 +44,10 @@ const MainScreen = ({ navigation }) => {
                 onChangeText={setPassword}
                 placeholder="비밀번호"
               />
-              <Button text="로그인" />
+              <Button
+                text="로그인"
+                onPress={() => navigation.navigate("BottomTab")}
+              />
               <View style={styles.textContainer}>
                 <View style={styles.eachText}>
                   <Text style={styles.text}>계정이 없으신가요?</Text>
@@ -69,7 +72,7 @@ const MainScreen = ({ navigation }) => {
   );
 };
 
-export default MainScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
