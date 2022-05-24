@@ -88,7 +88,15 @@ const EmailVerification = ({ navigation }) => {
                 </View>
               </View>
               <View style={styles.buttonContainer}>
-                <Button text="가입하기!" disabled={buttonDisabled} />
+                <Button
+                  text="가입하기!"
+                  disabled={buttonDisabled}
+                  onPress={() =>
+                    navigation.reset({
+                      routes: [{ name: "BottomTab" }],
+                    })
+                  }
+                />
                 <BackButton text="이전으로" onPress={() => navigation.pop()} />
               </View>
             </View>

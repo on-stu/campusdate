@@ -46,7 +46,11 @@ const LoginScreen = ({ navigation }) => {
               />
               <Button
                 text="로그인"
-                onPress={() => navigation.navigate("BottomTab")}
+                onPress={() =>
+                  navigation.reset({
+                    routes: [{ name: "BottomTab" }],
+                  })
+                }
               />
               <View style={styles.textContainer}>
                 <View style={styles.eachText}>
