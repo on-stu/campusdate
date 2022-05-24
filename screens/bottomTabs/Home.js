@@ -6,7 +6,7 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import TitleImg from "../../img/title.svg";
 import SmallProfile from "../../components/SmallProfile";
 import colors from "../../lib/colors.json";
@@ -16,6 +16,8 @@ import FindingIcon from "../../img/love2.svg";
 import { TouchableOpacity } from "react-native";
 import FaqIcon from "../../img/faq.svg";
 import posts from "../../lib/posts.json";
+import { useDispatch, useSelector } from "react-redux";
+import { increment } from "../../redux/reducers/counterSlice";
 
 const Header = ({ university }) => {
   return (
@@ -71,6 +73,13 @@ const LongBanner = ({ title, items }) => {
 };
 
 const Home = () => {
+  const count = useSelector((state) => state.counter.value);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(count);
+  }, [count]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -81,6 +90,7 @@ const Home = () => {
               title="매칭하기"
               texts={["지금 이 순간,", "널 사랑하고 싶다."]}
               svg={<MatchingIcon height={100} />}
+              onPress={() => dispatch(increment())}
             />
             <Banner
               title="내 연인 찾기"

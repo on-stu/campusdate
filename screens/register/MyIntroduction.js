@@ -15,9 +15,18 @@ import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
 
 const MyIntroduction = ({ navigation }) => {
   const [introduction, setIntroduction] = useState("");
+  const dispatch = useDispatch();
+
+  const onNext = () => {
+    const tempUser = { introduction };
+    dispatch(setUser(tempUser));
+    navigation.navigate("EmailVerification");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,11 +55,7 @@ const MyIntroduction = ({ navigation }) => {
               />
             </View>
             <View style={styles.buttonContainer}>
-              <Button
-                text="다음으로"
-                disabled={false}
-                onPress={() => navigation.navigate("EmailVerification")}
-              />
+              <Button text="다음으로" disabled={false} onPress={onNext} />
               <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>

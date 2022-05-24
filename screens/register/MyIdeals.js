@@ -18,12 +18,21 @@ import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
 
 const options = categories.ideals;
 
 const MyIdeals = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [ideals, setIdeals] = useState([]);
+  const dispatch = useDispatch();
+
+  const onNext = () => {
+    const tempUser = { myIdeals: ideals };
+    dispatch(setUser(tempUser));
+    navigation.navigate("WhoAmI");
+  };
 
   useEffect(() => {
     if (ideals.length > 0) {
@@ -96,7 +105,7 @@ const MyIdeals = ({ navigation }) => {
               <Button
                 text="다음으로"
                 disabled={buttonDisabled}
-                onPress={() => navigation.navigate("WhoAmI")}
+                onPress={onNext}
               />
               <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>

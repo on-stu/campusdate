@@ -1,8 +1,10 @@
 import Navigation from "./Navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { StatusBar } from "expo-status-bar";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 
 const customFont = {
   WaterMelon: require("./assets/116watermelon.otf"),
@@ -33,7 +35,9 @@ export default function App() {
 
   return (
     <>
-      <Navigation />
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
       <StatusBar style="dark" />
     </>
   );

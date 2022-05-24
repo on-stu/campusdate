@@ -13,12 +13,22 @@ import ShadowInput from "../../components/ShadowInput";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import colors from "../../lib/colors.json";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
 
 const EmailAndPassword = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const dispatch = useDispatch();
+
+  const onNext = () => {
+    const tempUser = { email, password };
+    dispatch(setUser(tempUser));
+    navigation.navigate("BasicInfomation");
+  };
 
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -27,8 +37,24 @@ const EmailAndPassword = ({ navigation }) => {
     return false;
   }
 
+  function ValidatePassword(password) {
+    if (
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/.test(
+        password
+      )
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   useEffect(() => {
-    if (ValidateEmail(email) && password !== "" && password === confirm) {
+    if (
+      ValidateEmail(email) &&
+      password !== "" &&
+      ValidatePassword(password) &&
+      password === confirm
+    ) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
@@ -44,35 +70,57 @@ const EmailAndPassword = ({ navigation }) => {
           }}
         >
           <View style={styles.container}>
-            <Title text="가입하기" percent="1 / 8" />
-            <LoginImg width={300} height={300} />
-            <View style={styles.textContainer}>
-              <Text style={styles.property}>이메일</Text>
-            </View>
-            <ShadowInput email={true} value={email} onChangeText={setEmail} />
             <View style={styles.inputContainer}>
+              <Title text="가입하기" percent="1 / 8" />
+              <LoginImg width={300} height={300} />
               <View style={styles.textContainer}>
-                <Text style={styles.property}>비밀번호</Text>
+                <Text style={styles.property}>이메일</Text>
               </View>
-              <ShadowInput
-                value={password}
-                onChangeText={setPassword}
-                secure={true}
-              />
-              <View style={styles.textContainer}>
-                <Text style={styles.property}>비밀번호 확인</Text>
+              <ShadowInput email={true} value={email} onChangeText={setEmail} />
+              {email !== "" && !ValidateEmail(email) && (
+                <View style={styles.askContainer}>
+                  <Text style={styles.ask}>
+                    이메일 형식이 올바르지 않습니다.
+                  </Text>
+                </View>
+              )}
+              <View style={styles.inputContainer}>
+                <View style={styles.textContainer}>
+                  <Text style={styles.property}>비밀번호</Text>
+                </View>
+                <ShadowInput
+                  value={password}
+                  onChangeText={setPassword}
+                  secure={true}
+                />
+                {password !== "" && !ValidatePassword(password) && (
+                  <View style={styles.askContainer}>
+                    <Text style={styles.ask}>비밀번호는 8자 이상,</Text>
+                    <Text style={styles.ask}>
+                      영문, 숫자, 특수문자로 구성해주세요.
+                    </Text>
+                  </View>
+                )}
+                <View style={styles.textContainer}>
+                  <Text style={styles.property}>비밀번호 확인</Text>
+                </View>
+                <ShadowInput
+                  value={confirm}
+                  onChangeText={setConfirm}
+                  secure={true}
+                />
+                {confirm !== "" && confirm !== password && (
+                  <View style={styles.askContainer}>
+                    <Text style={styles.ask}>비밀번호를 확인해주세요.</Text>
+                  </View>
+                )}
               </View>
-              <ShadowInput
-                value={confirm}
-                onChangeText={setConfirm}
-                secure={true}
-              />
             </View>
             <View style={styles.buttonContainer}>
               <Button
                 text="다음으로"
                 disabled={buttonDisabled}
-                onPress={() => navigation.navigate("BasicInfomation")}
+                onPress={onNext}
               />
             </View>
           </View>
@@ -93,20 +141,24 @@ const styles = StyleSheet.create({
     width: 300,
     marginTop: 5,
   },
+  askContainer: {
+    width: 300,
+    marginTop: -5,
+  },
+  ask: {
+    color: colors.pink,
+  },
   inputContainer: {
     display: "flex",
     alignItems: "center",
     width: "100%",
     justifyContent: "flex-start",
   },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 20,
-  },
+  buttonContainer: {},
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "space-between",
   },
 });

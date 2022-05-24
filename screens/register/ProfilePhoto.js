@@ -16,10 +16,23 @@ import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
 import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [photoUrl, setPhotoUrl] = useState("");
+  const userInfo = useSelector((state) => state.user);
+  console.log(userInfo);
+  const dispatch = useDispatch();
+
+  const onNext = () => {
+    const tempUser = {
+      photoUrl,
+    };
+    dispatch(setUser(tempUser));
+    navigation.navigate("MyHobbies");
+  };
 
   useEffect(() => {
     if (photoUrl !== "") {
@@ -49,7 +62,6 @@ const ProfilePhoto = ({ navigation }) => {
     });
     if (!result.cancelled) {
       setPhotoUrl(result.base64);
-      console.log(result.base64.length);
     }
   };
 
@@ -81,7 +93,7 @@ const ProfilePhoto = ({ navigation }) => {
               <Button
                 text="다음으로"
                 disabled={buttonDisabled}
-                onPress={() => navigation.navigate("MyHobbies")}
+                onPress={onNext}
               />
               <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>

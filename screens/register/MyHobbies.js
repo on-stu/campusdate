@@ -18,12 +18,21 @@ import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
 
 const options = categories.hobbies;
 
 const MyHobbies = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [hobbies, setHobbies] = useState([]);
+  const dispatch = useDispatch();
+
+  const onNext = () => {
+    const tempUser = { myHobbies: hobbies };
+    dispatch(setUser(tempUser));
+    navigation.navigate("MyIdeals");
+  };
 
   useEffect(() => {
     if (hobbies.length > 0) {
@@ -95,7 +104,7 @@ const MyHobbies = ({ navigation }) => {
               <Button
                 text="다음으로"
                 disabled={buttonDisabled}
-                onPress={() => navigation.navigate("MyIdeals")}
+                onPress={onNext}
               />
               <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>

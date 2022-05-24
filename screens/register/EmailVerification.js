@@ -20,6 +20,10 @@ import { Picker } from "@react-native-picker/picker";
 import SelectButton from "../../components/SelectButton";
 import ShadowInput from "../../components/ShadowInput";
 import PopUp from "../../components/PopUp";
+import axios from "axios";
+import key from "../../lib/key.json";
+import emailValue from "../../lib/email.json";
+import { Alert } from "react-native";
 
 const EmailVerification = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -28,7 +32,31 @@ const EmailVerification = ({ navigation }) => {
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [visible, setVisible] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (verifiedEmail !== "") {
+      setButtonDisabled(false);
+    } else {
+      setButtonDisabled(true);
+    }
+  }, [verifiedEmail]);
+
+  const verifyEmail = async () => {
+    if (univEmail.includes(emailValue[university])) {
+      const response = await axios.post(`${key.API}/emailchecker/`, {
+        email: univEmail,
+      });
+      if (response.status === 200) {
+        setVerifiedEmail(univEmail);
+        return true;
+      } else {
+        setVerifiedEmail("");
+        return false;
+      }
+    } else {
+      setVerifiedEmail("");
+      return false;
+    }
+  };
 
   return (
     <>
@@ -36,7 +64,7 @@ const EmailVerification = ({ navigation }) => {
         <View style={{ width: 300, height: 300, zIndex: 11 }}>
           <Picker
             selectedValue={university}
-            onValueChange={(itemValue, itemIndex) => setUniversity(itemValue)}
+            onValueChange={(itemValue, _) => setUniversity(itemValue)}
           >
             <Picker.Item
               label="대학을 선택해주세요"
@@ -76,15 +104,26 @@ const EmailVerification = ({ navigation }) => {
                   onChangeText={setUnivEmail}
                   email
                 />
+                {verifiedEmail !== "" && (
+                  <View style={styles.askContainer}>
+                    <Text style={styles.ask}>인증에 성공했습니다.</Text>
+                  </View>
+                )}
                 <View style={styles.miniButtonContainer}>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (university === "대학을 선택해주세요") {
+                        return Alert.alert("대학을 선택해주세요");
+                      }
+                      if (univEmail !== "") {
+                        verifyEmail();
+                      }
+                    }}
+                  >
                     <View style={styles.miniButton}>
                       <Text style={styles.miniButtonText}>인증받기</Text>
                     </View>
                   </TouchableOpacity>
-                </View>
-                <View style={styles.askContainer}>
-                  <Text style={styles.ask}>인증에 성공했습니다.</Text>
                 </View>
               </View>
               <View style={styles.buttonContainer}>
