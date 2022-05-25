@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: "absolute",
-    backgroundColor: "rgba(255,255,255,0.3)",
+    backgroundColor: "rgba(255,255,255,0.8)",
     width: Dimensions.get("screen").width,
     height: Dimensions.get("screen").height,
     zIndex: 10,

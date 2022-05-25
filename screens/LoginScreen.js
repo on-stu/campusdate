@@ -91,7 +91,9 @@ const LoginScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.eachText}>
                   <Text style={styles.text}>비밀번호를 잊으셨나요?</Text>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate("ProfilePhoto")}
+                  >
                     <Text style={styles.underline}>비밀번호 재설정</Text>
                   </TouchableOpacity>
                 </View>

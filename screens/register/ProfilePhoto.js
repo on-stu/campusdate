@@ -18,6 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -50,6 +51,29 @@ const ProfilePhoto = ({ navigation }) => {
     })();
   }, []);
 
+  const resizeImg = async (uri) => {
+    console.log(uri);
+    try {
+      const result = await manipulateAsync(
+        uri,
+        [
+          {
+            resize: {
+              width: 500,
+            },
+          },
+        ],
+        {
+          base64: true,
+        }
+      );
+
+      return result.base64;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       base64: true,
@@ -59,7 +83,9 @@ const ProfilePhoto = ({ navigation }) => {
       quality: 0.1,
     });
     if (!result.cancelled) {
-      setPhotoUrl(result.base64);
+      const resized = await resizeImg(result.uri);
+      // console.log(resized);
+      setPhotoUrl(resized);
     }
   };
 
