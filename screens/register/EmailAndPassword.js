@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import React from "react";
 import Title from "../../components/Title";
@@ -16,6 +17,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import colors from "../../lib/colors.json";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
+import axios from "axios";
+import key from "../../lib/key.json";
 
 const EmailAndPassword = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -24,10 +27,19 @@ const EmailAndPassword = ({ navigation }) => {
   const [confirm, setConfirm] = useState("");
   const dispatch = useDispatch();
 
-  const onNext = () => {
-    const tempUser = { email, password };
-    dispatch(setUser(tempUser));
-    navigation.navigate("BasicInfomation");
+  const onNext = async () => {
+    try {
+      const response = await axios.post(`${key.API}/emailvalidate/`, { email });
+      if (response.status === 200) {
+        const tempUser = { email, password };
+        dispatch(setUser(tempUser));
+        navigation.navigate("BasicInfomation");
+      }
+    } catch (error) {
+      console.log(error.code);
+      Alert.alert("경고", "이미 가입된 이메일입니다.");
+      setEmail("");
+    }
   };
 
   function ValidateEmail(email) {

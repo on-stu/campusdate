@@ -15,7 +15,6 @@ import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
-import categories from "../../lib/categories.json";
 import { Picker } from "@react-native-picker/picker";
 import SelectButton from "../../components/SelectButton";
 import ShadowInput from "../../components/ShadowInput";
@@ -24,6 +23,9 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import emailValue from "../../lib/email.json";
 import { Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
+import { save } from "../../functions/secureStore";
 
 const EmailVerification = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -31,6 +33,9 @@ const EmailVerification = ({ navigation }) => {
   const [univEmail, setUnivEmail] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [visible, setVisible] = useState(false);
+
+  const userInfo = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (verifiedEmail !== "") {
@@ -56,6 +61,19 @@ const EmailVerification = ({ navigation }) => {
       setVerifiedEmail("");
       return false;
     }
+  };
+
+  const onSubmit = async () => {
+    const response = await axios.post(`${key.API}/register/`, userInfo);
+    console.log(response.data);
+    const {
+      data: { userInfo: user, token },
+    } = response;
+    dispatch(setUser(user));
+    save("token", token);
+    navigation.reset({
+      routes: [{ name: "BottomTab" }],
+    });
   };
 
   return (
@@ -130,11 +148,7 @@ const EmailVerification = ({ navigation }) => {
                 <Button
                   text="가입하기!"
                   disabled={buttonDisabled}
-                  onPress={() =>
-                    navigation.reset({
-                      routes: [{ name: "BottomTab" }],
-                    })
-                  }
+                  onPress={onSubmit}
                 />
                 <BackButton text="이전으로" onPress={() => navigation.pop()} />
               </View>

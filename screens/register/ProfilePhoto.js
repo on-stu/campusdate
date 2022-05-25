@@ -16,19 +16,17 @@ import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
 import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [photoUrl, setPhotoUrl] = useState("");
-  const userInfo = useSelector((state) => state.user);
-  console.log(userInfo);
   const dispatch = useDispatch();
 
   const onNext = () => {
     const tempUser = {
-      photoUrl,
+      photoUrl: `data:img/png;base64,${photoUrl}`,
     };
     dispatch(setUser(tempUser));
     navigation.navigate("MyHobbies");

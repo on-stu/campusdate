@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Dimensions,
   ScrollView,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 import TitleImg from "../../img/title.svg";
@@ -18,8 +19,9 @@ import FaqIcon from "../../img/faq.svg";
 import posts from "../../lib/posts.json";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "../../redux/reducers/counterSlice";
+import { deleteItem } from "../../functions/secureStore";
 
-const Header = ({ university }) => {
+const Header = ({ university, photoUrl, navigation }) => {
   return (
     <View style={styles.headerContainer}>
       <View style={styles.headerLeft}>
@@ -27,7 +29,26 @@ const Header = ({ university }) => {
         <Text style={styles.leftText}>{university}</Text>
       </View>
       <View>
-        <SmallProfile />
+        <SmallProfile
+          uri={photoUrl}
+          onPress={() =>
+            Alert.alert("알림", "로그아웃 하시겠습니까?", [
+              {
+                text: "아니오",
+                style: "cancel",
+              },
+              {
+                text: "예",
+                onPress: () =>
+                  deleteItem("token").then(() => {
+                    navigation.reset({
+                      routes: [{ name: "Login" }],
+                    });
+                  }),
+              },
+            ])
+          }
+        />
       </View>
     </View>
   );
@@ -72,18 +93,23 @@ const LongBanner = ({ title, items }) => {
   );
 };
 
-const Home = () => {
-  const count = useSelector((state) => state.counter.value);
+const Home = ({ stackNavigation, navigation }) => {
+  const userInfo = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  // console.log(stackNavigation);
 
   useEffect(() => {
-    console.log(count);
-  }, [count]);
+    console.log(userInfo);
+  }, [userInfo]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header university="부산대학교" />
+        <Header
+          university="부산대학교"
+          photoUrl={userInfo?.photoUrl}
+          navigation={stackNavigation}
+        />
         <View style={styles.innerContainer}>
           <View style={styles.bannerContainer}>
             <Banner
@@ -96,6 +122,7 @@ const Home = () => {
               title="내 연인 찾기"
               texts={["용기있는 자가", "미인을 얻는다."]}
               svg={<FindingIcon height={80} />}
+              onPress={() => deleteItem("token")}
             />
           </View>
         </View>

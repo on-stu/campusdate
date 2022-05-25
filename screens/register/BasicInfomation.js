@@ -16,7 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
 import BackButton from "../../components/BackButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
 
 const BasicInfomation = ({ navigation }) => {
@@ -24,10 +24,7 @@ const BasicInfomation = ({ navigation }) => {
   const [nickname, setNickname] = useState("");
   const [sex, setSex] = useState("male");
   const [age, setAge] = useState("");
-
-  const userInfo = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(userInfo);
 
   useEffect(() => {
     if (nickname !== "" && age !== "") {

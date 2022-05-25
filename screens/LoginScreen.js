@@ -3,19 +3,54 @@ import React from "react";
 import LogoImg from "../img/LOGO.svg";
 import ShadowInput from "../components/ShadowInput";
 import Button from "../components/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  Alert,
 } from "react-native";
 import colors from "../lib/colors.json";
 import { TouchableOpacity } from "react-native";
+import axios from "axios";
+import key from "../lib/key.json";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/reducers/userSlice";
+import { getValue, save } from "../functions/secureStore";
+import { getUserWithToken } from "../functions/getUserWithToken";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const onSubmit = async () => {
+    try {
+      const response = await axios.post(`${key.API}/login/`, {
+        email,
+        password,
+      });
+      // console.log(response.data);
+      const {
+        data: { token },
+      } = response;
+      // console.log(token);
+      save("token", token);
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      const user = await axios.get(`${key.API}/user/`, { headers });
+      // console.log(user.data);
+      dispatch(setUser(user.data));
+      navigation.reset({
+        routes: [{ name: "BottomTab" }],
+      });
+    } catch (error) {
+      console.log(error);
+      Alert.alert("경고", "이메일 혹은 비밀번호가 틀립니다.");
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,14 +79,7 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={setPassword}
                 placeholder="비밀번호"
               />
-              <Button
-                text="로그인"
-                onPress={() =>
-                  navigation.reset({
-                    routes: [{ name: "BottomTab" }],
-                  })
-                }
-              />
+              <Button text="로그인" onPress={onSubmit} />
               <View style={styles.textContainer}>
                 <View style={styles.eachText}>
                   <Text style={styles.text}>계정이 없으신가요?</Text>

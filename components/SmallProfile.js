@@ -7,7 +7,7 @@ const SmallProfile = ({ uri, onPress }) => {
   return (
     <>
       {uri ? (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
           <View>
             <Image
               style={{
@@ -22,7 +22,7 @@ const SmallProfile = ({ uri, onPress }) => {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
           <View style={styles.circle}>
             <Feather name="user" size={30} color="white" />
           </View>

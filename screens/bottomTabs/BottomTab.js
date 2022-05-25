@@ -21,8 +21,7 @@ function BottomTab({ navigation }) {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
-        stackNavigation={navigation}
+        children={() => <Home stackNavigation={navigation} />}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

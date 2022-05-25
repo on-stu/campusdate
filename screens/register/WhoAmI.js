@@ -27,6 +27,7 @@ const WhoAmI = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [ideals, setIdeals] = useState([]);
   const dispatch = useDispatch();
+
   const onNext = () => {
     const tempUser = { whoAmI: ideals };
     dispatch(setUser(tempUser));
