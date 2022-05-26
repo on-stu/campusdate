@@ -19,7 +19,6 @@ import FaqIcon from "../../img/faq.svg";
 import posts from "../../lib/posts.json";
 import { useDispatch, useSelector } from "react-redux";
 import { increment } from "../../redux/reducers/counterSlice";
-import { deleteItem } from "../../functions/secureStore";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -103,14 +102,18 @@ const Home = ({ stackNavigation }) => {
             />
             <Banner
               title="내 연인 찾기"
-              texts={["용기있는 자가", "미인을 얻는다."]}
+              texts={
+                userInfo?.sex === "male"
+                  ? ["용기있는 자가", "미인을 얻는다."]
+                  : ["용기있는 자가", "미남을 얻는다."]
+              }
               svg={<FindingIcon height={80} />}
               onPress={() => stackNavigation.navigate("FindMyLove")}
             />
           </View>
         </View>
         <View style={styles.innerContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => stackNavigation.navigate("Faq")}>
             <View
               style={{
                 ...styles.longBanner,

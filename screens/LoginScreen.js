@@ -15,7 +15,7 @@ import colors from "../lib/colors.json";
 import { TouchableOpacity } from "react-native";
 import axios from "axios";
 import key from "../lib/key.json";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/reducers/userSlice";
 import { getValue, save } from "../functions/secureStore";
 import { getUserWithToken } from "../functions/getUserWithToken";
@@ -24,6 +24,16 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.user);
+
+  useEffect(() => {
+    console.log(userInfo.id);
+    if (userInfo.id !== undefined) {
+      navigation.reset({
+        routes: [{ name: "BottomTab" }],
+      });
+    }
+  }, [userInfo]);
 
   const onSubmit = async () => {
     try {

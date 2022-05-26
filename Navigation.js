@@ -15,6 +15,9 @@ import { useDispatch } from "react-redux";
 import { setUser } from "./redux/reducers/userSlice";
 import MyProfile from "./screens/MyProfile";
 import FindMyLove from "./screens/FindMyLove";
+import Profile from "./screens/Profile";
+import Faq from "./screens/Faq/Faq";
+import FaqDetail from "./screens/Faq/FaqDetail";
 
 const Stack = createStackNavigator();
 
@@ -40,6 +43,9 @@ export default function Navigation({ isLogin, user }) {
         <Stack.Screen name="EmailVerification" component={EmailVerification} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="FindMyLove" component={FindMyLove} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Faq" component={Faq} />
+        <Stack.Screen name="FaqDetail" component={FaqDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

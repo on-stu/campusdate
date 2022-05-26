@@ -1,16 +1,32 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
 
-const MyProfileCard = ({ photoUrl, nickname, age, info, onButtonPress }) => {
+const ProfileCard = ({
+  photoUrl,
+  nickname,
+  age,
+  info,
+  onButtonPress,
+  fullVisible,
+}) => {
+  const [blurNickname, setBlurNickname] = useState("");
+  useEffect(() => {
+    setBlurNickname(nickname?.slice(0, 1));
+    for (let i = 0; i < nickname?.length - 1; i++) {
+      setBlurNickname((prev) => prev + "*");
+    }
+  }, [nickname]);
   return (
     <View style={styles.container}>
       <View style={styles.left}>
         <SmallProfile uri={photoUrl} />
         <View style={styles.info}>
           <View style={styles.top}>
-            <Text style={styles.nickname}>{nickname}</Text>
+            <Text style={styles.nickname}>
+              {fullVisible ? nickname : blurNickname}
+            </Text>
             <Text style={styles.age}>{age + "세"}</Text>
           </View>
           <View style={styles.infoContainer}>
@@ -28,14 +44,14 @@ const MyProfileCard = ({ photoUrl, nickname, age, info, onButtonPress }) => {
       </View>
       <TouchableOpacity onPress={onButtonPress}>
         <View style={styles.button}>
-          <Text style={styles.buttonText}>프로필 설정</Text>
+          <Text style={styles.buttonText}>프로필 보기</Text>
         </View>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default MyProfileCard;
+export default ProfileCard;
 
 const styles = StyleSheet.create({
   container: {
@@ -57,18 +73,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
   },
+  left: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
   infoContainer: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     flexWrap: "nowrap",
-  },
-  left: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
   },
   info: {
     marginLeft: 10,

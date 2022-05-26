@@ -12,10 +12,13 @@ import React from "react";
 import Hr from "../../components/Hr";
 import colors from "../../lib/colors.json";
 import MyProfileCard from "../../components/MyProfileCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { initUser } from "../../redux/reducers/userSlice";
+import { deleteItem, getValue } from "../../functions/secureStore";
 
 const Setting = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -93,7 +96,9 @@ const Setting = ({ stackNavigation }) => {
           <Hr />
           <View style={styles.left}>
             <Text style={styles.property}>결제</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Alert.alert("알림", "준비중입니다.")}
+            >
               <View style={styles.menu}>
                 <Text>결제 내역</Text>
               </View>
@@ -107,12 +112,17 @@ const Setting = ({ stackNavigation }) => {
                 Alert.alert("알림", "로그아웃 하시겠습니까?", [
                   {
                     text: "예",
-                    onPress: () =>
+                    onPress: () => {
                       deleteItem("token").then(() => {
-                        navigation.reset({
-                          routes: [{ name: "Login" }],
+                        getValue("token").then((token) => {
+                          console.log(token);
+                          dispatch(initUser());
+                          stackNavigation.reset({
+                            routes: [{ name: "Login" }],
+                          });
                         });
-                      }),
+                      });
+                    },
                   },
                   {
                     text: "아니오",

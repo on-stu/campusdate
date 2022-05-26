@@ -18,7 +18,7 @@ import BackButton from "../components/BackButton";
 const EachBox = ({ title, tagsArray }) => {
   return (
     <View style={styles.boxContainer}>
-      <View style={{ width: "80%" }}>
+      <View style={{ width: "100%" }}>
         <View>
           <Text style={styles.blackText}>{title}</Text>
         </View>
@@ -40,14 +40,12 @@ const EachBox = ({ title, tagsArray }) => {
           })}
         </View>
       </View>
-      <TouchableOpacity>
-        <Feather name="edit-2" size={24} color={colors.pink} />
-      </TouchableOpacity>
     </View>
   );
 };
 
-const MyProfile = ({ navigation }) => {
+const Profile = ({ navigation, route }) => {
+  console.log(route.params);
   const userInfo = useSelector((state) => state.user);
   const [whoAmIHash, setWhoAmIHash] = useState([]);
   const [idealsHash, setIdealsHash] = useState([]);
@@ -81,18 +79,7 @@ const MyProfile = ({ navigation }) => {
           <View style={styles.center}>
             <BigProfile uri={userInfo?.photoUrl} />
           </View>
-          <TouchableOpacity>
-            <View style={styles.left}>
-              <Text style={styles.property}>이름 변경하기</Text>
-              <Feather name="chevron-right" size={24} color={colors.darkgray} />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.left}>
-              <Text style={styles.property}>비밀번호 변경하기</Text>
-              <Feather name="chevron-right" size={24} color={colors.darkgray} />
-            </View>
-          </TouchableOpacity>
+
           <EachBox title={userInfo?.nickname + "님은"} tagsArray={whoAmIHash} />
           <EachBox
             title={userInfo?.nickname + "님의 이상형은"}
@@ -107,11 +94,10 @@ const MyProfile = ({ navigation }) => {
               <Text
                 style={styles.blackHashText}
               >{`${userInfo?.nickname}님의 자기소개`}</Text>
-              <Text>{userInfo?.introduction}</Text>
+              <View style={styles.introduction}>
+                <Text>{userInfo?.introduction}</Text>
+              </View>
             </View>
-            <TouchableOpacity>
-              <Feather name="edit-2" size={24} color={colors.pink} />
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -128,7 +114,7 @@ const MyProfile = ({ navigation }) => {
   );
 };
 
-export default MyProfile;
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {
@@ -200,5 +186,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexWrap: "wrap",
     width: "100%",
+  },
+  introduction: {
+    padding: 4,
   },
 });
