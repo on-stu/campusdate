@@ -31,23 +31,7 @@ const Header = ({ university, photoUrl, navigation }) => {
       <View>
         <SmallProfile
           uri={photoUrl}
-          onPress={() =>
-            Alert.alert("알림", "로그아웃 하시겠습니까?", [
-              {
-                text: "아니오",
-                style: "cancel",
-              },
-              {
-                text: "예",
-                onPress: () =>
-                  deleteItem("token").then(() => {
-                    navigation.reset({
-                      routes: [{ name: "Login" }],
-                    });
-                  }),
-              },
-            ])
-          }
+          onPress={() => navigation.navigate("MyProfile")}
         />
       </View>
     </View>
@@ -93,10 +77,9 @@ const LongBanner = ({ title, items }) => {
   );
 };
 
-const Home = ({ stackNavigation, navigation }) => {
+const Home = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  // console.log(stackNavigation);
 
   useEffect(() => {
     console.log(userInfo);
@@ -122,7 +105,7 @@ const Home = ({ stackNavigation, navigation }) => {
               title="내 연인 찾기"
               texts={["용기있는 자가", "미인을 얻는다."]}
               svg={<FindingIcon height={80} />}
-              onPress={() => deleteItem("token")}
+              onPress={() => stackNavigation.navigate("FindMyLove")}
             />
           </View>
         </View>

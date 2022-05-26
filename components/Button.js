@@ -21,7 +21,7 @@ export default Button;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    margin: 2,
   },
   button: {
     backgroundColor: colors.pink,

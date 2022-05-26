@@ -17,7 +17,7 @@ export default BackButton;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    margin: 2,
   },
   button: {
     width: 300,

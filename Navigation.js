@@ -13,6 +13,8 @@ import BottomTab from "./screens/bottomTabs/BottomTab";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "./redux/reducers/userSlice";
+import MyProfile from "./screens/MyProfile";
+import FindMyLove from "./screens/FindMyLove";
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,8 @@ export default function Navigation({ isLogin, user }) {
         <Stack.Screen name="WhoAmI" component={WhoAmI} />
         <Stack.Screen name="MyIntroduction" component={MyIntroduction} />
         <Stack.Screen name="EmailVerification" component={EmailVerification} />
+        <Stack.Screen name="MyProfile" component={MyProfile} />
+        <Stack.Screen name="FindMyLove" component={FindMyLove} />
       </Stack.Navigator>
     </NavigationContainer>
   );
