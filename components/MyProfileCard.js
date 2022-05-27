@@ -3,11 +3,18 @@ import React from "react";
 import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
 
-const MyProfileCard = ({ photoUrl, nickname, age, info, onButtonPress }) => {
+const MyProfileCard = ({
+  photoUrl,
+  nickname,
+  age,
+  info,
+  onButtonPress,
+  fullVisible,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <SmallProfile uri={photoUrl} />
+        <SmallProfile uri={photoUrl} fullVisible={fullVisible} />
         <View style={styles.info}>
           <View style={styles.top}>
             <Text style={styles.nickname}>{nickname}</Text>
@@ -15,7 +22,7 @@ const MyProfileCard = ({ photoUrl, nickname, age, info, onButtonPress }) => {
           </View>
           <View style={styles.infoContainer}>
             {info?.map((hash, i) => {
-              if (i < 3) {
+              if (i < 2) {
                 return (
                   <Text style={styles.hashText} key={i}>
                     {"#" + hash}

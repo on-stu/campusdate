@@ -46,6 +46,7 @@ const EmailVerification = ({ navigation }) => {
   }, [verifiedEmail]);
 
   const verifyEmail = async () => {
+    console.log("hi");
     if (univEmail.includes(emailValue[university])) {
       const response = await axios.post(`${key.API}/emailchecker/`, {
         email: univEmail,
@@ -59,6 +60,11 @@ const EmailVerification = ({ navigation }) => {
       }
     } else {
       setVerifiedEmail("");
+      setUnivEmail("");
+      Alert.alert(
+        "경고",
+        `${university}의 이메일은 ${emailValue[university]}입니다.`
+      );
       return false;
     }
   };

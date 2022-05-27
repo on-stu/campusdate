@@ -30,6 +30,7 @@ const Header = ({ university, photoUrl, navigation }) => {
         <SmallProfile
           uri={photoUrl}
           onPress={() => navigation.navigate("MyProfile")}
+          fullVisible
         />
       </View>
     </View>

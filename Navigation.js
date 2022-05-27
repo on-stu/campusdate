@@ -21,6 +21,8 @@ import FaqDetail from "./screens/Faq/FaqDetail";
 import Notice from "./screens/notice/Notice";
 import NoticePost from "./screens/notice/NoticePost";
 import MatchingLoading from "./screens/matching/MatchingLoading";
+import MatchingSuccess from "./screens/matching/MatchingSuccess";
+import MatchingFailed from "./screens/matching/MatchingFailed";
 
 const Stack = createStackNavigator();
 
@@ -46,12 +48,15 @@ export default function Navigation({ isLogin, user }) {
         <Stack.Screen name="EmailVerification" component={EmailVerification} />
         <Stack.Screen name="MyProfile" component={MyProfile} />
         <Stack.Screen name="FindMyLove" component={FindMyLove} />
+        {isLogin && <Stack.Screen name="Login" component={LoginScreen} />}
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Faq" component={Faq} />
         <Stack.Screen name="FaqDetail" component={FaqDetail} />
         <Stack.Screen name="Notice" component={Notice} />
         <Stack.Screen name="NoticePost" component={NoticePost} />
         <Stack.Screen name="MatchingLoading" component={MatchingLoading} />
+        <Stack.Screen name="MatchingSuccess" component={MatchingSuccess} />
+        <Stack.Screen name="MatchingFailed" component={MatchingFailed} />
       </Stack.Navigator>
     </NavigationContainer>
   );

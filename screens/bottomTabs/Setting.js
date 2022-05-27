@@ -22,7 +22,7 @@ const Setting = ({ stackNavigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.center}>
+        <View style={styles.header}>
           <Text style={styles.title}>설정</Text>
         </View>
         <View style={styles.inner}>
@@ -36,6 +36,7 @@ const Setting = ({ stackNavigation }) => {
               age={userInfo?.age}
               info={userInfo?.whoAmI}
               onButtonPress={() => stackNavigation.navigate("MyProfile")}
+              fullVisible
             />
           </View>
           <Hr />
@@ -160,6 +161,15 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     width: Dimensions.get("screen").width,
+  },
+  header: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   center: {
     width: "100%",

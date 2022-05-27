@@ -21,7 +21,7 @@ const ProfileCard = ({
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <SmallProfile uri={photoUrl} />
+        <SmallProfile uri={photoUrl} fullVisible={fullVisible} />
         <View style={styles.info}>
           <View style={styles.top}>
             <Text style={styles.nickname}>
@@ -31,7 +31,7 @@ const ProfileCard = ({
           </View>
           <View style={styles.infoContainer}>
             {info?.map((hash, i) => {
-              if (i < 3) {
+              if (i < 2) {
                 return (
                   <Text style={styles.hashText} key={i}>
                     {"#" + hash}

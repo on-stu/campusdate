@@ -14,6 +14,9 @@ import BigProfile from "../components/BigProfile";
 import { Feather } from "@expo/vector-icons";
 import Button from "../components/Button";
 import BackButton from "../components/BackButton";
+import { getValue } from "../functions/secureStore";
+import axios from "axios";
+import key from "../lib/key.json";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -45,57 +48,99 @@ const EachBox = ({ title, tagsArray }) => {
 };
 
 const Profile = ({ navigation, route }) => {
-  console.log(route.params);
-  const userInfo = useSelector((state) => state.user);
+  const {
+    params: { userId },
+  } = route;
+  const [profileInfo, setProfileInfo] = useState({});
   const [whoAmIHash, setWhoAmIHash] = useState([]);
   const [idealsHash, setIdealsHash] = useState([]);
   const [hobbiesHash, setHobbiesHash] = useState([]);
+  const [fullVisible, setFullVisible] = useState(false);
+  const [blurNickname, setBlurNickname] = useState("");
 
   useEffect(() => {
-    const mySex = userInfo.sex === "male" ? "남자" : "여자";
-    const otherSex = userInfo.sex === "male" ? "여자" : "남자";
-    if (userInfo) {
-      setWhoAmIHash(userInfo.whoAmI?.map((item, i) => `#${item}`));
+    if (profileInfo.id !== undefined) {
+      setBlurNickname(
+        fullVisible ? profileInfo?.nickname : blurNickname?.slice(0, 1)
+      );
+      for (
+        let i = 0;
+        i < fullVisible ? profileInfo?.nickname : blurNickname?.length - 1;
+        i++
+      ) {
+        setBlurNickname((prev) => prev + "*");
+      }
+    }
+  }, [profileInfo]);
+
+  useEffect(() => {
+    (async () => {
+      const token = await getValue("token");
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      const response = await axios.get(`${key.API}/user/${userId}/`, {
+        headers,
+      });
+      setProfileInfo(response.data);
+    })();
+
+    if (profileInfo.id !== undefined) {
+      const mySex = profileInfo?.sex === "male" ? "남자" : "여자";
+      const otherSex = profileInfo?.sex === "male" ? "여자" : "남자";
+      setWhoAmIHash(profileInfo?.whoAmI?.map((item, i) => `#${item}`));
       setWhoAmIHash((prev) => [...prev, `${mySex}에요.`]);
-
-      setIdealsHash(userInfo.myIdeals?.map((item, i) => `#${item}`));
+      setIdealsHash(profileInfo?.myIdeals?.map((item, i) => `#${item}`));
       setIdealsHash((prev) => [...prev, `${otherSex}에요.`]);
-
-      setHobbiesHash(userInfo.myHobbies?.map((item, i) => `#${item}`));
+      setHobbiesHash(profileInfo?.myHobbies?.map((item, i) => `#${item}`));
       setHobbiesHash((prev) => [...prev, `에요.`]);
     }
-  }, [userInfo]);
+  }, [profileInfo]);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.inner}>
           <View style={styles.center}>
-            <Text style={styles.title}>{userInfo?.nickname}</Text>
+            <Text style={styles.title}>
+              {fullVisible
+                ? fullVisible
+                  ? profileInfo?.nickname
+                  : blurNickname
+                : blurNickname}
+            </Text>
           </View>
           <View style={styles.center}>
-            <Text style={styles.text}>{`${userInfo?.age}세`}</Text>
+            <Text style={styles.text}>{`${profileInfo?.age}세`}</Text>
           </View>
           <View style={styles.center}>
-            <BigProfile uri={userInfo?.photoUrl} />
+            <BigProfile uri={profileInfo?.photoUrl} fullVisible={fullVisible} />
           </View>
-
-          <EachBox title={userInfo?.nickname + "님은"} tagsArray={whoAmIHash} />
           <EachBox
-            title={userInfo?.nickname + "님의 이상형은"}
+            title={fullVisible ? profileInfo?.nickname : blurNickname + "님은"}
+            tagsArray={whoAmIHash}
+          />
+          <EachBox
+            title={
+              fullVisible
+                ? profileInfo?.nickname
+                : blurNickname + "님의 이상형은"
+            }
             tagsArray={idealsHash}
           />
           <EachBox
-            title={userInfo?.nickname + "님의 취미는"}
+            title={
+              fullVisible ? profileInfo?.nickname : blurNickname + "님의 취미는"
+            }
             tagsArray={hobbiesHash}
           />
           <View style={styles.boxContainer}>
             <View>
-              <Text
-                style={styles.blackHashText}
-              >{`${userInfo?.nickname}님의 자기소개`}</Text>
+              <Text style={styles.blackHashText}>{`${
+                fullVisible ? profileInfo?.nickname : blurNickname
+              }님의 자기소개`}</Text>
               <View style={styles.introduction}>
-                <Text>{userInfo?.introduction}</Text>
+                <Text>{profileInfo?.introduction}</Text>
               </View>
             </View>
           </View>
@@ -107,7 +152,7 @@ const Profile = ({ navigation, route }) => {
           flexDirection: "column",
         }}
       >
-        <Button text="적용하기" />
+        <Button text="채팅 해보기" />
         <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>
     </SafeAreaView>

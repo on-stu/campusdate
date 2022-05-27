@@ -79,7 +79,7 @@ const MyProfile = ({ navigation }) => {
             <Text style={styles.text}>{`${userInfo?.age}세`}</Text>
           </View>
           <View style={styles.center}>
-            <BigProfile uri={userInfo?.photoUrl} />
+            <BigProfile uri={userInfo?.photoUrl} fullVisible />
           </View>
           <TouchableOpacity>
             <View style={styles.left}>
