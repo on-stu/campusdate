@@ -23,6 +23,10 @@ import NoticePost from "./screens/notice/NoticePost";
 import MatchingLoading from "./screens/matching/MatchingLoading";
 import MatchingSuccess from "./screens/matching/MatchingSuccess";
 import MatchingFailed from "./screens/matching/MatchingFailed";
+import MyWhoAmI from "./screens/my/MyWhoAmI";
+import MyIdealsChange from "./screens/my/MyIdealsChange";
+import MyHobbiesChange from "./screens/my/MyHobbiesChange";
+import MyIntroductionChange from "./screens/my/MyIntroductionChange";
 
 const Stack = createStackNavigator();
 
@@ -57,6 +61,13 @@ export default function Navigation({ isLogin, user }) {
         <Stack.Screen name="MatchingLoading" component={MatchingLoading} />
         <Stack.Screen name="MatchingSuccess" component={MatchingSuccess} />
         <Stack.Screen name="MatchingFailed" component={MatchingFailed} />
+        <Stack.Screen name="MyWhoAmI" component={MyWhoAmI} />
+        <Stack.Screen name="MyIdealsChange" component={MyIdealsChange} />
+        <Stack.Screen name="MyHobbiesChange" component={MyHobbiesChange} />
+        <Stack.Screen
+          name="MyIntroductionChange"
+          component={MyIntroductionChange}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -4,19 +4,22 @@ import { BlurView } from "expo-blur";
 import colors from "../lib/colors.json";
 
 const BigProfile = ({ uri, fullVisible }) => {
+  // console.log(uri);
   return (
     <View style={styles.circleContainer}>
-      <Image
-        style={{
-          width: 250,
-          height: 250,
-          resizeMode: "cover",
-          borderWidth: 0,
-          borderRadius: 125,
-          margin: 12,
-        }}
-        source={{ uri: uri }}
-      />
+      {uri && (
+        <Image
+          style={{
+            width: 250,
+            height: 250,
+            resizeMode: "cover",
+            borderWidth: 0,
+            borderRadius: 125,
+            margin: 12,
+          }}
+          source={{ uri: uri }}
+        />
+      )}
       {!fullVisible && (
         <BlurView intensity={30} style={styles.blurContainer}></BlurView>
       )}

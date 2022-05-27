@@ -26,7 +26,6 @@ const FindMyLove = ({ navigation }) => {
       };
       const response = await axios.get(`${key.API}/usersbysex/`, { headers });
       setUserList((prev) => [...prev, ...response.data]);
-      console.log(userList);
     })();
   }, []);
 

@@ -17,6 +17,7 @@ import BackButton from "../components/BackButton";
 import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
+import { getBlurNickname } from "../functions/getBlurNickname";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -59,33 +60,27 @@ const Profile = ({ navigation, route }) => {
   const [blurNickname, setBlurNickname] = useState("");
 
   useEffect(() => {
-    if (profileInfo.id !== undefined) {
-      setBlurNickname(
-        fullVisible ? profileInfo?.nickname : blurNickname?.slice(0, 1)
-      );
-      for (
-        let i = 0;
-        i < fullVisible ? profileInfo?.nickname : blurNickname?.length - 1;
-        i++
-      ) {
-        setBlurNickname((prev) => prev + "*");
-      }
+    if (profileInfo.nickname !== undefined) {
+      setBlurNickname(getBlurNickname(profileInfo.nickname));
     }
-  }, [profileInfo]);
+    return () => getBlurNickname();
+  }, [profileInfo.nickname]);
+
+  const getProfile = async () => {
+    const token = await getValue("token");
+    const headers = {
+      Authorization: `Token ${token}`,
+    };
+    const response = await axios.get(`${key.API}/user/${userId}/`, {
+      headers,
+    });
+    setProfileInfo(response.data);
+  };
 
   useEffect(() => {
-    (async () => {
-      const token = await getValue("token");
-      const headers = {
-        Authorization: `Token ${token}`,
-      };
-      const response = await axios.get(`${key.API}/user/${userId}/`, {
-        headers,
-      });
-      setProfileInfo(response.data);
-    })();
+    getProfile();
 
-    if (profileInfo.id !== undefined) {
+    if (profileInfo.id !== undefined && profileInfo !== {}) {
       const mySex = profileInfo?.sex === "male" ? "남자" : "여자";
       const otherSex = profileInfo?.sex === "male" ? "여자" : "남자";
       setWhoAmIHash(profileInfo?.whoAmI?.map((item, i) => `#${item}`));
@@ -103,11 +98,7 @@ const Profile = ({ navigation, route }) => {
         <View style={styles.inner}>
           <View style={styles.center}>
             <Text style={styles.title}>
-              {fullVisible
-                ? fullVisible
-                  ? profileInfo?.nickname
-                  : blurNickname
-                : blurNickname}
+              {fullVisible ? profileInfo?.nickname : blurNickname}
             </Text>
           </View>
           <View style={styles.center}>

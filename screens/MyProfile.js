@@ -6,16 +6,24 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  Platform,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import colors from "../lib/colors.json";
 import BigProfile from "../components/BigProfile";
 import { Feather } from "@expo/vector-icons";
 import Button from "../components/Button";
 import BackButton from "../components/BackButton";
+import * as ImagePicker from "expo-image-picker";
+import { manipulateAsync } from "expo-image-manipulator";
+import { getValue } from "../functions/secureStore";
+import axios from "axios";
+import key from "../lib/key.json";
+import { setUser } from "../redux/reducers/userSlice";
 
-const EachBox = ({ title, tagsArray }) => {
+const EachBox = ({ title, tagsArray, onPress }) => {
   return (
     <View style={styles.boxContainer}>
       <View style={{ width: "80%" }}>
@@ -40,7 +48,7 @@ const EachBox = ({ title, tagsArray }) => {
           })}
         </View>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
         <Feather name="edit-2" size={24} color={colors.pink} />
       </TouchableOpacity>
     </View>
@@ -52,11 +60,60 @@ const MyProfile = ({ navigation }) => {
   const [whoAmIHash, setWhoAmIHash] = useState([]);
   const [idealsHash, setIdealsHash] = useState([]);
   const [hobbiesHash, setHobbiesHash] = useState([]);
+  const [photoUrl, setPhotoUrl] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const mySex = userInfo.sex === "male" ? "남자" : "여자";
-    const otherSex = userInfo.sex === "male" ? "여자" : "남자";
+    (async () => {
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("권한을 승인해주십시오.");
+        }
+      }
+    })();
+  }, []);
+
+  const resizeImg = async (uri) => {
+    try {
+      const result = await manipulateAsync(
+        uri,
+        [
+          {
+            resize: {
+              width: 500,
+            },
+          },
+        ],
+        {
+          base64: true,
+        }
+      );
+      return result.base64;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      base64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.1,
+    });
+    if (!result.cancelled) {
+      const resized = await resizeImg(result.uri);
+      setPhotoUrl(`data:img/png;base64,${resized}`);
+    }
+  };
+
+  useEffect(() => {
     if (userInfo) {
+      const mySex = userInfo.sex === "male" ? "남자" : "여자";
+      const otherSex = userInfo.sex === "male" ? "여자" : "남자";
       setWhoAmIHash(userInfo.whoAmI?.map((item, i) => `#${item}`));
       setWhoAmIHash((prev) => [...prev, `${mySex}에요.`]);
 
@@ -65,8 +122,31 @@ const MyProfile = ({ navigation }) => {
 
       setHobbiesHash(userInfo.myHobbies?.map((item, i) => `#${item}`));
       setHobbiesHash((prev) => [...prev, `에요.`]);
+
+      setPhotoUrl(userInfo?.photoUrl.toString());
     }
+    console.log(userInfo);
   }, [userInfo]);
+
+  const onSubmit = async () => {
+    if (userInfo?.photoUrl !== photoUrl) {
+      const token = await getValue("token");
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      const response = await axios.put(
+        `${key.API}/user/`,
+        { photoUrl },
+        {
+          headers,
+        }
+      );
+      dispatch(setUser(response.data));
+      navigation.pop();
+    } else {
+      navigation.pop();
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,7 +159,9 @@ const MyProfile = ({ navigation }) => {
             <Text style={styles.text}>{`${userInfo?.age}세`}</Text>
           </View>
           <View style={styles.center}>
-            <BigProfile uri={userInfo?.photoUrl} fullVisible />
+            <TouchableOpacity onPress={pickImage}>
+              <BigProfile uri={photoUrl !== "" && photoUrl} fullVisible />
+            </TouchableOpacity>
           </View>
           <TouchableOpacity>
             <View style={styles.left}>
@@ -93,14 +175,20 @@ const MyProfile = ({ navigation }) => {
               <Feather name="chevron-right" size={24} color={colors.darkgray} />
             </View>
           </TouchableOpacity>
-          <EachBox title={userInfo?.nickname + "님은"} tagsArray={whoAmIHash} />
+          <EachBox
+            title={userInfo?.nickname + "님은"}
+            tagsArray={whoAmIHash}
+            onPress={() => navigation.navigate("MyWhoAmI")}
+          />
           <EachBox
             title={userInfo?.nickname + "님의 이상형은"}
             tagsArray={idealsHash}
+            onPress={() => navigation.navigate("MyIdealsChange")}
           />
           <EachBox
             title={userInfo?.nickname + "님의 취미는"}
             tagsArray={hobbiesHash}
+            onPress={() => navigation.navigate("MyHobbiesChange")}
           />
           <View style={styles.boxContainer}>
             <View>
@@ -109,7 +197,9 @@ const MyProfile = ({ navigation }) => {
               >{`${userInfo?.nickname}님의 자기소개`}</Text>
               <Text>{userInfo?.introduction}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("MyIntroductionChange")}
+            >
               <Feather name="edit-2" size={24} color={colors.pink} />
             </TouchableOpacity>
           </View>
@@ -121,7 +211,7 @@ const MyProfile = ({ navigation }) => {
           flexDirection: "column",
         }}
       >
-        <Button text="적용하기" />
+        <Button text="적용하기" onPress={onSubmit} />
         <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>
     </SafeAreaView>
@@ -190,6 +280,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     padding: 10,
     width: "100%",
   },

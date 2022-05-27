@@ -18,7 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
-import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { manipulateAsync } from "expo-image-manipulator";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
