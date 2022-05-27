@@ -18,6 +18,9 @@ import FindMyLove from "./screens/FindMyLove";
 import Profile from "./screens/Profile";
 import Faq from "./screens/Faq/Faq";
 import FaqDetail from "./screens/Faq/FaqDetail";
+import Notice from "./screens/notice/Notice";
+import NoticePost from "./screens/notice/NoticePost";
+import MatchingLoading from "./screens/matching/MatchingLoading";
 
 const Stack = createStackNavigator();
 
@@ -46,6 +49,9 @@ export default function Navigation({ isLogin, user }) {
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="Faq" component={Faq} />
         <Stack.Screen name="FaqDetail" component={FaqDetail} />
+        <Stack.Screen name="Notice" component={Notice} />
+        <Stack.Screen name="NoticePost" component={NoticePost} />
+        <Stack.Screen name="MatchingLoading" component={MatchingLoading} />
       </Stack.Navigator>
     </NavigationContainer>
   );

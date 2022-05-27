@@ -17,8 +17,7 @@ import FindingIcon from "../../img/love2.svg";
 import { TouchableOpacity } from "react-native";
 import FaqIcon from "../../img/faq.svg";
 import posts from "../../lib/posts.json";
-import { useDispatch, useSelector } from "react-redux";
-import { increment } from "../../redux/reducers/counterSlice";
+import { useSelector } from "react-redux";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -55,10 +54,10 @@ const Banner = ({ title, texts, svg, onPress }) => {
   );
 };
 
-const LongBanner = ({ title, items }) => {
+const LongBanner = ({ title, items, onPress }) => {
   return (
     <View style={styles.longBanner}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress}>
         <View style={styles.innerLongBanner}>
           <Text style={styles.bannerTitle}>{title}</Text>
           <Text>더보기</Text>
@@ -78,7 +77,6 @@ const LongBanner = ({ title, items }) => {
 
 const Home = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(userInfo);
@@ -98,7 +96,7 @@ const Home = ({ stackNavigation }) => {
               title="매칭하기"
               texts={["지금 이 순간,", "널 사랑하고 싶다."]}
               svg={<MatchingIcon height={100} />}
-              onPress={() => dispatch(increment())}
+              onPress={() => stackNavigation.navigate("MatchingLoading")}
             />
             <Banner
               title="내 연인 찾기"
@@ -131,7 +129,11 @@ const Home = ({ stackNavigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.innerContainer}>
-          <LongBanner title="공지사항" items={posts.slice(0, 3)} />
+          <LongBanner
+            title="공지사항"
+            items={posts.slice(0, 3)}
+            onPress={() => stackNavigation.navigate("Notice")}
+          />
         </View>
         <View style={styles.innerContainer}>
           <LongBanner title="후기" items={posts.slice(0, 4)} />

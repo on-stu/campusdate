@@ -62,12 +62,14 @@ const Setting = ({ stackNavigation }) => {
                 <Text style={styles.value}>0.1.0</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => stackNavigation.navigate("Notice")}
+            >
               <View style={styles.menu}>
                 <Text>공지사항</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => stackNavigation.navigate("Faq")}>
               <View style={styles.menu}>
                 <Text>문의하기</Text>
               </View>
