@@ -12,7 +12,7 @@ import axios from "axios";
 const ListItemFaq = ({
   authorId,
   createdAt,
-  status,
+  done,
   onPress,
   last,
   fullVisible,
@@ -48,10 +48,10 @@ const ListItemFaq = ({
         <View style={{ ...styles.spacebetween, ...styles.contentBox }}>
           <Text>{fullVisible ? title : "비밀글 입니다."}</Text>
           <View style={styles.waitContainer}>
-            <Text style={status === "done" ? styles.done : styles.wait}>
-              {status === "done" ? "답변 완료" : "답변 대기중"}
+            <Text style={done ? styles.done : styles.wait}>
+              {done ? "답변 완료" : "답변 대기중"}
             </Text>
-            {status === "done" ? (
+            {done ? (
               <Feather name="check" size={16} color={colors.pink} />
             ) : (
               <Feather name="clock" size={16} color={colors.purple} />

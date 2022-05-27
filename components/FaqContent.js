@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import SmallProfileCard from "./SmallProfileCard";
 import Hr from "./Hr";
@@ -6,10 +6,6 @@ import { Feather } from "@expo/vector-icons";
 import colors from "../lib/colors.json";
 import { getTimeString } from "../functions/getTimeString";
 import { useDispatch, useSelector } from "react-redux";
-import { setFaq } from "../redux/reducers/faqSlice";
-import key from "../lib/key.json";
-import axios from "axios";
-import { setFaqById } from "../redux/reducers/faqsSlice";
 
 const FaqContent = ({ author, fullVisible }) => {
   const [timeString, setTimeString] = useState("");
@@ -39,7 +35,7 @@ const FaqContent = ({ author, fullVisible }) => {
         <View style={styles.bottomInfo}>
           {faq?.done ? (
             <>
-              <Text>답변 완료</Text>
+              <Text style={styles.doneText}>답변 완료</Text>
               <Feather name="check" size={16} color={colors.pink} />
             </>
           ) : (

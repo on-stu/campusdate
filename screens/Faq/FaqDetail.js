@@ -12,18 +12,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import BoardContent from "../../components/BoardContent";
 import key from "../../lib/key.json";
 import axios from "axios";
 import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  initNotices,
-  setNoticeById,
-  setNotices,
-} from "../../redux/reducers/noticesSlice";
 import colors from "../../lib/colors.json";
-import { initNotice, setNotice } from "../../redux/reducers/noticeSlice";
 import Comment from "../../components/Comment";
 import { setFaq } from "../../redux/reducers/faqSlice";
 import { setFaqsById } from "../../redux/reducers/faqsSlice";
@@ -34,7 +27,6 @@ const FaqDetail = ({ navigation }) => {
   const [comment, setComment] = useState("");
   const userInfo = useSelector((state) => state.user);
   const faq = useSelector((state) => state.faq);
-  console.log(faq);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,13 +51,15 @@ const FaqDetail = ({ navigation }) => {
     try {
       const commentObj = {
         creatorId: userInfo?.id,
-        comment: comment,
+        answer: comment,
         createdAt: new Date(),
       };
-      dispatch(setFaq({ comments: [...faq.comments, commentObj] }));
+      dispatch(setFaq({ answers: [...faq.answers, commentObj] }));
       const response = await axios.put(`${key.API}/faq/${faq.id}/`, {
-        comments: [...faq.comments, commentObj],
+        answers: [...faq.answers, commentObj],
+        done: true,
       });
+      dispatch(setFaq(response.data));
       dispatch(setFaqsById(response.data));
     } catch (error) {
       console.log(error);
@@ -93,9 +87,9 @@ const FaqDetail = ({ navigation }) => {
                 <FaqContent author={author} />
               </View>
               <View style={styles.commentsContainer}>
-                {faq?.comments?.map((item, i) => (
+                {faq?.answers?.map((item, i) => (
                   <Comment
-                    comment={item.comment}
+                    comment={item.answer}
                     key={i}
                     createdAt={item.createdAt}
                     creatorId={item.creatorId}

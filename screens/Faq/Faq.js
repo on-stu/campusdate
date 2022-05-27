@@ -49,9 +49,12 @@ const Faq = ({ navigation }) => {
               createdAt={faq?.createdAt}
               title={faq?.title}
               key={i}
+              done={faq?.done}
               onPress={() => {
-                dispatch(setFaq(faq));
-                navigation.navigate("FaqDetail");
+                if (!faq?.isSecret || userInfo?.is_admin) {
+                  dispatch(setFaq(faq));
+                  navigation.navigate("FaqDetail");
+                }
               }}
             />
           ))}
