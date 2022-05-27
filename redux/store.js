@@ -3,6 +3,8 @@ import counterReducer from "./reducers/counterSlice";
 import userReducer from "./reducers/userSlice";
 import noticeReducer from "./reducers/noticeSlice";
 import noticesReduceer from "./reducers/noticesSlice";
+import faqSlice from "./reducers/faqSlice";
+import faqsSlice from "./reducers/faqsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ export const store = configureStore({
     user: userReducer,
     notice: noticeReducer,
     notices: noticesReduceer,
+    faq: faqSlice,
+    faqs: faqsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

@@ -30,8 +30,6 @@ const Notice = ({ navigation }) => {
         dispatch(setNotices(response.data));
       })();
     }
-    console.log("hello");
-    // return () => dispatch(initNotices());
   }, [notices]);
 
   return (

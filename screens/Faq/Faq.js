@@ -6,15 +6,31 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import colors from "../../lib/colors.json";
 import FaqIcon from "../../img/faq.svg";
 import { Feather } from "@expo/vector-icons";
 import SearchBar from "../../components/SearchBar";
 import ListItemFaq from "../../components/ListItemFaq";
+import { useDispatch, useSelector } from "react-redux";
+import key from "../../lib/key.json";
 
-const Faq = () => {
-  const now = new Date();
+import axios from "axios";
+import { setFaqs } from "../../redux/reducers/faqsSlice";
+import { setFaq } from "../../redux/reducers/faqSlice";
+
+const Faq = ({ navigation }) => {
+  const userInfo = useSelector((state) => state.user);
+  const faqs = useSelector((state) => state.faqs);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (faqs.length === 0) {
+      (async () => {
+        const response = await axios.get(`${key.API}/faq/`);
+        dispatch(setFaqs(response.data));
+      })();
+    }
+  }, [faqs]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -26,22 +42,26 @@ const Faq = () => {
           <SearchBar placeholder="문의사항 검색하기" />
         </View>
         <View style={styles.inner}>
-          <ListItemFaq
-            author="관리자"
-            status="done"
-            time={now}
-            title="예시 문의사항"
-            fullVisible
-          />
-          <ListItemFaq author="관리자" time={now} title="예시 문의사항" />
-          <ListItemFaq author="관리자" time={now} title="예시 문의사항" />
-          <ListItemFaq author="관리자" time={now} title="예시 문의사항" />
-          <ListItemFaq author="관리자" time={now} title="예시 문의사항" />
-          <ListItemFaq author="관리자" time={now} title="예시 문의사항" />
-          <ListItemFaq author="관리자" time={now} title="예시 문의사항" last />
+          {faqs.map((faq, i) => (
+            <ListItemFaq
+              fullVisible={!faq?.isSecret || userInfo?.is_admin ? true : false}
+              authorId={faq?.authorId}
+              createdAt={faq?.createdAt}
+              title={faq?.title}
+              key={i}
+              onPress={() => {
+                dispatch(setFaq(faq));
+                navigation.navigate("FaqDetail");
+              }}
+            />
+          ))}
         </View>
       </ScrollView>
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("FaqPost");
+        }}
+      >
         <View style={styles.button}>
           <Feather name="edit" size={24} color="white" />
           <Text style={styles.buttonText}>문의하기</Text>

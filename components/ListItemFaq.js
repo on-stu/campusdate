@@ -1,30 +1,52 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 import SmallProfileCard from "./SmallProfileCard";
 import Hr from "./Hr";
+import { getTimeString } from "../functions/getTimeString";
+import key from "../lib/key.json";
+import { getValue } from "../functions/secureStore";
+import axios from "axios";
 
 const ListItemFaq = ({
-  author,
-  time,
-  title,
+  authorId,
+  createdAt,
   status,
   onPress,
   last,
   fullVisible,
+  title,
 }) => {
+  const [author, setAuthor] = useState({});
+  useEffect(() => {
+    if (authorId) {
+      (async () => {
+        const token = await getValue("token");
+        const headers = {
+          Authorization: `Token ${token}`,
+        };
+        const response = await axios.get(`${key.API}/user/${authorId}/`, {
+          headers,
+        });
+        setAuthor(response.data);
+      })();
+    }
+  }, [authorId]);
+  const timeString = getTimeString(createdAt);
   return (
     <View style={styles.itemBox}>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.spacebetween}>
-          <SmallProfileCard nickname={author} fullVisible={fullVisible} />
-          <Text
-            style={styles.time}
-          >{`${time?.getMonth()}/${time?.getDate()} ${time?.getHours()}:${time?.getMinutes()}`}</Text>
+          <SmallProfileCard
+            nickname={author?.nickname}
+            photoUrl={author?.photoUrl}
+            fullVisible={fullVisible}
+          />
+          <Text style={styles.time}>{timeString}</Text>
         </View>
         <View style={{ ...styles.spacebetween, ...styles.contentBox }}>
-          <Text>{title}</Text>
+          <Text>{fullVisible ? title : "비밀글 입니다."}</Text>
           <View style={styles.waitContainer}>
             <Text style={status === "done" ? styles.done : styles.wait}>
               {status === "done" ? "답변 완료" : "답변 대기중"}
