@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Hr from "../../components/Hr";
 import colors from "../../lib/colors.json";
 import MyProfileCard from "../../components/MyProfileCard";
@@ -19,6 +19,7 @@ import { deleteItem, getValue } from "../../functions/secureStore";
 const Setting = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [notification, setNotification] = useState(true);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -42,10 +43,12 @@ const Setting = ({ stackNavigation }) => {
           <Hr />
           <View style={styles.left}>
             <Text style={styles.property}>앱 설정</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => setNotification((prev) => !prev)}>
               <View style={styles.menu}>
                 <Text>알림 설정</Text>
-                <Text style={styles.value}>켜짐</Text>
+                <Text style={styles.value}>
+                  {notification ? "켜짐" : "꺼짐"}
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity>

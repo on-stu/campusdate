@@ -1,13 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 import SmallProfileCard from "./SmallProfileCard";
 import Hr from "./Hr";
+import { getValue } from "../functions/secureStore";
+import key from "../lib/key.json";
+import axios from "axios";
+import { getTimeString } from "../functions/getTimeString";
 
 const ListItem = ({
-  author,
-  time,
+  authorId,
+  createdAt,
   title,
   thumbsNum,
   commentsNum,
@@ -15,14 +19,32 @@ const ListItem = ({
   last,
   fullVisible,
 }) => {
+  const [author, setAuthor] = useState({});
+  useEffect(() => {
+    if (authorId) {
+      (async () => {
+        const token = await getValue("token");
+        const headers = {
+          Authorization: `Token ${token}`,
+        };
+        const response = await axios.get(`${key.API}/user/${authorId}/`, {
+          headers,
+        });
+        setAuthor(response.data);
+      })();
+    }
+  }, [authorId]);
+  const timeString = getTimeString(createdAt);
   return (
     <View style={styles.itemBox}>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.spacebetween}>
-          <SmallProfileCard nickname={author} fullVisible={fullVisible} />
-          <Text
-            style={styles.time}
-          >{`${time?.getMonth()}/${time?.getDate()} ${time?.getHours()}:${time?.getMinutes()}`}</Text>
+          <SmallProfileCard
+            nickname={author?.nickname}
+            photoUrl={author?.photoUrl}
+            fullVisible={fullVisible}
+          />
+          <Text style={styles.time}>{timeString}</Text>
         </View>
         <View style={{ ...styles.spacebetween, ...styles.contentBox }}>
           <Text>{title}</Text>

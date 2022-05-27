@@ -7,7 +7,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TitleImg from "../../img/title.svg";
 import SmallProfile from "../../components/SmallProfile";
 import colors from "../../lib/colors.json";
@@ -17,7 +17,12 @@ import FindingIcon from "../../img/love2.svg";
 import { TouchableOpacity } from "react-native";
 import FaqIcon from "../../img/faq.svg";
 import posts from "../../lib/posts.json";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import key from "../../lib/key.json";
+import { getTimeString } from "../../functions/getTimeString";
+import { setNotices } from "../../redux/reducers/noticesSlice";
+import { setNotice } from "../../redux/reducers/noticeSlice";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -55,7 +60,7 @@ const Banner = ({ title, texts, svg, onPress }) => {
   );
 };
 
-const LongBanner = ({ title, items, onPress }) => {
+const LongBanner = ({ title, items, onPress, navigation, dispatch }) => {
   return (
     <View style={styles.longBanner}>
       <TouchableOpacity onPress={onPress}>
@@ -64,24 +69,40 @@ const LongBanner = ({ title, items, onPress }) => {
           <Text>더보기</Text>
         </View>
       </TouchableOpacity>
-      {items?.map((item, key) => (
-        <TouchableOpacity key={key}>
-          <View style={{ ...styles.innerLongBanner, marginVertical: 4 }}>
-            <Text>{item.title}</Text>
-            <Text>{item.createdAt}</Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+      {items?.map((item, key) => {
+        const timeString = getTimeString(item.createdAt);
+        return (
+          <TouchableOpacity
+            key={key}
+            onPress={() => {
+              dispatch(setNotice(item));
+              navigation.navigate("NoticeDetail", { noticeId: item.id });
+            }}
+          >
+            <View style={{ ...styles.innerLongBanner, marginVertical: 4 }}>
+              <Text>{item.title}</Text>
+              <Text style={styles.time}>{timeString}</Text>
+            </View>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
 
 const Home = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
-
+  const notices = useSelector((state) => state.notices);
+  const dispatch = useDispatch();
   useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
+    (async () => {
+      if (notices?.length === 0) {
+        const response = await axios.get(`${key.API}/notice/`);
+        dispatch(setNotices(response.data));
+      }
+    })();
+  }, []);
+  useEffect(() => {}, [userInfo, notices]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -132,9 +153,14 @@ const Home = ({ stackNavigation }) => {
         <View style={styles.innerContainer}>
           <LongBanner
             title="공지사항"
-            items={posts.slice(0, 3)}
+            items={notices.slice(0, 3)}
+            navigation={stackNavigation}
             onPress={() => stackNavigation.navigate("Notice")}
+            dispatch={dispatch}
           />
+        </View>
+        <View style={styles.innerContainer}>
+          <LongBanner title="매력어필" items={posts.slice(0, 4)} />
         </View>
         <View style={styles.innerContainer}>
           <LongBanner title="후기" items={posts.slice(0, 4)} />
@@ -216,5 +242,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  time: {
+    color: colors.darkgray,
   },
 });

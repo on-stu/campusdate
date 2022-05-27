@@ -14,14 +14,16 @@ const SmallProfileCard = ({
 }) => {
   const [blurNickname, setBlurNickname] = useState("");
   useEffect(() => {
-    setBlurNickname(nickname?.slice(0, 1));
-    for (let i = 0; i < nickname?.length - 1; i++) {
-      setBlurNickname((prev) => prev + "*");
+    if (nickname?.slice !== undefined) {
+      setBlurNickname(nickname?.slice(0, 1));
+      for (let i = 0; i < nickname?.length - 1; i++) {
+        setBlurNickname((prev) => prev + "*");
+      }
     }
   }, [nickname]);
   return (
     <View style={styles.container}>
-      <TinyProfile uri={photoUrl} />
+      <TinyProfile uri={photoUrl} fullVisible={fullVisible} />
       <View style={styles.info}>
         <View style={styles.top}>
           <Text style={styles.nickname}>

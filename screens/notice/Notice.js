@@ -6,17 +6,34 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import colors from "../../lib/colors.json";
 import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
 import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import key from "../../lib/key.json";
+import { setNotice } from "../../redux/reducers/noticeSlice";
+import { initNotices, setNotices } from "../../redux/reducers/noticesSlice";
 
 const Notice = ({ navigation }) => {
-  const now = new Date();
   const userInfo = useSelector((state) => state.user);
+  const notices = useSelector((state) => state.notices);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (notices.length === 0) {
+      (async () => {
+        const response = await axios.get(`${key.API}/notice/`);
+        dispatch(setNotices(response.data));
+      })();
+    }
+    console.log("hello");
+    // return () => dispatch(initNotices());
+  }, [notices]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -28,71 +45,23 @@ const Notice = ({ navigation }) => {
           <SearchBar placeholder="공지사항 검색하기" />
         </View>
         <View style={styles.inner}>
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-          />
-          <ListItem
-            author="관리자"
-            thumbsNum={10}
-            commentsNum={10}
-            time={now}
-            title="예시 공지사항"
-            fullVisible
-            last={true}
-          />
+          {notices.map((notice, i) => (
+            <ListItem
+              authorId={notice?.authorId}
+              createdAt={notice?.createdAt}
+              title={notice.title}
+              key={i}
+              fullVisible
+              thumbsNum={notice?.thumbs?.length}
+              commentsNum={notice?.comments?.length}
+              onPress={() => {
+                dispatch(setNotice(notice));
+                navigation.navigate("NoticeDetail", {
+                  noticeId: notice.id,
+                });
+              }}
+            />
+          ))}
         </View>
       </ScrollView>
       {userInfo?.is_admin && (

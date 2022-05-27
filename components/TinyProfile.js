@@ -2,13 +2,14 @@ import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
+import { BlurView } from "expo-blur";
 
-const TinyProfile = ({ uri, onPress }) => {
+const TinyProfile = ({ uri, onPress, fullVisible }) => {
   return (
     <>
       {uri ? (
         <TouchableOpacity onPress={onPress}>
-          <View>
+          <View style={styles.circleContainer}>
             <Image
               style={{
                 width: 32,
@@ -19,6 +20,9 @@ const TinyProfile = ({ uri, onPress }) => {
               }}
               source={{ uri: uri }}
             />
+            {!fullVisible && (
+              <BlurView intensity={10} style={styles.blurContainer}></BlurView>
+            )}
           </View>
         </TouchableOpacity>
       ) : (
@@ -41,6 +45,21 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  circleContainer: {
+    width: 32,
+    height: 32,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 28,
+    overflow: "hidden",
+  },
+  blurContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 28,
+    position: "absolute",
   },
 });
 export default TinyProfile;

@@ -27,6 +27,7 @@ import MyWhoAmI from "./screens/my/MyWhoAmI";
 import MyIdealsChange from "./screens/my/MyIdealsChange";
 import MyHobbiesChange from "./screens/my/MyHobbiesChange";
 import MyIntroductionChange from "./screens/my/MyIntroductionChange";
+import NoticeDetail from "./screens/notice/NoticeDetail";
 
 const Stack = createStackNavigator();
 
@@ -68,6 +69,7 @@ export default function Navigation({ isLogin, user }) {
           name="MyIntroductionChange"
           component={MyIntroductionChange}
         />
+        <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

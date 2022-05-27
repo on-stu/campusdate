@@ -90,7 +90,7 @@ const MyHobbiesChange = ({ navigation }) => {
                             prev.filter((elm) => elm !== option)
                           );
                         } else {
-                          setHobbies((prev) => [...prev, option]);
+                          setHobbies((prev) => prev.push(option));
                         }
                       }}
                     />
