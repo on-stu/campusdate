@@ -23,6 +23,7 @@ import key from "../../lib/key.json";
 import { getTimeString } from "../../functions/getTimeString";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 import { setNotice } from "../../redux/reducers/noticeSlice";
+import useWebSockets from "../../functions/useWebSockets";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -94,6 +95,7 @@ const Home = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();
+  const { createChat } = useWebSockets();
   useEffect(() => {
     (async () => {
       if (notices?.length === 0) {
@@ -160,7 +162,13 @@ const Home = ({ stackNavigation }) => {
           />
         </View>
         <View style={styles.innerContainer}>
-          <LongBanner title="매력어필" items={posts.slice(0, 4)} />
+          <LongBanner
+            onPress={() => {
+              createChat(1, 2);
+            }}
+            title="매력어필"
+            items={posts.slice(0, 4)}
+          />
         </View>
         <View style={styles.innerContainer}>
           <LongBanner title="후기" items={posts.slice(0, 4)} />

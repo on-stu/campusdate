@@ -18,6 +18,7 @@ import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
 import { getBlurNickname } from "../functions/getBlurNickname";
+import useWebSockets from "../functions/useWebSockets";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -58,6 +59,7 @@ const Profile = ({ navigation, route }) => {
   const [hobbiesHash, setHobbiesHash] = useState([]);
   const [fullVisible, setFullVisible] = useState(false);
   const [blurNickname, setBlurNickname] = useState("");
+  const { socketRef } = useWebSockets();
 
   useEffect(() => {
     if (profileInfo.nickname !== undefined) {
@@ -79,7 +81,6 @@ const Profile = ({ navigation, route }) => {
 
   useEffect(() => {
     getProfile();
-
     if (profileInfo.id !== undefined && profileInfo !== {}) {
       const mySex = profileInfo?.sex === "male" ? "남자" : "여자";
       const otherSex = profileInfo?.sex === "male" ? "여자" : "남자";
@@ -143,7 +144,10 @@ const Profile = ({ navigation, route }) => {
           flexDirection: "column",
         }}
       >
-        <Button text="채팅 해보기" />
+        <Button
+          text="채팅 해보기"
+          onPress={() => socketRef.current.emit("chat", "hello from the expo")}
+        />
         <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>
     </SafeAreaView>

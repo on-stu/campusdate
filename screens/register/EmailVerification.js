@@ -46,7 +46,7 @@ const EmailVerification = ({ navigation }) => {
   }, [verifiedEmail]);
 
   const verifyEmail = async () => {
-    console.log("hi");
+    // console.log("hi");
     if (univEmail.includes(emailValue[university])) {
       const response = await axios.post(`${key.API}/emailchecker/`, {
         email: univEmail,

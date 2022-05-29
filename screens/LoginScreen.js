@@ -27,7 +27,6 @@ const LoginScreen = ({ navigation }) => {
   const userInfo = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(userInfo.id);
     if (userInfo.id !== undefined) {
       navigation.reset({
         routes: [{ name: "BottomTab" }],

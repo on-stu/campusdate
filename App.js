@@ -1,5 +1,5 @@
 import Navigation from "./Navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { StatusBar } from "expo-status-bar";
@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { getValue } from "./functions/secureStore";
 import axios from "axios";
 import key from "./lib/key.json";
+import useWebSockets from "./functions/useWebSockets";
 
 const customFont = {
   WaterMelon: require("./assets/116watermelon.otf"),
@@ -17,6 +18,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(false);
+  const { joinRoom } = useWebSockets();
 
   useEffect(() => {
     (async () => {
@@ -33,6 +35,7 @@ export default function App() {
             };
             const userInfo = await axios.get(`${key.API}/user/`, { headers });
             setUser(userInfo.data);
+            joinRoom(userInfo.data.id);
           } catch (error) {
             setUser(false);
           }

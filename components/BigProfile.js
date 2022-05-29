@@ -4,7 +4,6 @@ import { BlurView } from "expo-blur";
 import colors from "../lib/colors.json";
 
 const BigProfile = ({ uri, fullVisible }) => {
-  // console.log(uri);
   return (
     <View style={styles.circleContainer}>
       {uri && (

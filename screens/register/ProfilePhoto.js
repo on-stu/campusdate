@@ -103,7 +103,10 @@ const ProfilePhoto = ({ navigation }) => {
               <Text style={styles.property}>프로필 사진</Text>
               <TouchableOpacity onPress={pickImage}>
                 {photoUrl ? (
-                  <BigProfile uri={`data:img/png;base64, ${photoUrl}`} />
+                  <BigProfile
+                    uri={`data:img/png;base64, ${photoUrl}`}
+                    fullVisible
+                  />
                 ) : (
                   <View style={styles.circle}></View>
                 )}
