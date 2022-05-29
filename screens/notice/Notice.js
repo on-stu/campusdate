@@ -1,4 +1,5 @@
 import {
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -6,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
 import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
@@ -16,12 +17,22 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { setNotice } from "../../redux/reducers/noticeSlice";
-import { initNotices, setNotices } from "../../redux/reducers/noticesSlice";
+import { setNotices } from "../../redux/reducers/noticesSlice";
+
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 const Notice = ({ navigation }) => {
   const userInfo = useSelector((state) => state.user);
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     if (notices.length === 0) {
@@ -34,7 +45,11 @@ const Notice = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.header}>
           <Text style={styles.title}>공지사항</Text>
           <NoticeIcon height={72} width={122} />

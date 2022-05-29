@@ -7,7 +7,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TitleImg from "../../img/title.svg";
 import SmallProfile from "../../components/SmallProfile";
 import colors from "../../lib/colors.json";
@@ -24,6 +24,7 @@ import { getTimeString } from "../../functions/getTimeString";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import useWebSockets from "../../functions/useWebSockets";
+import SocketContext from "../../context/socket";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -95,7 +96,8 @@ const Home = ({ stackNavigation }) => {
   const userInfo = useSelector((state) => state.user);
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();
-  const { createChat } = useWebSockets();
+  const socket = useContext(SocketContext);
+
   useEffect(() => {
     (async () => {
       if (notices?.length === 0) {
@@ -135,24 +137,6 @@ const Home = ({ stackNavigation }) => {
           </View>
         </View>
         <View style={styles.innerContainer}>
-          <TouchableOpacity onPress={() => stackNavigation.navigate("Faq")}>
-            <View
-              style={{
-                ...styles.longBanner,
-                height: 80,
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                paddingHorizontal: 16,
-              }}
-            >
-              <Text style={styles.bannerTitle}>문의하기</Text>
-              <FaqIcon width={120} />
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.innerContainer}>
           <LongBanner
             title="공지사항"
             items={notices.slice(0, 3)}
@@ -164,7 +148,7 @@ const Home = ({ stackNavigation }) => {
         <View style={styles.innerContainer}>
           <LongBanner
             onPress={() => {
-              createChat(1, 2);
+              socket.emit("createChat", 20, 3);
             }}
             title="매력어필"
             items={posts.slice(0, 4)}

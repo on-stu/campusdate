@@ -27,13 +27,6 @@ const useWebSockets = () => {
     socketRef.current.emit("join", userId);
   };
 
-  const createChat = (creatorId, receiverId) => {
-    socketRef.current.emit("createChat", creatorId, receiverId);
-    socketRef.current.on("chatCreated", (chatId) => {
-      console.log(chatId);
-    });
-  };
-
   const disconnectFromSocket = () => {
     if (socketRef.current !== null) {
       socketRef.current.disconnect();
@@ -41,9 +34,7 @@ const useWebSockets = () => {
   };
 
   return {
-    socketRef,
     joinRoom,
-    createChat,
   };
 };
 

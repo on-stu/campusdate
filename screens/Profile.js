@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import colors from "../lib/colors.json";
 import BigProfile from "../components/BigProfile";
@@ -18,7 +18,7 @@ import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
 import { getBlurNickname } from "../functions/getBlurNickname";
-import useWebSockets from "../functions/useWebSockets";
+import SocketContext from "../context/socket";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -59,13 +59,13 @@ const Profile = ({ navigation, route }) => {
   const [hobbiesHash, setHobbiesHash] = useState([]);
   const [fullVisible, setFullVisible] = useState(false);
   const [blurNickname, setBlurNickname] = useState("");
-  const { socketRef } = useWebSockets();
+  const socket = useContext(SocketContext);
+  const userInfo = useSelector((state) => state.user);
 
   useEffect(() => {
     if (profileInfo.nickname !== undefined) {
       setBlurNickname(getBlurNickname(profileInfo.nickname));
     }
-    return () => getBlurNickname();
   }, [profileInfo.nickname]);
 
   const getProfile = async () => {
@@ -80,7 +80,9 @@ const Profile = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    getProfile();
+    if (profileInfo?.id === undefined) {
+      getProfile();
+    }
     if (profileInfo.id !== undefined && profileInfo !== {}) {
       const mySex = profileInfo?.sex === "male" ? "남자" : "여자";
       const otherSex = profileInfo?.sex === "male" ? "여자" : "남자";
@@ -146,7 +148,9 @@ const Profile = ({ navigation, route }) => {
       >
         <Button
           text="채팅 해보기"
-          onPress={() => socketRef.current.emit("chat", "hello from the expo")}
+          onPress={() =>
+            socket.emit("createRoom", userInfo?.id, profileInfo?.id)
+          }
         />
         <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import LogoImg from "../img/LOGO.svg";
 import ShadowInput from "../components/ShadowInput";
 import Button from "../components/Button";
@@ -19,12 +19,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../redux/reducers/userSlice";
 import { getValue, save } from "../functions/secureStore";
 import { getUserWithToken } from "../functions/getUserWithToken";
+import SocketContext from "../context/socket";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     if (userInfo.id !== undefined) {
