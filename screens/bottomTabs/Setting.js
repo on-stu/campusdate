@@ -8,18 +8,19 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Hr from "../../components/Hr";
 import colors from "../../lib/colors.json";
 import MyProfileCard from "../../components/MyProfileCard";
-import { useDispatch, useSelector } from "react-redux";
-import { initUser } from "../../redux/reducers/userSlice";
 import { deleteItem, getValue } from "../../functions/secureStore";
+import { UserContext } from "../../context/user";
+import SocketContext from "../../context/socket";
 
 const Setting = ({ stackNavigation }) => {
-  const userInfo = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const socket = useContext(SocketContext);
   const [notification, setNotification] = useState(true);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -121,8 +122,8 @@ const Setting = ({ stackNavigation }) => {
                     onPress: () => {
                       deleteItem("token").then(() => {
                         getValue("token").then((token) => {
-                          console.log(token);
-                          dispatch(initUser());
+                          setUserInfo({});
+                          socket.disconnect();
                           stackNavigation.reset({
                             routes: [{ name: "Login" }],
                           });

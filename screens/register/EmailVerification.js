@@ -8,7 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
@@ -23,9 +23,9 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import emailValue from "../../lib/email.json";
 import { Alert } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
 import { save } from "../../functions/secureStore";
+import { UserContext } from "../../context/user";
+import SocketContext from "../../context/socket";
 
 const EmailVerification = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -33,12 +33,11 @@ const EmailVerification = ({ navigation }) => {
   const [univEmail, setUnivEmail] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [visible, setVisible] = useState(false);
-
-  const userInfo = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-
+  const { setUserInfo, userInfo } = useContext(UserContext);
+  const socket = useContext(SocketContext);
   useEffect(() => {
     if (verifiedEmail !== "") {
+      setUserInfo({ ...userInfo, university });
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
@@ -46,7 +45,6 @@ const EmailVerification = ({ navigation }) => {
   }, [verifiedEmail]);
 
   const verifyEmail = async () => {
-    // console.log("hi");
     if (univEmail.includes(emailValue[university])) {
       const response = await axios.post(`${key.API}/emailchecker/`, {
         email: univEmail,
@@ -56,6 +54,10 @@ const EmailVerification = ({ navigation }) => {
         return true;
       } else {
         setVerifiedEmail("");
+        Alert.alert(
+          "인증실패",
+          "인증에 실패하였습니다.\n 메일주소를 확인해주세요"
+        );
         return false;
       }
     } else {
@@ -70,13 +72,18 @@ const EmailVerification = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    const response = await axios.post(`${key.API}/register/`, userInfo);
-    console.log(response.data);
+    console.log("chatroom is", userInfo.chatRooms);
+    const response = await axios.post(`${key.API}/register/`, {
+      ...userInfo,
+      chatRooms: [],
+    });
     const {
       data: { userInfo: user, token },
     } = response;
-    dispatch(setUser(user));
+    setUserInfo(user);
     save("token", token);
+    socket.connect();
+    socket.emit("join", user.id);
     navigation.reset({
       routes: [{ name: "BottomTab" }],
     });

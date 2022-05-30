@@ -8,23 +8,21 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
 import { getValue } from "../../functions/secureStore";
 import key from "../../lib/key.json";
 import axios from "axios";
+import { UserContext } from "../../context/user";
 
 const MyIntroductionChange = ({ navigation }) => {
   const [introduction, setIntroduction] = useState("");
-  const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const onNext = async () => {
     const token = await getValue("token");
@@ -38,7 +36,7 @@ const MyIntroductionChange = ({ navigation }) => {
         headers,
       }
     );
-    dispatch(setUser(response.data));
+    setUserInfo(response.data);
     navigation.pop();
   };
 

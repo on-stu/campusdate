@@ -36,8 +36,7 @@ function BottomTab({ navigation }) {
       />
       <Tab.Screen
         name="Chat"
-        component={Chat}
-        stackNavigation={navigation}
+        children={() => <Chat stackNavigation={navigation} />}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

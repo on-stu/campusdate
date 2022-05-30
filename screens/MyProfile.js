@@ -9,8 +9,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
 import colors from "../lib/colors.json";
 import BigProfile from "../components/BigProfile";
 import { Feather } from "@expo/vector-icons";
@@ -21,7 +20,7 @@ import { manipulateAsync } from "expo-image-manipulator";
 import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
-import { setUser } from "../redux/reducers/userSlice";
+import { UserContext } from "../context/user";
 
 const EachBox = ({ title, tagsArray, onPress }) => {
   return (
@@ -56,12 +55,11 @@ const EachBox = ({ title, tagsArray, onPress }) => {
 };
 
 const MyProfile = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
   const [whoAmIHash, setWhoAmIHash] = useState([]);
   const [idealsHash, setIdealsHash] = useState([]);
   const [hobbiesHash, setHobbiesHash] = useState([]);
   const [photoUrl, setPhotoUrl] = useState("");
-  const dispatch = useDispatch();
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
@@ -125,7 +123,6 @@ const MyProfile = ({ navigation }) => {
 
       setPhotoUrl(userInfo?.photoUrl.toString());
     }
-    console.log(userInfo);
   }, [userInfo]);
 
   const onSubmit = async () => {
@@ -141,7 +138,7 @@ const MyProfile = ({ navigation }) => {
           headers,
         }
       );
-      dispatch(setUser(response.data));
+      setUserInfo(response.data);
       navigation.pop();
     } else {
       navigation.pop();

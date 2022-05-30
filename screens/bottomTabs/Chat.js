@@ -5,15 +5,51 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
-import SmallProfile from "../../components/SmallProfile";
 import colors from "../../lib/colors.json";
 import NotificationCircle from "../../components/NotificationCircle";
+import ChatItem from "../../components/ChatItem";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import key from "../../lib/key.json";
+import { addChat, setChats } from "../../redux/reducers/chatsSlice";
+import SocketContext from "../../context/socket";
+import { UserContext } from "../../context/user";
 
-const Chat = () => {
+const Chat = ({ stackNavigation }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
+  const chatList = useSelector((state) => state.chats);
+  const dispatch = useDispatch();
+  const socket = useContext(SocketContext);
+  const { userInfo } = useContext(UserContext);
+
+  const getChatRoom = async (chatRoomId) => {
+    try {
+      const response = await axios.get(`${key.API}/chatroom/${chatRoomId}/`);
+      if (response.status === 200) {
+        dispatch(addChat(response.data));
+      }
+    } catch (e) {
+      console.log(chatRoomId + "failed");
+    }
+  };
+
+  useEffect(() => {
+    userInfo?.chatRooms?.map((chatRoom) => {
+      socket.emit("join", chatRoom);
+      getChatRoom(chatRoom);
+    });
+    socket?.on("chatRoomCreated", (chatRoomId, chatRoomInfo) => {
+      addChat(chatRoomInfo);
+      getChatRoom(chatRoomId);
+    });
+    socket.on("receiveMessage", (message) => getChatRoom(message.chatRoomId));
+
+    return () => socket.off("receiveMessage");
+  }, [userInfo, socket]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -24,7 +60,9 @@ const Chat = () => {
             <NotificationCircle num={9} />
           </View>
           <TouchableOpacity
-            onPress={() => setIsNotificationOn((prev) => !prev)}
+            onPress={() => {
+              setIsNotificationOn((prev) => !prev);
+            }}
           >
             {isNotificationOn ? (
               <Feather name="bell" size={24} color={colors.darkgray} />
@@ -33,26 +71,34 @@ const Chat = () => {
             )}
           </TouchableOpacity>
         </View>
-        <View>
-          <View>
-            <SmallProfile />
-            <View>
-              <View>
-                <View>
-                  <Text>캠퍼스 데이트 매니저</Text>
-                  <Feather name="bell" size={24} color="black" />
-                </View>
-                <View>
-                  <Text>2</Text>
-                </View>
-              </View>
-              <View>
-                <Text>안녕하세요</Text>
-                <Text>12:30</Text>
-              </View>
+        {chatList?.map((chat, i) => {
+          let counterPartId;
+          chat.participants.map((participant) => {
+            if (participant !== userInfo.id) {
+              counterPartId = participant;
+            }
+          });
+
+          return (
+            <View style={styles.inner} key={i}>
+              <ChatItem
+                counterPartId={counterPartId}
+                lastAt={chat.lastAt}
+                onPress={() => {
+                  stackNavigation.navigate({
+                    name: "ChatScreen",
+                    params: { counterPartId, chatInfo: chat },
+                  });
+                }}
+              />
             </View>
+          );
+        })}
+        {chatList.length === 0 && (
+          <View style={styles.innerCenter}>
+            <Text>현재 진행중인 채팅이 없습니다.</Text>
           </View>
-        </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -80,5 +126,16 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  inner: {
+    paddingHorizontal: 20,
+    width: Dimensions.get("screen").width,
+    marginBottom: 10,
+  },
+  innerCenter: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

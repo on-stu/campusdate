@@ -67,6 +67,7 @@ const NoticeDetail = ({ navigation, route }) => {
         comments: [...notice.comments, commentObj],
       });
       dispatch(setNoticeById(response.data));
+      setComment("");
     } catch (error) {
       console.log(error);
     }

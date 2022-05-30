@@ -7,7 +7,7 @@ import {
   Keyboard,
   Alert,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import LoginImg from "../../img/login.svg";
 import ShadowInput from "../../components/ShadowInput";
@@ -15,24 +15,23 @@ import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
 import axios from "axios";
 import key from "../../lib/key.json";
+import { UserContext } from "../../context/user";
 
 const EmailAndPassword = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const dispatch = useDispatch();
+  const { setUserInfo, userInfo } = useContext(UserContext);
 
   const onNext = async () => {
     try {
       const response = await axios.post(`${key.API}/emailvalidate/`, { email });
       if (response.status === 200) {
         const tempUser = { email, password };
-        dispatch(setUser(tempUser));
+        setUserInfo({ ...userInfo, ...tempUser });
         navigation.navigate("BasicInfomation");
       }
     } catch (error) {

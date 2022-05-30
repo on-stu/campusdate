@@ -15,17 +15,15 @@ import colors from "../lib/colors.json";
 import { TouchableOpacity } from "react-native";
 import axios from "axios";
 import key from "../lib/key.json";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../redux/reducers/userSlice";
-import { getValue, save } from "../functions/secureStore";
-import { getUserWithToken } from "../functions/getUserWithToken";
+
 import SocketContext from "../context/socket";
+import { UserContext } from "../context/user";
+import { save } from "../functions/secureStore";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo, setUserInfo } = useContext(UserContext);
   const socket = useContext(SocketContext);
 
   useEffect(() => {
@@ -53,7 +51,7 @@ const LoginScreen = ({ navigation }) => {
       };
       const user = await axios.get(`${key.API}/user/`, { headers });
       // console.log(user.data);
-      dispatch(setUser(user.data));
+      setUserInfo(user.data);
       navigation.reset({
         routes: [{ name: "BottomTab" }],
       });

@@ -8,23 +8,22 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
+
+import { UserContext } from "../../context/user";
 
 const MyIntroduction = ({ navigation }) => {
   const [introduction, setIntroduction] = useState("");
-  const dispatch = useDispatch();
-
+  const { setUserInfo, userInfo } = useContext(UserContext);
   const onNext = () => {
     const tempUser = { introduction };
-    dispatch(setUser(tempUser));
+    setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("EmailVerification");
   };
 

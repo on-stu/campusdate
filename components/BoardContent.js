@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SmallProfileCard from "./SmallProfileCard";
 import Hr from "./Hr";
 import { Feather } from "@expo/vector-icons";
@@ -10,10 +10,11 @@ import { setNotice } from "../redux/reducers/noticeSlice";
 import key from "../lib/key.json";
 import axios from "axios";
 import { setNoticeById } from "../redux/reducers/noticesSlice";
+import { UserContext } from "../context/user";
 
 const BoardContent = ({ author, fullVisible }) => {
   const [timeString, setTimeString] = useState("");
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
   const notice = useSelector((state) => state.notice);
   const dispatch = useDispatch();
 

@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import ProfileImg from "../../img/profile.svg";
 import ShadowInput from "../../components/ShadowInput";
@@ -16,15 +16,14 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
 import BackButton from "../../components/BackButton";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
+import { UserContext } from "../../context/user";
 
 const BasicInfomation = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [nickname, setNickname] = useState("");
   const [sex, setSex] = useState("male");
   const [age, setAge] = useState("");
-  const dispatch = useDispatch();
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   useEffect(() => {
     if (nickname !== "" && age !== "") {
@@ -42,7 +41,7 @@ const BasicInfomation = ({ navigation }) => {
 
   const onNext = () => {
     const tempUser = { nickname, sex, age };
-    dispatch(setUser(tempUser));
+    setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("ProfilePhoto");
   };
 

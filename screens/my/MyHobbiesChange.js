@@ -7,7 +7,7 @@ import {
   Keyboard,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
@@ -18,19 +18,17 @@ import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
 import { getValue } from "../../functions/secureStore";
 import axios from "axios";
 import key from "../../lib/key.json";
+import { UserContext } from "../../context/user";
 
 const options = categories.hobbies;
 
 const MyHobbiesChange = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [hobbies, setHobbies] = useState([]);
-  const dispatch = useDispatch();
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const onNext = async () => {
     const token = await getValue("token");
@@ -44,7 +42,7 @@ const MyHobbiesChange = ({ navigation }) => {
         headers,
       }
     );
-    dispatch(setUser(response.data));
+    setUserInfo(response.data);
     navigation.pop();
   };
 

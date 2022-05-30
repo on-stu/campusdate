@@ -7,7 +7,7 @@ import {
   Keyboard,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
@@ -16,20 +16,19 @@ import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
 import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
 import { manipulateAsync } from "expo-image-manipulator";
+import { UserContext } from "../../context/user";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [photoUrl, setPhotoUrl] = useState("");
-  const dispatch = useDispatch();
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const onNext = () => {
     const tempUser = {
       photoUrl: `data:img/png;base64,${photoUrl}`,
     };
-    dispatch(setUser(tempUser));
+    setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("MyHobbies");
   };
 

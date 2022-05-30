@@ -8,7 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import colors from "../lib/colors.json";
 import BigProfile from "../components/BigProfile";
 import { Feather } from "@expo/vector-icons";
@@ -19,6 +19,8 @@ import axios from "axios";
 import key from "../lib/key.json";
 import { getBlurNickname } from "../functions/getBlurNickname";
 import SocketContext from "../context/socket";
+import { addChat } from "../redux/reducers/chatsSlice";
+import { UserContext } from "../context/user";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -60,7 +62,7 @@ const Profile = ({ navigation, route }) => {
   const [fullVisible, setFullVisible] = useState(false);
   const [blurNickname, setBlurNickname] = useState("");
   const socket = useContext(SocketContext);
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
 
   useEffect(() => {
     if (profileInfo.nickname !== undefined) {
@@ -148,9 +150,14 @@ const Profile = ({ navigation, route }) => {
       >
         <Button
           text="채팅 해보기"
-          onPress={() =>
-            socket.emit("createRoom", userInfo?.id, profileInfo?.id)
-          }
+          onPress={() => {
+            console.log(userInfo.id, profileInfo.id);
+            socket.emit("createRoom", userInfo?.id, profileInfo?.id, () => {
+              navigation.reset({
+                routes: [{ name: "BottomTab" }],
+              });
+            });
+          }}
         />
         <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>

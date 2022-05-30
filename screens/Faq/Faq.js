@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import colors from "../../lib/colors.json";
 import FaqIcon from "../../img/faq.svg";
 import { Feather } from "@expo/vector-icons";
@@ -14,13 +14,13 @@ import SearchBar from "../../components/SearchBar";
 import ListItemFaq from "../../components/ListItemFaq";
 import { useDispatch, useSelector } from "react-redux";
 import key from "../../lib/key.json";
-
 import axios from "axios";
 import { setFaqs } from "../../redux/reducers/faqsSlice";
 import { setFaq } from "../../redux/reducers/faqSlice";
+import { UserContext } from "../../context/user";
 
 const Faq = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
   const faqs = useSelector((state) => state.faqs);
   const dispatch = useDispatch();
   useEffect(() => {

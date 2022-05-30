@@ -7,7 +7,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import TitleImg from "../../img/title.svg";
 import SmallProfile from "../../components/SmallProfile";
 import colors from "../../lib/colors.json";
@@ -15,7 +15,6 @@ import getWidthByPercent from "../../functions/getWidthByPercent";
 import MatchingIcon from "../../img/love.svg";
 import FindingIcon from "../../img/love2.svg";
 import { TouchableOpacity } from "react-native";
-import FaqIcon from "../../img/faq.svg";
 import posts from "../../lib/posts.json";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -23,8 +22,8 @@ import key from "../../lib/key.json";
 import { getTimeString } from "../../functions/getTimeString";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 import { setNotice } from "../../redux/reducers/noticeSlice";
-import useWebSockets from "../../functions/useWebSockets";
 import SocketContext from "../../context/socket";
+import { UserContext } from "../../context/user";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -93,7 +92,7 @@ const LongBanner = ({ title, items, onPress, navigation, dispatch }) => {
 };
 
 const Home = ({ stackNavigation }) => {
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
@@ -106,7 +105,6 @@ const Home = ({ stackNavigation }) => {
       }
     })();
   }, []);
-  useEffect(() => {}, [userInfo, notices]);
 
   return (
     <SafeAreaView style={styles.container}>

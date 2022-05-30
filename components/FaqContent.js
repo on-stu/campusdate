@@ -5,13 +5,11 @@ import Hr from "./Hr";
 import { Feather } from "@expo/vector-icons";
 import colors from "../lib/colors.json";
 import { getTimeString } from "../functions/getTimeString";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const FaqContent = ({ author, fullVisible }) => {
   const [timeString, setTimeString] = useState("");
-  const userInfo = useSelector((state) => state.user);
   const faq = useSelector((state) => state.faq);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     setTimeString(getTimeString(faq.createdAt));

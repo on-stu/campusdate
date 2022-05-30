@@ -7,7 +7,7 @@ import {
   Keyboard,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import Title from "../../components/Title";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
@@ -18,19 +18,18 @@ import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
+import { UserContext } from "../../context/user";
 
 const options = categories.ideals;
 
 const MyIdeals = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [ideals, setIdeals] = useState([]);
-  const dispatch = useDispatch();
+  const { setUserInfo, userInfo } = useContext(UserContext);
 
   const onNext = () => {
     const tempUser = { myIdeals: ideals };
-    dispatch(setUser(tempUser));
+    setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("WhoAmI");
   };
 

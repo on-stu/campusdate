@@ -10,9 +10,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import WhoAmI from "./screens/register/WhoAmI";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTab from "./screens/bottomTabs/BottomTab";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setUser } from "./redux/reducers/userSlice";
 import MyProfile from "./screens/MyProfile";
 import FindMyLove from "./screens/FindMyLove";
 import Profile from "./screens/Profile";
@@ -29,21 +26,16 @@ import MyHobbiesChange from "./screens/my/MyHobbiesChange";
 import MyIntroductionChange from "./screens/my/MyIntroductionChange";
 import NoticeDetail from "./screens/notice/NoticeDetail";
 import FaqPost from "./screens/Faq/FaqPost";
+import ChatScreen from "./screens/ChatScreen";
 
 const Stack = createStackNavigator();
 
-export default function Navigation({ isLogin, user }) {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (user) {
-      dispatch(setUser(user));
-    }
-  }, [user]);
+export default function Navigation({ isLogin }) {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isLogin && <Stack.Screen name="Login" component={LoginScreen} />}
-        <Stack.Screen name="BottomTab" component={BottomTab} user={user} />
+        <Stack.Screen name="BottomTab" component={BottomTab} />
         <Stack.Screen name="EmailAndPassword" component={EmailAndPassword} />
         <Stack.Screen name="BasicInfomation" component={BasicInfomation} />
         <Stack.Screen name="ProfilePhoto" component={ProfilePhoto} />
@@ -72,6 +64,7 @@ export default function Navigation({ isLogin, user }) {
         />
         <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
         <Stack.Screen name="FaqPost" component={FaqPost} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
