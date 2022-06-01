@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
@@ -18,7 +17,6 @@ import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
-import BackButton from "../../components/BackButton";
 import { UserContext } from "../../context/user";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUp from "../../components/PopUp";
@@ -80,16 +78,19 @@ const BasicInfomation = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inner}>
-              <Title text="가입하기" percent="2 / 8" />
+              <Title
+                text="가입하기"
+                percent="2 / 8"
+                navigation={navigation}
+                backbutton
+              />
               <ProfileImg width={250} height={250} />
               <View style={styles.inputContainer}>
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>이름</Text>
                 </View>
                 <ShadowInput value={nickname} onChangeText={setNickname} />
-                <View style={styles.askContainer}>
-                  <Text style={styles.ask}>이름을 알려주세요!</Text>
-                </View>
+
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>성별</Text>
                 </View>
@@ -105,9 +106,7 @@ const BasicInfomation = ({ navigation }) => {
                     onPress={() => toggleSex()}
                   />
                 </View>
-                <View style={styles.askContainer}>
-                  <Text style={styles.ask}>성별을 알려주세요!</Text>
-                </View>
+
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>생년월일</Text>
                 </View>
@@ -120,9 +119,6 @@ const BasicInfomation = ({ navigation }) => {
                     }월 ${birthday.getDate()}일`}</Text>
                   </View>
                 </TouchableOpacity>
-                <View style={styles.askContainer}>
-                  <Text style={styles.ask}>생년월일을 알려주세요!</Text>
-                </View>
               </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -131,7 +127,6 @@ const BasicInfomation = ({ navigation }) => {
                 disabled={buttonDisabled}
                 onPress={onNext}
               />
-              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -164,7 +159,9 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom: 10,
+  },
   inner: {
     width: "100%",
     alignItems: "center",

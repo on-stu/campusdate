@@ -37,7 +37,12 @@ const MyIntroduction = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="가입하기" percent="7 / 8" />
+              <Title
+                text="가입하기"
+                percent="7 / 8"
+                backbutton
+                navigation={navigation}
+              />
               <View style={styles.subTitle}>
                 <Text style={styles.ask}>
                   혹시 자신에 대해 더 소개할 말이 있으신가요?
@@ -55,7 +60,6 @@ const MyIntroduction = ({ navigation }) => {
             </View>
             <View style={styles.buttonContainer}>
               <Button text="다음으로" disabled={false} onPress={onNext} />
-              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -110,5 +114,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "space-between",
+  },
+  buttonContainer: {
+    marginBottom: 10,
   },
 });

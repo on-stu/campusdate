@@ -110,7 +110,7 @@ const Home = ({ stackNavigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header
-          university="부산대학교"
+          university={userInfo?.university}
           photoUrl={userInfo?.photoUrl}
           navigation={stackNavigation}
         />

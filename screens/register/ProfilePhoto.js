@@ -13,11 +13,11 @@ import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
-import BackButton from "../../components/BackButton";
 import * as ImagePicker from "expo-image-picker";
 import BigProfile from "../../components/BigProfile";
 import { manipulateAsync } from "expo-image-manipulator";
 import { UserContext } from "../../context/user";
+import AvatarIcon from "../../img/avatar.svg";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -83,7 +83,6 @@ const ProfilePhoto = ({ navigation }) => {
     });
     if (!result.cancelled) {
       const resized = await resizeImg(result.uri);
-      // console.log(resized);
       setPhotoUrl(resized);
     }
   };
@@ -97,9 +96,14 @@ const ProfilePhoto = ({ navigation }) => {
           }}
         >
           <View style={styles.container}>
-            <Title text="가입하기" percent="3 / 8" />
+            <Title
+              text="가입하기"
+              percent="3 / 8"
+              backbutton={true}
+              navigation={navigation}
+            />
             <View style={styles.inputContainer}>
-              <Text style={styles.property}>프로필 사진</Text>
+              <Text style={styles.property}>프로필 사진 선택</Text>
               <TouchableOpacity onPress={pickImage}>
                 {photoUrl ? (
                   <BigProfile
@@ -107,13 +111,15 @@ const ProfilePhoto = ({ navigation }) => {
                     fullVisible
                   />
                 ) : (
-                  <View style={styles.circle}></View>
+                  <AvatarIcon width={250} height={250} />
                 )}
               </TouchableOpacity>
-              <Text style={styles.ask}>프로필 사진을 설정해주세요!</Text>
-              <Text style={styles.ask}>
-                되도록 얼굴이 나온 사진으로 하는 것이 좋습니다!
-              </Text>
+              <View style={styles.askContainer}>
+                <Text style={styles.ask}>프로필 사진을 설정해주세요!</Text>
+                <Text style={styles.ask}>
+                  되도록 얼굴이 나온 사진으로 하는 것이 좋습니다!
+                </Text>
+              </View>
             </View>
             <View style={styles.buttonContainer}>
               <Button
@@ -121,7 +127,6 @@ const ProfilePhoto = ({ navigation }) => {
                 disabled={buttonDisabled}
                 onPress={onNext}
               />
-              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -134,16 +139,19 @@ export default ProfilePhoto;
 
 const styles = StyleSheet.create({
   property: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "700",
+    marginBottom: 10,
   },
   textContainer: {
     width: 300,
     marginTop: 10,
   },
   askContainer: {
+    alignItems: "center",
+    justifyContent: "center",
     width: 300,
-    marginTop: -5,
+    marginVertical: 10,
   },
   ask: {
     color: colors.pink,
@@ -154,7 +162,9 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -172,7 +182,7 @@ const styles = StyleSheet.create({
     margin: 12,
     width: 250,
     height: 250,
-    backgroundColor: colors.darkgray,
+    backgroundColor: colors.gray,
     borderRadius: 125,
   },
 });

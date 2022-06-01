@@ -113,7 +113,12 @@ const EmailVerification = ({ navigation }) => {
           >
             <View style={styles.container}>
               <View style={styles.inputContainer}>
-                <Title text="가입하기" percent="8 / 8" />
+                <Title
+                  text="가입하기"
+                  percent="8 / 8"
+                  backbutton
+                  navigation={navigation}
+                />
                 <View style={styles.subTitle}>
                   <Text style={styles.ask}>마지막 단계에요,</Text>
                   <Text style={styles.ask}>
@@ -162,7 +167,6 @@ const EmailVerification = ({ navigation }) => {
                   disabled={buttonDisabled}
                   onPress={onSubmit}
                 />
-                <BackButton text="이전으로" onPress={() => navigation.pop()} />
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -213,7 +217,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
     justifyContent: "flex-start",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom: 10,
+  },
   section: {
     width: Dimensions.get("screen").width,
     display: "flex",

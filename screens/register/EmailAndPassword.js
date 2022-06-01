@@ -94,13 +94,13 @@ const EmailAndPassword = ({ navigation }) => {
                 <Text style={styles.property}>이메일</Text>
               </View>
               <ShadowInput email={true} value={email} onChangeText={setEmail} />
-              {email !== "" && !ValidateEmail(email) && (
-                <View style={styles.askContainer}>
+              <View style={styles.askContainer}>
+                {email !== "" && !ValidateEmail(email) && (
                   <Text style={styles.ask}>
                     이메일 형식이 올바르지 않습니다.
                   </Text>
-                </View>
-              )}
+                )}
+              </View>
               <View style={styles.inputContainer}>
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>비밀번호</Text>
@@ -110,14 +110,13 @@ const EmailAndPassword = ({ navigation }) => {
                   onChangeText={setPassword}
                   secure={true}
                 />
-                {password !== "" && !ValidatePassword(password) && (
-                  <View style={styles.askContainer}>
-                    <Text style={styles.ask}>비밀번호는 8자 이상,</Text>
+                <View style={styles.askContainer}>
+                  {password !== "" && !ValidatePassword(password) && (
                     <Text style={styles.ask}>
-                      영문, 숫자, 특수문자로 구성해주세요.
+                      비밀번호 조건 : 8자 이상, 영문 혼합, 특수문자
                     </Text>
-                  </View>
-                )}
+                  )}
+                </View>
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>비밀번호 확인</Text>
                 </View>
@@ -126,11 +125,11 @@ const EmailAndPassword = ({ navigation }) => {
                   onChangeText={setConfirm}
                   secure={true}
                 />
-                {confirm !== "" && confirm !== password && (
-                  <View style={styles.askContainer}>
+                <View style={styles.askContainer}>
+                  {confirm !== "" && confirm !== password && (
                     <Text style={styles.ask}>비밀번호를 확인해주세요.</Text>
-                  </View>
-                )}
+                  )}
+                </View>
               </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -160,6 +159,7 @@ const styles = StyleSheet.create({
   },
   askContainer: {
     width: 300,
+    height: 20,
     marginTop: -5,
   },
   ask: {
@@ -171,7 +171,9 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "flex-start",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

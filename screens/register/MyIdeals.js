@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useContext } from "react";
 import Title from "../../components/Title";
@@ -39,7 +40,6 @@ const MyIdeals = ({ navigation }) => {
     } else {
       setButtonDisabled(true);
     }
-    // console.log(ideals.length);
   }, [ideals]);
 
   return (
@@ -52,9 +52,16 @@ const MyIdeals = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="가입하기" percent="5 / 8" />
+              <Title
+                text="가입하기"
+                percent="5 / 8"
+                backbutton
+                navigation={navigation}
+              />
               <View style={styles.subTitle}>
-                <Text style={styles.ask}>이상형이 어떻게 되세요?</Text>
+                <Text style={styles.ask}>
+                  이상형이 어떻게 되세요? {"(5개까지 선택 가능)"}
+                </Text>
                 <Text style={styles.property}>나의 이상형</Text>
               </View>
             </View>
@@ -93,7 +100,11 @@ const MyIdeals = ({ navigation }) => {
                           prev.filter((elm) => elm !== option)
                         );
                       } else {
-                        setIdeals((prev) => prev.concat(option));
+                        if (ideals.length < 5) {
+                          setIdeals((prev) => prev.concat(option));
+                        } else {
+                          Alert.alert("경고", "최대 5개까지 선택 가능합니다.");
+                        }
                       }
                     }}
                   />
@@ -106,7 +117,6 @@ const MyIdeals = ({ navigation }) => {
                 disabled={buttonDisabled}
                 onPress={onNext}
               />
-              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -155,7 +165,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
     justifyContent: "flex-start",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",

@@ -1,9 +1,22 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
+import { Feather } from "@expo/vector-icons";
+import colors from "../lib/colors.json";
 
-const Title = ({ text, percent }) => {
+const Title = ({ text, percent, backbutton, navigation }) => {
   return (
     <View style={styles.container}>
+      {backbutton && (
+        <TouchableOpacity onPress={() => navigation.pop()}>
+          <Feather name="chevron-left" size={24} color={colors.darkgray} />
+        </TouchableOpacity>
+      )}
       <View style={styles.left}>
         <Text style={styles.title}>{text}</Text>
       </View>
@@ -26,6 +39,7 @@ const styles = StyleSheet.create({
   },
   left: {
     display: "flex",
+    flexDirection: "row",
     paddingLeft: 20,
   },
   right: {

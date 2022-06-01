@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useContext } from "react";
 import Title from "../../components/Title";
@@ -55,7 +56,9 @@ const WhoAmI = ({ navigation }) => {
             <View style={styles.inputContainer}>
               <Title text="가입하기" percent="6 / 8" />
               <View style={styles.subTitle}>
-                <Text style={styles.ask}>자기소개를 해볼까요?</Text>
+                <Text style={styles.ask}>
+                  자기소개를 해볼까요? {"(5개까지 선택 가능)"}
+                </Text>
                 <Text style={styles.property}>나는 이런 사람이에요.</Text>
               </View>
             </View>
@@ -94,7 +97,11 @@ const WhoAmI = ({ navigation }) => {
                           prev.filter((elm) => elm !== option)
                         );
                       } else {
-                        setIdeals((prev) => prev.concat(option));
+                        if (ideals.length < 5) {
+                          setIdeals((prev) => prev.concat(option));
+                        } else {
+                          Alert.alert("경고", "최대 5개까지 선택 가능합니다.");
+                        }
                       }
                     }}
                   />
@@ -107,7 +114,6 @@ const WhoAmI = ({ navigation }) => {
                 disabled={buttonDisabled}
                 onPress={onNext}
               />
-              <BackButton text="이전으로" onPress={() => navigation.pop()} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -156,7 +162,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get("screen").width,
     justifyContent: "flex-start",
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginBottom: 10,
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
