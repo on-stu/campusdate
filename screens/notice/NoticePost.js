@@ -11,7 +11,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import { useState } from "react";
@@ -21,13 +21,15 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import MiniCheck from "../../components/MiniCheck";
 import { setNotices } from "../../redux/reducers/noticesSlice";
+import { UserContext } from "../../context/user";
 
 const NoticePost = ({ navigation }) => {
   const [canPost, setCanPost] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isImportant, setIsImportant] = useState(true);
-  const userInfo = useSelector((state) => state.user);
+
+  const { userInfo } = useContext(UserContext);
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();
 

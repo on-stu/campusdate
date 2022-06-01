@@ -1,14 +1,13 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useContext } from "react";
 import MatchingIcon from "../../img/sad.svg";
 import colors from "../../lib/colors.json";
 import Button from "../../components/Button";
 import BackButton from "../../components/BackButton";
+import { UserContext } from "../../context/user";
 
 const MatchingFailed = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
-
+  const { userInfo } = useContext(UserContext);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

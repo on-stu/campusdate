@@ -14,7 +14,6 @@ import Button from "../../components/Button";
 import { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
-import BackButton from "../../components/BackButton";
 
 import { UserContext } from "../../context/user";
 
@@ -45,13 +44,14 @@ const MyIntroduction = ({ navigation }) => {
               />
               <View style={styles.subTitle}>
                 <Text style={styles.ask}>
-                  혹시 자신에 대해 더 소개할 말이 있으신가요?
+                  혹시 자신에 대해 더 소개할 말이 있으신가요?{" "}
+                  {`(${introduction.length}자 / 500자)`}
                 </Text>
                 <Text style={styles.property}>나는 이런 사람이에요.</Text>
               </View>
               <TextInput
                 multiline={true}
-                placeholder="터치해서 글쓰기"
+                placeholder="ex) 좋아하는 데이트 코스, MBTI, 요즘 관심있는 것 등"
                 value={introduction}
                 onChangeText={setIntroduction}
                 style={styles.subTitle}

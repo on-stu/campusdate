@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
 import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
@@ -19,12 +19,14 @@ import key from "../../lib/key.json";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 
+import { UserContext } from "../../context/user";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 const Notice = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
+
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);

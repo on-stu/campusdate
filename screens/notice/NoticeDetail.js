@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import BoardContent from "../../components/BoardContent";
@@ -17,14 +17,11 @@ import key from "../../lib/key.json";
 import axios from "axios";
 import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  initNotices,
-  setNoticeById,
-  setNotices,
-} from "../../redux/reducers/noticesSlice";
+import { setNoticeById } from "../../redux/reducers/noticesSlice";
 import colors from "../../lib/colors.json";
-import { initNotice, setNotice } from "../../redux/reducers/noticeSlice";
+import { setNotice } from "../../redux/reducers/noticeSlice";
 import Comment from "../../components/Comment";
+import { UserContext } from "../../context/user";
 
 const NoticeDetail = ({ navigation, route }) => {
   const {
@@ -32,7 +29,8 @@ const NoticeDetail = ({ navigation, route }) => {
   } = route;
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
-  const userInfo = useSelector((state) => state.user);
+
+  const { userInfo } = useContext(UserContext);
   const notice = useSelector((state) => state.notice);
   const notices = useSelector((state) => state.notices);
   const dispatch = useDispatch();

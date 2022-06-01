@@ -1,13 +1,14 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
 import MatchingIcon from "../../img/love.svg";
 import ProgressBar from "../../components/ProgressBar";
 import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
 
+import { UserContext } from "../../context/user";
 const MatchingLoading = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
+
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {

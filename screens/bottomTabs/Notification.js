@@ -13,6 +13,7 @@ import colors from "../../lib/colors.json";
 
 const Notification = () => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
+  const [notifications, setNotifications] = useState([]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -32,6 +33,11 @@ const Notification = () => {
           </TouchableOpacity>
         </View>
         <View></View>
+        {notifications.length === 0 && (
+          <View style={styles.innerCenter}>
+            <Text>알림이 없습니다.</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -59,5 +65,11 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  innerCenter: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   Dimensions,
   ScrollView,
-  Alert,
 } from "react-native";
 import React, { useContext, useEffect } from "react";
 import TitleImg from "../../img/title.svg";

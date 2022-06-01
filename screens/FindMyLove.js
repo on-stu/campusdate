@@ -1,15 +1,15 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useContext, useEffect, useState } from "react";
 import colors from "../lib/colors.json";
 import ProfileCard from "../components/ProfileCard";
 import { ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
 import key from "../lib/key.json";
 import { getValue } from "../functions/secureStore";
+import { UserContext } from "../context/user";
 
 const FindMyLove = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
   const [userList, setUserList] = useState([]);
 
   useEffect(() => {

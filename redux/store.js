@@ -9,7 +9,6 @@ import chatsSlice from "./reducers/chatsSlice";
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-
     notice: noticeReducer,
     notices: noticesReduceer,
     faq: faqSlice,

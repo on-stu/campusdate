@@ -112,7 +112,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (socket.disconnected && user) {
+    if (socket.disconnected && user?.id) {
       socket.connect();
       socket.emit("join", user.id);
       user?.chatRooms?.map((roomId) => {
@@ -122,6 +122,12 @@ export default function App() {
 
     return () => socket.disconnect();
   }, [user, socket]);
+
+  useEffect(() => {
+    if (user?.id === undefined) {
+      socket.disconnect();
+    }
+  }, [user]);
 
   useEffect(() => {
     socket.on("join_please", () => {

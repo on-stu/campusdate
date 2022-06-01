@@ -1,13 +1,14 @@
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useContext } from "react";
 import MatchingIcon from "../../img/love2.svg";
 import colors from "../../lib/colors.json";
 import Button from "../../components/Button";
 import ProfileCard from "../../components/ProfileCard";
 
+import { UserContext } from "../../context/user";
 const MatchingSuccess = ({ navigation }) => {
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>

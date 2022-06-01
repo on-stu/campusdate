@@ -36,7 +36,6 @@ const BasicInfomation = ({ navigation }) => {
     } else {
       setButtonDisabled(true);
     }
-    console.log(birthday);
   }, [nickname, birthday]);
 
   const toggleSex = () => {
