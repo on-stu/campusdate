@@ -35,6 +35,12 @@ const EmailAndPassword = ({ navigation }) => {
         navigation.navigate("BasicInfomation");
       }
     } catch (error) {
+      if ((error.code = "ERR_NETWORK")) {
+        Alert.alert(
+          "경고",
+          "네트워크 문제로 가입할 수 없습니다.\n나중에 다시 시도해주세요."
+        );
+      }
       console.log(error.code);
       Alert.alert("경고", "이미 가입된 이메일입니다.");
       setEmail("");

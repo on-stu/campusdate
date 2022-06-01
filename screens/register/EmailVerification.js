@@ -72,7 +72,6 @@ const EmailVerification = ({ navigation }) => {
   };
 
   const onSubmit = async () => {
-    console.log("chatroom is", userInfo.chatRooms);
     const response = await axios.post(`${key.API}/register/`, {
       ...userInfo,
       chatRooms: [],

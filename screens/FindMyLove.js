@@ -8,12 +8,6 @@ import axios from "axios";
 import key from "../lib/key.json";
 import { getValue } from "../functions/secureStore";
 
-const exampleUser = {
-  nickname: "유승호",
-  age: 23,
-  whoAmI: ["귀여운", "청순한"],
-};
-
 const FindMyLove = ({ navigation }) => {
   const userInfo = useSelector((state) => state.user);
   const [userList, setUserList] = useState([]);
@@ -25,7 +19,13 @@ const FindMyLove = ({ navigation }) => {
         Authorization: `Token ${token}`,
       };
       const response = await axios.get(`${key.API}/usersbysex/`, { headers });
-      setUserList((prev) => [...prev, ...response.data]);
+
+      if (
+        userList.map((user) => user.id === response.data.id && response.data.id)
+          .length === 0
+      ) {
+        setUserList((prev) => [...prev, ...response.data]);
+      }
     })();
   }, []);
 
@@ -46,21 +46,23 @@ const FindMyLove = ({ navigation }) => {
               프로필을 확인하시고 먼저 연락을 걸어보세요!
             </Text>
           </View>
-          {userList?.map((user, i) => (
-            <View style={styles.profileContainer} key={i}>
-              <ProfileCard
-                nickname={user?.nickname}
-                photoUrl={user?.photoUrl}
-                info={user?.whoAmI}
-                age={user?.age}
-                onButtonPress={() =>
-                  navigation.navigate("Profile", {
-                    userId: user?.id,
-                  })
-                }
-              />
-            </View>
-          ))}
+          {userList?.map((user, i) => {
+            return (
+              <View style={styles.profileContainer} key={i}>
+                <ProfileCard
+                  nickname={user?.nickname}
+                  photoUrl={user?.photoUrl}
+                  info={user?.whoAmI}
+                  birthday={user?.birthday}
+                  onButtonPress={() =>
+                    navigation.navigate("Profile", {
+                      userId: user?.id,
+                    })
+                  }
+                />
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>

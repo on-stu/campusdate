@@ -2,11 +2,12 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
+import { getAge } from "../functions/getAge";
 
 const MyProfileCard = ({
   photoUrl,
   nickname,
-  age,
+  birthday,
   info,
   onButtonPress,
   fullVisible,
@@ -18,7 +19,7 @@ const MyProfileCard = ({
         <View style={styles.info}>
           <View style={styles.top}>
             <Text style={styles.nickname}>{nickname}</Text>
-            <Text style={styles.age}>{age + "세"}</Text>
+            <Text style={styles.age}>{getAge(birthday) + "세"}</Text>
           </View>
           <View style={styles.infoContainer}>
             {info?.map((hash, i) => {

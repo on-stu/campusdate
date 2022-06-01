@@ -35,7 +35,7 @@ const Setting = ({ stackNavigation }) => {
             <MyProfileCard
               photoUrl={userInfo?.photoUrl}
               nickname={userInfo?.nickname}
-              age={userInfo?.age}
+              birthday={userInfo?.birthday}
               info={userInfo?.whoAmI}
               onButtonPress={() => stackNavigation.navigate("MyProfile")}
               fullVisible

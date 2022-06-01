@@ -21,6 +21,7 @@ import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
 import { UserContext } from "../context/user";
+import { getAge } from "../functions/getAge";
 
 const EachBox = ({ title, tagsArray, onPress }) => {
   return (
@@ -153,7 +154,7 @@ const MyProfile = ({ navigation }) => {
             <Text style={styles.title}>{userInfo?.nickname}</Text>
           </View>
           <View style={styles.center}>
-            <Text style={styles.text}>{`${userInfo?.age}세`}</Text>
+            <Text style={styles.text}>{`${getAge(userInfo?.birthday)}세`}</Text>
           </View>
           <View style={styles.center}>
             <TouchableOpacity onPress={pickImage}>

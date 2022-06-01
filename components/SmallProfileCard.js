@@ -4,14 +4,7 @@ import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
 import TinyProfile from "./TinyProfile";
 
-const SmallProfileCard = ({
-  photoUrl,
-  nickname,
-  age,
-  info,
-  onButtonPress,
-  fullVisible,
-}) => {
+const SmallProfileCard = ({ photoUrl, nickname, fullVisible }) => {
   const [blurNickname, setBlurNickname] = useState("");
   useEffect(() => {
     if (nickname?.slice !== undefined) {
