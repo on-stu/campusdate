@@ -1,4 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import colors from "../lib/colors.json";
 import ProfileCard from "../components/ProfileCard";
@@ -7,6 +13,7 @@ import axios from "axios";
 import key from "../lib/key.json";
 import { getValue } from "../functions/secureStore";
 import { UserContext } from "../context/user";
+import { Feather } from "@expo/vector-icons";
 
 const FindMyLove = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -33,6 +40,11 @@ const FindMyLove = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.top}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => navigation.pop()}>
+              <Feather name="chevron-left" size={24} color={colors.darkgray} />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.title}>내 연인 찾기</Text>
         </View>
         <View style={styles.inner}>
@@ -77,10 +89,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   top: {
+    position: "relative",
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
   },
   title: {
@@ -104,5 +118,9 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 4,
     marginVertical: 4,
+  },
+  buttonContainer: {
+    position: "absolute",
+    left: 10,
   },
 });

@@ -1,5 +1,4 @@
 import {
-  Dimensions,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,

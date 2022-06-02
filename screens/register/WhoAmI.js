@@ -15,19 +15,25 @@ import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
-import BackButton from "../../components/BackButton";
 import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 
 import { UserContext } from "../../context/user";
 
-const options = categories.ideals;
-
 const WhoAmI = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [ideals, setIdeals] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    if (userInfo?.sex === "male") {
+      setOptions(categories.idealsForGirl);
+    } else if (userInfo?.sex === "female") {
+      setOptions(categories.idealsForBoy);
+    }
+  }, [userInfo]);
 
   const onNext = () => {
     const tempUser = { whoAmI: ideals };
@@ -41,7 +47,6 @@ const WhoAmI = ({ navigation }) => {
     } else {
       setButtonDisabled(true);
     }
-    // console.log(ideals.length);
   }, [ideals]);
 
   return (

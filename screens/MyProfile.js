@@ -149,6 +149,11 @@ const MyProfile = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={() => navigation.pop()}>
+            <Feather name="chevron-left" size={24} color={colors.darkgray} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.inner}>
           <View style={styles.center}>
             <Text style={styles.title}>{userInfo?.nickname}</Text>
@@ -210,7 +215,6 @@ const MyProfile = ({ navigation }) => {
         }}
       >
         <Button text="적용하기" onPress={onSubmit} />
-        <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>
     </SafeAreaView>
   );
@@ -289,5 +293,8 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     flexWrap: "wrap",
     width: "100%",
+  },
+  headerContainer: {
+    paddingHorizontal: 10,
   },
 });

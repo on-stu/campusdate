@@ -8,7 +8,6 @@ import {
   Dimensions,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import colors from "../lib/colors.json";
 import BigProfile from "../components/BigProfile";
 import { Feather } from "@expo/vector-icons";
@@ -21,6 +20,7 @@ import { getBlurNickname } from "../functions/getBlurNickname";
 import SocketContext from "../context/socket";
 import { addChat } from "../redux/reducers/chatsSlice";
 import { UserContext } from "../context/user";
+import { getAge } from "../functions/getAge";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -100,6 +100,11 @@ const Profile = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={() => navigation.pop()}>
+            <Feather name="chevron-left" size={24} color={colors.darkgray} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.inner}>
           <View style={styles.center}>
             <Text style={styles.title}>
@@ -107,7 +112,9 @@ const Profile = ({ navigation, route }) => {
             </Text>
           </View>
           <View style={styles.center}>
-            <Text style={styles.text}>{`${profileInfo?.age}세`}</Text>
+            <Text style={styles.text}>{`${getAge(
+              profileInfo?.birthday
+            )}세`}</Text>
           </View>
           <View style={styles.center}>
             <BigProfile uri={profileInfo?.photoUrl} fullVisible={fullVisible} />
@@ -159,7 +166,6 @@ const Profile = ({ navigation, route }) => {
             });
           }}
         />
-        <BackButton text="뒤로가기" onPress={() => navigation.pop()} />
       </View>
     </SafeAreaView>
   );
@@ -240,5 +246,8 @@ const styles = StyleSheet.create({
   },
   introduction: {
     padding: 4,
+  },
+  headerContainer: {
+    paddingHorizontal: 10,
   },
 });
