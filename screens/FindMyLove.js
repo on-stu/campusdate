@@ -58,7 +58,8 @@ const FindMyLove = ({ navigation }) => {
               프로필을 확인하시고 먼저 연락을 걸어보세요!
             </Text>
           </View>
-          {userList?.map((user, i) => {
+          {userList?.map((data, i) => {
+            const user = data.data;
             return (
               <View style={styles.profileContainer} key={i}>
                 <ProfileCard

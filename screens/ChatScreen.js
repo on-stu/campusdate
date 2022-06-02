@@ -16,7 +16,6 @@ import key from "../lib/key.json";
 import { Feather } from "@expo/vector-icons";
 import colors from "../lib/colors.json";
 import SocketContext from "../context/socket";
-import { useSelector } from "react-redux";
 import { useEffectOnce } from "../functions/useEffectOnce";
 import MyChat from "../components/MyChat";
 import { UserContext } from "../context/user";
@@ -34,7 +33,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const socket = useContext(SocketContext);
 
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, setUserChatList, userChatList } = useContext(UserContext);
 
   const getProfile = async (userId) => {
     const token = await getValue("token");
@@ -61,9 +60,11 @@ const ChatScreen = ({ navigation, route }) => {
   useEffect(() => {
     socket.on("receiveMessage", (message) => addChatMessage(message));
     socket.on("readMessage", (readMessage) => {
-      setChatMessages((prev) =>
-        prev.map((msg) => (msg.id === readMessage.id ? readMessage : msg))
-      );
+      setChatMessages((prev) => {
+        return prev.map((msg) =>
+          msg.id === readMessage.id ? readMessage : msg
+        );
+      });
     });
     return () => {
       socket.off("readMessage");
@@ -79,6 +80,17 @@ const ChatScreen = ({ navigation, route }) => {
       refreshChatMessages();
     }
   }, []);
+
+  useEffect(() => {
+    const newChatList = userChatList?.map((chatRoom) => {
+      if (chatRoom.id === chatInfo.id) {
+        return { ...chatRoom, chats: chatMessages };
+      } else {
+        return chatRoom;
+      }
+    });
+    setUserChatList(newChatList);
+  }, [chatMessages]);
 
   const onSendMessage = () => {
     socket.emit(
@@ -128,7 +140,6 @@ const ChatScreen = ({ navigation, route }) => {
                       );
                     } else {
                       if (!chat.isRead) {
-                        console.log(chat.id);
                         socket.emit("readMessage", chatInfo.id, chat.id);
                       }
                       return (

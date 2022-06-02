@@ -12,13 +12,11 @@ import colors from "../lib/colors.json";
 import BigProfile from "../components/BigProfile";
 import { Feather } from "@expo/vector-icons";
 import Button from "../components/Button";
-import BackButton from "../components/BackButton";
 import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
 import { getBlurNickname } from "../functions/getBlurNickname";
 import SocketContext from "../context/socket";
-import { addChat } from "../redux/reducers/chatsSlice";
 import { UserContext } from "../context/user";
 import { getAge } from "../functions/getAge";
 
@@ -158,7 +156,6 @@ const Profile = ({ navigation, route }) => {
         <Button
           text="채팅 해보기"
           onPress={() => {
-            console.log(userInfo.id, profileInfo.id);
             socket.emit("createRoom", userInfo?.id, profileInfo?.id, () => {
               navigation.reset({
                 routes: [{ name: "BottomTab" }],

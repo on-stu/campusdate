@@ -9,7 +9,7 @@ import axios from "axios";
 import key from "../lib/key.json";
 import { getTimeString } from "../functions/getTimeString";
 
-const ChatItem = ({ isMute, counterPartId, onPress, lastAt }) => {
+const ChatItem = ({ isMute, counterPartId, onPress, lastAt, notRead }) => {
   const [counterPart, setCounterPart] = useState({});
   useEffect(() => {
     if (counterPartId) {
@@ -22,7 +22,6 @@ const ChatItem = ({ isMute, counterPartId, onPress, lastAt }) => {
           headers,
         });
         setCounterPart(response.data);
-        // console.log(response.data);
       })();
     }
   }, [counterPartId]);
@@ -43,7 +42,7 @@ const ChatItem = ({ isMute, counterPartId, onPress, lastAt }) => {
           </View>
         </View>
         <View style={styles.rightContainer}>
-          <NotificationCircle num={2} />
+          <NotificationCircle num={notRead} />
           <Text>{timeString}</Text>
         </View>
       </View>

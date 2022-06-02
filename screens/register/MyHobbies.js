@@ -20,6 +20,7 @@ import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 import { UserContext } from "../../context/user";
+import { calculateHobbies } from "../../functions/calculateScore";
 
 const options = categories.hobbies;
 
@@ -29,7 +30,10 @@ const MyHobbies = ({ navigation }) => {
   const { setUserInfo, userInfo } = useContext(UserContext);
 
   const onNext = () => {
-    const tempUser = { myHobbies: hobbies };
+    const tempUser = {
+      myHobbies: hobbies,
+      myHobbiesScore: calculateHobbies(hobbies),
+    };
     setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("MyIdeals");
   };

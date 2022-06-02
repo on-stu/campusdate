@@ -32,6 +32,63 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(false);
+  const [chatList, setChatList] = useState([]);
+
+  const refreshUser = async () => {
+    const token = await getValue("token");
+    try {
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      if (token) {
+        const userInfo = await axios.get(`${key.API}/user/`, { headers });
+        setUser(userInfo.data);
+      }
+    } catch (error) {
+      setUser(false);
+    }
+  };
+
+  const getChatRoom = async (chatRoomId) => {
+    try {
+      const response = await axios.get(`${key.API}/chatroom/${chatRoomId}/`);
+      if (response.status === 200) {
+        addChatRoom(response.data);
+      }
+    } catch (e) {
+      console.log(chatRoomId + "failed");
+    }
+  };
+
+  const refreshChatList = async (userInfo) => {
+    userInfo?.chats?.map((chatRoom) => {
+      getChatRoom(chatRoom?.id);
+    });
+  };
+
+  const addChatRoom = (chatRoom) => {
+    const existInState = chatList.filter((l) => l.id === chatRoom.id);
+    if (existInState.length === 0) {
+      console.log("successfully added");
+      setChatList((prev) => [...prev, chatRoom]);
+    }
+  };
+
+  const addChat = () => {};
+
+  const UserValue = useMemo(
+    () => ({
+      userInfo: user,
+      setUserInfo: setUser,
+      refreshUserInfo: refreshUser,
+      userChatList: chatList,
+      refreshChatList: refreshChatList,
+      setUserChatList: setChatList,
+      addChatRoom: addChatRoom,
+      addChat: addChat,
+    }),
+    [user, setUser, chatList, setChatList]
+  );
 
   //notification
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -64,30 +121,6 @@ export default function App() {
     };
   }, []);
 
-  const refreshUser = async () => {
-    const token = await getValue("token");
-    try {
-      const headers = {
-        Authorization: `Token ${token}`,
-      };
-      if (token) {
-        const userInfo = await axios.get(`${key.API}/user/`, { headers });
-        setUser(userInfo.data);
-      }
-    } catch (error) {
-      setUser(false);
-    }
-  };
-
-  const UserValue = useMemo(
-    () => ({
-      userInfo: user,
-      setUserInfo: setUser,
-      refreshUserInfo: refreshUser,
-    }),
-    [user, setUser]
-  );
-
   useEffect(() => {
     (async () => {
       try {
@@ -117,6 +150,7 @@ export default function App() {
       socket.emit("join", user.id);
       user?.chatRooms?.map((roomId) => {
         socket.emit("join", roomId);
+        getChatRoom(roomId);
       });
     }
 
@@ -134,13 +168,15 @@ export default function App() {
       socket.emit("join", user.id);
       user?.chatRooms?.map((roomId) => {
         socket.emit("join", roomId);
+        getChatRoom(roomId);
       });
     });
   }, []);
 
   useEffectOnce(() => {
-    socket.on("chatRoomCreated", (chatRoomId) => {
+    socket.on("chatRoomCreated", (chatRoomId, chatRoomInfo) => {
       socket.emit("join", chatRoomId);
+      addChatRoom(chatRoomInfo);
     });
 
     socket.on("receiveMessage", (message) => {

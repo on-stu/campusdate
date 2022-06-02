@@ -20,6 +20,7 @@ import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 
 import { UserContext } from "../../context/user";
+import { calculateIdeals } from "../../functions/calculateScore";
 
 const WhoAmI = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -36,7 +37,7 @@ const WhoAmI = ({ navigation }) => {
   }, [userInfo]);
 
   const onNext = () => {
-    const tempUser = { whoAmI: ideals };
+    const tempUser = { whoAmI: ideals, whoAmIScore: calculateIdeals(ideals) };
     setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("MyIntroduction");
   };
@@ -59,7 +60,12 @@ const WhoAmI = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="가입하기" percent="6 / 8" />
+              <Title
+                text="가입하기"
+                percent="6 / 8"
+                backbutton
+                navigation={navigation}
+              />
               <View style={styles.subTitle}>
                 <Text style={styles.ask}>
                   자기소개를 해볼까요? {"(5개까지 선택 가능)"}

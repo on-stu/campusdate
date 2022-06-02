@@ -12,42 +12,19 @@ import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import NotificationCircle from "../../components/NotificationCircle";
 import ChatItem from "../../components/ChatItem";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import key from "../../lib/key.json";
-import { addChat, setChats } from "../../redux/reducers/chatsSlice";
 import SocketContext from "../../context/socket";
 import { UserContext } from "../../context/user";
 
 const Chat = ({ stackNavigation }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
-  const chatList = useSelector((state) => state.chats);
-  const dispatch = useDispatch();
   const socket = useContext(SocketContext);
-  const { userInfo } = useContext(UserContext);
-
-  const getChatRoom = async (chatRoomId) => {
-    try {
-      const response = await axios.get(`${key.API}/chatroom/${chatRoomId}/`);
-      if (response.status === 200) {
-        dispatch(addChat(response.data));
-      }
-    } catch (e) {
-      console.log(chatRoomId + "failed");
-    }
-  };
+  const { userInfo, userChatList, refreshChatList } = useContext(UserContext);
 
   useEffect(() => {
-    userInfo?.chatRooms?.map((chatRoom) => {
-      socket.emit("join", chatRoom);
-      getChatRoom(chatRoom);
+    socket.on("receiveMessage", (message) => {
+      // dispatch(setEachChat(message));
     });
-    socket?.on("chatRoomCreated", (chatRoomId, chatRoomInfo) => {
-      addChat(chatRoomInfo);
-      getChatRoom(chatRoomId);
-    });
-    socket.on("receiveMessage", (message) => getChatRoom(message.chatRoomId));
-
+    refreshChatList(userInfo);
     return () => socket.off("receiveMessage");
   }, [userInfo, socket]);
 
@@ -71,12 +48,16 @@ const Chat = ({ stackNavigation }) => {
             )}
           </TouchableOpacity>
         </View>
-        {chatList?.map((chat, i) => {
+        {userChatList?.map((chat, i) => {
           let counterPartId;
+          let notRead = 0;
           chat.participants.map((participant) => {
             if (participant !== userInfo.id) {
               counterPartId = participant;
             }
+          });
+          chat.chats.map((elm) => {
+            if (elm.isRead === false) notRead += 1;
           });
 
           return (
@@ -90,11 +71,12 @@ const Chat = ({ stackNavigation }) => {
                     params: { counterPartId, chatInfo: chat },
                   });
                 }}
+                notRead={notRead}
               />
             </View>
           );
         })}
-        {chatList.length === 0 && (
+        {userChatList?.length === 0 && (
           <View style={styles.innerCenter}>
             <Text>현재 진행중인 채팅이 없습니다.</Text>
           </View>

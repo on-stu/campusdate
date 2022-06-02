@@ -4,8 +4,14 @@ import colors from "../lib/colors.json";
 
 const NotificationCircle = ({ num }) => {
   return (
-    <View style={styles.circle}>
-      <Text style={styles.text}>{num}</Text>
+    <View
+      style={
+        num > 0
+          ? styles.circle
+          : { ...styles.circle, backgroundColor: "transparent" }
+      }
+    >
+      <Text style={styles.text}>{num > 0 && num}</Text>
     </View>
   );
 };

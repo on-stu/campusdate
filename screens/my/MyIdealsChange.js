@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
+  Alert,
 } from "react-native";
 import React, { useContext } from "react";
 import Title from "../../components/Title";
@@ -21,13 +22,21 @@ import Option from "../../components/Option";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
-
-const options = categories.ideals;
+import { getValue } from "../../functions/secureStore";
 
 const MyIdealsChange = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [ideals, setIdeals] = useState([]);
   const { userInfo, setUserInfo } = useContext(UserContext);
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    if (userInfo?.sex === "male") {
+      setOptions(categories.idealsForBoy);
+    } else if (userInfo?.sex === "female") {
+      setOptions(categories.idealsForGirl);
+    }
+  }, [userInfo]);
 
   const onNext = async () => {
     const token = await getValue("token");
@@ -69,7 +78,9 @@ const MyIdealsChange = ({ navigation }) => {
             <View style={styles.inputContainer}>
               <Title text="프로필 변경" />
               <View style={styles.subTitle}>
-                <Text style={styles.ask}>이상형이 어떻게 되세요?</Text>
+                <Text style={styles.ask}>
+                  이상형이 어떻게 되세요? {"(최대 5개까지 선택 가능)"}
+                </Text>
                 <Text style={styles.property}>나의 이상형</Text>
               </View>
             </View>
@@ -108,7 +119,11 @@ const MyIdealsChange = ({ navigation }) => {
                           prev.filter((elm) => elm !== option)
                         );
                       } else {
-                        setIdeals((prev) => prev.concat(option));
+                        if (ideals.length < 5) {
+                          setIdeals((prev) => prev.concat(option));
+                        } else {
+                          Alert.alert("경고", "최대 5개까지 선택 가능합니다.");
+                        }
                       }
                     }}
                   />

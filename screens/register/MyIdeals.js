@@ -19,6 +19,7 @@ import { ScrollView } from "react-native";
 import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 import { UserContext } from "../../context/user";
+import { calculateIdeals } from "../../functions/calculateScore";
 
 const MyIdeals = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -35,7 +36,10 @@ const MyIdeals = ({ navigation }) => {
   }, [userInfo]);
 
   const onNext = () => {
-    const tempUser = { myIdeals: ideals };
+    const tempUser = {
+      myIdeals: ideals,
+      myIdealsScore: calculateIdeals(ideals),
+    };
     setUserInfo({ ...userInfo, ...tempUser });
     navigation.navigate("WhoAmI");
   };
