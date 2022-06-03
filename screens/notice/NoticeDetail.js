@@ -28,6 +28,7 @@ const NoticeDetail = ({ navigation, route }) => {
   } = route;
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
+  const [dropMenuVisible, setDropMenuVisible] = useState(false);
 
   const { userInfo } = useContext(UserContext);
   const notice = useSelector((state) => state.notice);
@@ -85,6 +86,25 @@ const NoticeDetail = ({ navigation, route }) => {
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
                   <Text style={styles.title}>공지사항</Text>
+                </View>
+                <View style={{ position: "relative" }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      author.id === userInfo.id &&
+                      setDropMenuVisible((prev) => !prev)
+                    }
+                  >
+                    <Feather name="more-vertical" size={24} color="black" />
+                  </TouchableOpacity>
+                  {dropMenuVisible && (
+                    <View style={styles.dropMenuContainer}>
+                      <TouchableOpacity>
+                        <View style={styles.dropMenu}>
+                          <Text style={styles.deleteText}>삭제하기</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </View>
               <View style={styles.inner}>
@@ -188,5 +208,21 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     paddingHorizontal: 20,
+  },
+  dropMenuContainer: {
+    position: "absolute",
+    top: 32,
+    right: 0,
+  },
+  dropMenu: {
+    backgroundColor: colors.gray,
+    width: 100,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    borderRadius: 8,
+  },
+  deleteText: {
+    color: colors.red,
   },
 });

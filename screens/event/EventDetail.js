@@ -11,7 +11,6 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import BoardContent from "../../components/BoardContent";
 import key from "../../lib/key.json";
 import axios from "axios";
 import { getValue } from "../../functions/secureStore";
@@ -21,17 +20,15 @@ import colors from "../../lib/colors.json";
 import { setEvent } from "../../redux/reducers/eventSlice";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
+import EventContent from "../../components/EventContent";
 
 const EventDetail = ({ navigation, route }) => {
-  const {
-    params: { eventId },
-  } = route;
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
+  const [dropMenuVisible, setDropMenuVisible] = useState(false);
 
   const { userInfo } = useContext(UserContext);
   const event = useSelector((state) => state.event);
-  const events = useSelector((state) => state.events);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -84,11 +81,30 @@ const EventDetail = ({ navigation, route }) => {
                   <Feather name="chevron-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.title}>공지사항</Text>
+                  <Text style={styles.title}>이벤트</Text>
+                </View>
+                <View style={{ position: "relative" }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      author.id === userInfo.id &&
+                      setDropMenuVisible((prev) => !prev)
+                    }
+                  >
+                    <Feather name="more-vertical" size={24} color="black" />
+                  </TouchableOpacity>
+                  {dropMenuVisible && (
+                    <View style={styles.dropMenuContainer}>
+                      <TouchableOpacity>
+                        <View style={styles.dropMenu}>
+                          <Text style={styles.deleteText}>삭제하기</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </View>
               <View style={styles.inner}>
-                <BoardContent
+                <EventContent
                   author={author}
                   title={event?.title}
                   content={event?.content}
@@ -188,5 +204,21 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     paddingHorizontal: 20,
+  },
+  dropMenuContainer: {
+    position: "absolute",
+    top: 32,
+    right: 0,
+  },
+  dropMenu: {
+    backgroundColor: colors.gray,
+    width: 100,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    borderRadius: 8,
+  },
+  deleteText: {
+    color: colors.red,
   },
 });

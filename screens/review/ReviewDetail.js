@@ -18,9 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "../../lib/colors.json";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
-import CharmContent from "../../components/CharmContent";
 import { setReview } from "../../redux/reducers/reviewSlice";
 import { setReviewById } from "../../redux/reducers/reviewsSlice";
+import ReviewContent from "../../components/ReviewContent";
 
 const ReviewDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
@@ -28,6 +28,7 @@ const ReviewDetail = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
   const review = useSelector((state) => state.review);
   const dispatch = useDispatch();
+  const [dropMenuVisible, setDropMenuVisible] = useState(false);
 
   useEffect(() => {
     if (review.authorId && author !== {}) {
@@ -79,11 +80,30 @@ const ReviewDetail = ({ navigation }) => {
                   <Feather name="chevron-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.title}>리뷰</Text>
+                  <Text style={styles.title}>후기</Text>
+                </View>
+                <View style={{ position: "relative" }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      author.id === userInfo.id &&
+                      setDropMenuVisible((prev) => !prev)
+                    }
+                  >
+                    <Feather name="more-vertical" size={24} color="black" />
+                  </TouchableOpacity>
+                  {dropMenuVisible && (
+                    <View style={styles.dropMenuContainer}>
+                      <TouchableOpacity>
+                        <View style={styles.dropMenu}>
+                          <Text style={styles.deleteText}>삭제하기</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </View>
               <View style={styles.inner}>
-                <CharmContent
+                <ReviewContent
                   author={author}
                   fullVisible={!review?.isAnonymous}
                 />
@@ -179,5 +199,21 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     paddingHorizontal: 20,
+  },
+  dropMenuContainer: {
+    position: "absolute",
+    top: 32,
+    right: 0,
+  },
+  dropMenu: {
+    backgroundColor: colors.gray,
+    width: 100,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    borderRadius: 8,
+  },
+  deleteText: {
+    color: colors.red,
   },
 });

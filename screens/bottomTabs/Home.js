@@ -15,7 +15,6 @@ import MatchingIcon from "../../img/love.svg";
 import FindingIcon from "../../img/love2.svg";
 import EventIcon from "../../img/event.svg";
 import { TouchableOpacity } from "react-native";
-import posts from "../../lib/posts.json";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
@@ -27,6 +26,7 @@ import { UserContext } from "../../context/user";
 import { setCharms } from "../../redux/reducers/charmsSlice";
 import { setCharm } from "../../redux/reducers/charmSlice";
 import { setReview } from "../../redux/reducers/reviewSlice";
+import { setReviews } from "../../redux/reducers/reviewsSlice";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -122,6 +122,10 @@ const Home = ({ stackNavigation }) => {
         const response = await axios.get(`${key.API}/charm/`);
         dispatch(setCharms(response.data));
       }
+      if (reviews?.length === 0) {
+        const response = await axios.get(`${key.API}/review/`);
+        dispatch(setReviews(response.data));
+      }
     })();
     socket.on("receiveMessage", (msg) => {
       const newChatList = userChatList?.map((chatRoom) => {
@@ -131,7 +135,6 @@ const Home = ({ stackNavigation }) => {
           return chatRoom;
         }
       });
-      console.log(userChatList === newChatList);
       setUserChatList(newChatList);
     });
     return () => socket.off("receiveMessage");
@@ -166,7 +169,7 @@ const Home = ({ stackNavigation }) => {
           </View>
         </View>
         <View style={styles.innerContainer}>
-          <TouchableOpacity onPress={() => stackNavigation.navigate("Faq")}>
+          <TouchableOpacity onPress={() => stackNavigation.navigate("Event")}>
             <View
               style={{
                 ...styles.longBanner,

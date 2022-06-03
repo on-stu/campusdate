@@ -33,6 +33,9 @@ import CharmDetail from "./screens/charm/CharmDetail";
 import Review from "./screens/review/Review";
 import ReviewDetail from "./screens/review/ReviewDetail";
 import ReviewPost from "./screens/review/ReviewPost";
+import Event from "./screens/event/Event";
+import EventPost from "./screens/event/EventPost";
+import EventDetail from "./screens/event/EventDetail";
 
 const Stack = createStackNavigator();
 
@@ -77,6 +80,9 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="Review" component={Review} />
         <Stack.Screen name="ReviewPost" component={ReviewPost} />
         <Stack.Screen name="ReviewDetail" component={ReviewDetail} />
+        <Stack.Screen name="Event" component={Event} />
+        <Stack.Screen name="EventPost" component={EventPost} />
+        <Stack.Screen name="EventDetail" component={EventDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

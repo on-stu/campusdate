@@ -39,7 +39,7 @@ const Review = ({ navigation }) => {
   useEffect(() => {
     if (reviews.length === 0) {
       (async () => {
-        const response = await axios.get(`${key.API}/Review/`);
+        const response = await axios.get(`${key.API}/review/`);
         dispatch(setReviews(response.data));
       })();
     }
@@ -53,18 +53,22 @@ const Review = ({ navigation }) => {
         }
       >
         <View style={styles.header}>
-          <Text style={styles.title}>리뷰</Text>
+          <Text style={styles.title}>후기</Text>
           <NoticeIcon height={72} width={122} />
         </View>
         <View style={styles.header}>
-          <SearchBar placeholder="리뷰 검색하기" />
+          <SearchBar placeholder="후기 검색하기" />
         </View>
         <View style={styles.inner}>
           {reviews.map((review, i) => (
             <ListItem
               authorId={review?.authorId}
+              createdAt={review?.createdAt}
+              title={review.title}
               key={i}
               fullVisible={!review?.isAnonymous}
+              thumbsNum={review?.thumbs?.length}
+              commentsNum={review?.comments?.length}
               onPress={() => {
                 dispatch(setReview(review));
                 navigation.navigate("ReviewDetail");

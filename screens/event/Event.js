@@ -13,6 +13,7 @@ import { Feather } from "@expo/vector-icons";
 import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
 import { useDispatch, useSelector } from "react-redux";
+import EventIcon from "../../img/event.svg";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { setEvent } from "../../redux/reducers/eventSlice";
@@ -53,27 +54,35 @@ const Event = ({ navigation }) => {
       >
         <View style={styles.header}>
           <Text style={styles.title}>이벤트</Text>
-          <eventIcon height={72} width={122} />
+          <EventIcon height={72} width={122} />
         </View>
         <View style={styles.header}>
           <SearchBar placeholder="이벤트 검색하기" />
         </View>
         <View style={styles.inner}>
-          {events.map((event, i) => (
-            <ListItem
-              authorId={event?.authorId}
-              createdAt={event?.createdAt}
-              title={event.title}
-              key={i}
-              fullVisible
-              thumbsNum={event?.thumbs?.length}
-              commentsNum={event?.comments?.length}
-              onPress={() => {
-                dispatch(setEvent(event));
-                navigation.navigate("EventDetail");
-              }}
-            />
-          ))}
+          {events.length > 0 &&
+            events.map((event, i) => (
+              <ListItem
+                authorId={event?.authorId}
+                createdAt={event?.createdAt}
+                title={event.title}
+                key={i}
+                fullVisible
+                thumbsNum={event?.thumbs?.length}
+                commentsNum={event?.comments?.length}
+                onPress={() => {
+                  dispatch(setEvent(event));
+                  navigation.navigate("EventDetail");
+                }}
+              />
+            ))}
+          {events.length === 0 && (
+            <View style={styles.noEventsContainer}>
+              <Text style={styles.noEventText}>
+                진행중인 이벤트가 없습니다.
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
       {userInfo?.is_admin && (
@@ -132,5 +141,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginLeft: 4,
+  },
+  noEventsContainer: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  noEventText: {
+    color: colors.darkgray,
   },
 });

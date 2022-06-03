@@ -20,7 +20,7 @@ const Notification = () => {
         <View style={styles.header}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>알림</Text>
-            <NotificationCircle num={2} />
+            <NotificationCircle num={notifications.length} />
           </View>
           <TouchableOpacity
             onPress={() => setIsNotificationOn((prev) => !prev)}
@@ -35,7 +35,7 @@ const Notification = () => {
         <View></View>
         {notifications.length === 0 && (
           <View style={styles.innerCenter}>
-            <Text>알림이 없습니다.</Text>
+            <Text style={styles.noText}>알림이 없습니다.</Text>
           </View>
         )}
       </ScrollView>
@@ -71,5 +71,8 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  noText: {
+    color: colors.darkgray,
   },
 });
