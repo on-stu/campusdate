@@ -79,7 +79,14 @@ const Setting = ({ stackNavigation }) => {
                 <Text>문의하기</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "신고 안내",
+                  "신고하실 사항은\nminsu0523@naver.com로\n메일보내주시기 바랍니다"
+                )
+              }
+            >
               <View style={styles.menu}>
                 <Text>신고하기</Text>
               </View>

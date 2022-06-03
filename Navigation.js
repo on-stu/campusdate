@@ -30,6 +30,9 @@ import ChatScreen from "./screens/ChatScreen";
 import Charm from "./screens/charm/Charm";
 import CharmPost from "./screens/charm/CharmPost";
 import CharmDetail from "./screens/charm/CharmDetail";
+import Review from "./screens/review/Review";
+import ReviewDetail from "./screens/review/ReviewDetail";
+import ReviewPost from "./screens/review/ReviewPost";
 
 const Stack = createStackNavigator();
 
@@ -71,6 +74,9 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="Charm" component={Charm} />
         <Stack.Screen name="CharmPost" component={CharmPost} />
         <Stack.Screen name="CharmDetail" component={CharmDetail} />
+        <Stack.Screen name="Review" component={Review} />
+        <Stack.Screen name="ReviewPost" component={ReviewPost} />
+        <Stack.Screen name="ReviewDetail" component={ReviewDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

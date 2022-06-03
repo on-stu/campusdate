@@ -25,6 +25,8 @@ import { setNotice } from "../../redux/reducers/noticeSlice";
 import SocketContext from "../../context/socket";
 import { UserContext } from "../../context/user";
 import { setCharms } from "../../redux/reducers/charmsSlice";
+import { setCharm } from "../../redux/reducers/charmSlice";
+import { setReview } from "../../redux/reducers/reviewSlice";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -62,7 +64,15 @@ const Banner = ({ title, texts, svg, onPress }) => {
   );
 };
 
-const LongBanner = ({ title, items, onPress, navigation, dispatch }) => {
+const LongBanner = ({
+  title,
+  items,
+  onPress,
+  navigation,
+  dispatch,
+  reducerFunction,
+  detailPathname,
+}) => {
   return (
     <View style={styles.longBanner}>
       <TouchableOpacity onPress={onPress}>
@@ -77,8 +87,8 @@ const LongBanner = ({ title, items, onPress, navigation, dispatch }) => {
           <TouchableOpacity
             key={key}
             onPress={() => {
-              dispatch(setNotice(item));
-              navigation.navigate("NoticeDetail", { noticeId: item.id });
+              reducerFunction(item);
+              navigation.navigate(detailPathname);
             }}
           >
             <View style={{ ...styles.innerLongBanner, marginVertical: 4 }}>
@@ -96,6 +106,9 @@ const Home = ({ stackNavigation }) => {
   const { userInfo, setUserChatList, userChatList } = useContext(UserContext);
   const notices = useSelector((state) => state.notices);
   const charms = useSelector((state) => state.charms);
+  const reviews = useSelector((state) => state.reviews);
+  const events = useSelector((state) => state.events);
+
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
 
@@ -165,10 +178,35 @@ const Home = ({ stackNavigation }) => {
                 paddingHorizontal: 16,
               }}
             >
-              <Text style={styles.bannerTitle}>이벤트</Text>
+              <View>
+                <Text style={styles.bannerTitle}>이벤트</Text>
+                <Text style={styles.bannerSubtitle}>
+                  너와 함께하고픈 내 마음
+                </Text>
+              </View>
               <EventIcon width={100} height={80} />
             </View>
           </TouchableOpacity>
+        </View>
+        <View style={styles.innerContainer}>
+          <LongBanner
+            onPress={() => stackNavigation.navigate("Charm")}
+            navigation={stackNavigation}
+            title="매력어필"
+            items={charms.slice(0, 3)}
+            reducerFunction={(item) => dispatch(setCharm(item))}
+            detailPathname="CharmDetail"
+          />
+        </View>
+        <View style={styles.innerContainer}>
+          <LongBanner
+            onPress={() => stackNavigation.navigate("Review")}
+            navigation={stackNavigation}
+            title="후기"
+            items={reviews.slice(0, 3)}
+            reducerFunction={(item) => dispatch(setReview(item))}
+            detailPathname="ReviewDetail"
+          />
         </View>
         <View style={styles.innerContainer}>
           <LongBanner
@@ -176,20 +214,9 @@ const Home = ({ stackNavigation }) => {
             items={notices.slice(0, 3)}
             navigation={stackNavigation}
             onPress={() => stackNavigation.navigate("Notice")}
-            dispatch={dispatch}
+            reducerFunction={(item) => dispatch(setNotice(item))}
+            detailPathname="NoticeDetail"
           />
-        </View>
-        <View style={styles.innerContainer}>
-          <LongBanner
-            onPress={() => stackNavigation.navigate("Charm")}
-            navigation={stackNavigation}
-            dispatch={dispatch}
-            title="매력어필"
-            items={charms.slice(0, 3)}
-          />
-        </View>
-        <View style={styles.innerContainer}>
-          <LongBanner title="후기" items={posts.slice(0, 4)} />
         </View>
       </ScrollView>
     </SafeAreaView>
