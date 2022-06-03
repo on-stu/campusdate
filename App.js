@@ -128,6 +128,7 @@ export default function App() {
         await Font.loadAsync(customFont);
         await new Promise((resolve) => setTimeout(resolve, 2000));
         const token = await getValue("token");
+        console.log(token);
         if (token) {
           setIsLogin(true);
           await refreshUser();
@@ -171,6 +172,9 @@ export default function App() {
         getChatRoom(roomId);
       });
     });
+    socket.on("receiveMessage", (message) => {
+      console.log(message);
+    });
   }, []);
 
   useEffectOnce(() => {
@@ -179,22 +183,16 @@ export default function App() {
       addChatRoom(chatRoomInfo);
     });
 
-    socket.on("receiveMessage", (message) => {
-      if (isLoading) {
-        Alert.alert("");
-      }
-    });
-
     socket.on("pushEvent", (event) => {
       console.log(event);
     });
   }, []);
 
   useEffect(() => {
+    console.log(isLoading);
     if (!isLoading) {
       (async () => {
         await SplashScreen.hideAsync();
-        socket.off("receiveMessage");
       })();
     }
   }, [isLoading]);

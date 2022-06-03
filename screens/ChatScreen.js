@@ -33,7 +33,8 @@ const ChatScreen = ({ navigation, route }) => {
 
   const socket = useContext(SocketContext);
 
-  const { userInfo, setUserChatList, userChatList } = useContext(UserContext);
+  const { userInfo, setUserChatList, userChatList, refreshChatList } =
+    useContext(UserContext);
 
   const getProfile = async (userId) => {
     const token = await getValue("token");
@@ -68,9 +69,10 @@ const ChatScreen = ({ navigation, route }) => {
     });
     return () => {
       socket.off("readMessage");
+      refreshChatList();
       scrollViewRef.current = null;
     };
-  }, [scrollViewRef]);
+  }, [scrollViewRef, socket]);
 
   useEffectOnce(() => {
     if (profileInfo?.id === undefined) {

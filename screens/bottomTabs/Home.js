@@ -13,6 +13,7 @@ import colors from "../../lib/colors.json";
 import getWidthByPercent from "../../functions/getWidthByPercent";
 import MatchingIcon from "../../img/love.svg";
 import FindingIcon from "../../img/love2.svg";
+import EventIcon from "../../img/event.svg";
 import { TouchableOpacity } from "react-native";
 import posts from "../../lib/posts.json";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +24,7 @@ import { setNotices } from "../../redux/reducers/noticesSlice";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import SocketContext from "../../context/socket";
 import { UserContext } from "../../context/user";
+import { setCharms } from "../../redux/reducers/charmsSlice";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -91,8 +93,9 @@ const LongBanner = ({ title, items, onPress, navigation, dispatch }) => {
 };
 
 const Home = ({ stackNavigation }) => {
-  const { userInfo } = useContext(UserContext);
+  const { userInfo, setUserChatList, userChatList } = useContext(UserContext);
   const notices = useSelector((state) => state.notices);
+  const charms = useSelector((state) => state.charms);
   const dispatch = useDispatch();
   const socket = useContext(SocketContext);
 
@@ -102,7 +105,23 @@ const Home = ({ stackNavigation }) => {
         const response = await axios.get(`${key.API}/notice/`);
         dispatch(setNotices(response.data));
       }
+      if (charms?.length === 0) {
+        const response = await axios.get(`${key.API}/charm/`);
+        dispatch(setCharms(response.data));
+      }
     })();
+    socket.on("receiveMessage", (msg) => {
+      const newChatList = userChatList?.map((chatRoom) => {
+        if (chatRoom.id === msg.chatRoomId) {
+          return { ...chatRoom, chats: [...chatRoom.chats, msg] };
+        } else {
+          return chatRoom;
+        }
+      });
+      console.log(userChatList === newChatList);
+      setUserChatList(newChatList);
+    });
+    return () => socket.off("receiveMessage");
   }, []);
 
   return (
@@ -134,6 +153,24 @@ const Home = ({ stackNavigation }) => {
           </View>
         </View>
         <View style={styles.innerContainer}>
+          <TouchableOpacity onPress={() => stackNavigation.navigate("Faq")}>
+            <View
+              style={{
+                ...styles.longBanner,
+                height: 80,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingHorizontal: 16,
+              }}
+            >
+              <Text style={styles.bannerTitle}>이벤트</Text>
+              <EventIcon width={100} height={80} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.innerContainer}>
           <LongBanner
             title="공지사항"
             items={notices.slice(0, 3)}
@@ -144,11 +181,11 @@ const Home = ({ stackNavigation }) => {
         </View>
         <View style={styles.innerContainer}>
           <LongBanner
-            onPress={() => {
-              socket.emit("createChat", 20, 3);
-            }}
+            onPress={() => stackNavigation.navigate("Charm")}
+            navigation={stackNavigation}
+            dispatch={dispatch}
             title="매력어필"
-            items={posts.slice(0, 4)}
+            items={charms.slice(0, 3)}
           />
         </View>
         <View style={styles.innerContainer}>

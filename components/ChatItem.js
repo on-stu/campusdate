@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
@@ -8,9 +8,19 @@ import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
 import { getTimeString } from "../functions/getTimeString";
+import { UserContext } from "../context/user";
 
-const ChatItem = ({ isMute, counterPartId, onPress, lastAt, notRead }) => {
+const ChatItem = ({
+  isMute,
+  counterPartId,
+  onPress,
+  lastAt,
+  chats,
+  notRead,
+  lastItem,
+}) => {
   const [counterPart, setCounterPart] = useState({});
+  const { userInfo } = useContext(UserContext);
   useEffect(() => {
     if (counterPartId) {
       (async () => {
@@ -25,6 +35,7 @@ const ChatItem = ({ isMute, counterPartId, onPress, lastAt, notRead }) => {
       })();
     }
   }, [counterPartId]);
+
   const timeString = getTimeString(lastAt);
   return (
     <TouchableOpacity onPress={onPress}>
@@ -38,7 +49,7 @@ const ChatItem = ({ isMute, counterPartId, onPress, lastAt, notRead }) => {
                 <Feather name="bell-off" size={16} color={colors.darkgray} />
               )}
             </View>
-            <Text>안녕하세요</Text>
+            <Text>{lastItem?.content}</Text>
           </View>
         </View>
         <View style={styles.rightContainer}>

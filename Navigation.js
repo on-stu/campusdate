@@ -27,6 +27,9 @@ import MyIntroductionChange from "./screens/my/MyIntroductionChange";
 import NoticeDetail from "./screens/notice/NoticeDetail";
 import FaqPost from "./screens/Faq/FaqPost";
 import ChatScreen from "./screens/ChatScreen";
+import Charm from "./screens/charm/Charm";
+import CharmPost from "./screens/charm/CharmPost";
+import CharmDetail from "./screens/charm/CharmDetail";
 
 const Stack = createStackNavigator();
 
@@ -65,6 +68,9 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
         <Stack.Screen name="FaqPost" component={FaqPost} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="Charm" component={Charm} />
+        <Stack.Screen name="CharmPost" component={CharmPost} />
+        <Stack.Screen name="CharmDetail" component={CharmDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );
