@@ -36,6 +36,8 @@ import ReviewPost from "./screens/review/ReviewPost";
 import Event from "./screens/event/Event";
 import EventPost from "./screens/event/EventPost";
 import EventDetail from "./screens/event/EventDetail";
+import OpenSourceList from "./screens/oss/OpenSourceList";
+import OpenSourceDetail from "./screens/oss/OpenSourceDetail";
 
 const Stack = createStackNavigator();
 
@@ -83,6 +85,8 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="Event" component={Event} />
         <Stack.Screen name="EventPost" component={EventPost} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
+        <Stack.Screen name="OpenSourceList" component={OpenSourceList} />
+        <Stack.Screen name="OpenSourceDetail" component={OpenSourceDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

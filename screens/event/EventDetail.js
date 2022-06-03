@@ -15,7 +15,7 @@ import key from "../../lib/key.json";
 import axios from "axios";
 import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
-import { setEventById } from "../../redux/reducers/eventsSlice";
+import { setEventById, setEvents } from "../../redux/reducers/eventsSlice";
 import colors from "../../lib/colors.json";
 import { setEvent } from "../../redux/reducers/eventSlice";
 import Comment from "../../components/Comment";
@@ -29,6 +29,7 @@ const EventDetail = ({ navigation, route }) => {
 
   const { userInfo } = useContext(UserContext);
   const event = useSelector((state) => state.event);
+  const events = useSelector((state) => state.events);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -67,6 +68,19 @@ const EventDetail = ({ navigation, route }) => {
     }
   };
 
+  const onDelete = async () => {
+    const newState = events.filter((elm) => elm.id !== event.id);
+    dispatch(setEvents(newState));
+    try {
+      const response = await axios.delete(`${key.API}/event/${event.id}/`);
+      if (response.status === 204) {
+        navigation.pop();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -94,7 +108,7 @@ const EventDetail = ({ navigation, route }) => {
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={onDelete}>
                         <View style={styles.dropMenu}>
                           <Text style={styles.deleteText}>삭제하기</Text>
                         </View>

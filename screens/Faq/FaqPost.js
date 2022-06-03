@@ -11,7 +11,7 @@ import {
   Alert,
   Dimensions,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import { useState } from "react";
@@ -22,13 +22,14 @@ import key from "../../lib/key.json";
 import MiniCheck from "../../components/MiniCheck";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 import { setFaqs } from "../../redux/reducers/faqsSlice";
+import { UserContext } from "../../context/user";
 
 const FaqPost = ({ navigation }) => {
   const [canPost, setCanPost] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isSecret, setIsSecret] = useState(true);
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
   const faqs = useSelector((state) => state.faqs);
   const dispatch = useDispatch();
 

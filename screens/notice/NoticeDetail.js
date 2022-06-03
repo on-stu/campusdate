@@ -16,7 +16,7 @@ import key from "../../lib/key.json";
 import axios from "axios";
 import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
-import { setNoticeById } from "../../redux/reducers/noticesSlice";
+import { setNoticeById, setNotices } from "../../redux/reducers/noticesSlice";
 import colors from "../../lib/colors.json";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import Comment from "../../components/Comment";
@@ -71,6 +71,19 @@ const NoticeDetail = ({ navigation, route }) => {
     }
   };
 
+  const onDelete = async () => {
+    const newState = notices.filter((elm) => elm.id !== notice.id);
+    dispatch(setNotices(newState));
+    try {
+      const response = await axios.delete(`${key.API}/notice/${notice.id}/`);
+      if (response.status === 204) {
+        navigation.pop();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -98,7 +111,7 @@ const NoticeDetail = ({ navigation, route }) => {
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={onDelete}>
                         <View style={styles.dropMenu}>
                           <Text style={styles.deleteText}>삭제하기</Text>
                         </View>

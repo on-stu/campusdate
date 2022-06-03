@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import key from "../../lib/key.json";
@@ -19,14 +19,18 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "../../lib/colors.json";
 import Comment from "../../components/Comment";
 import { setFaq } from "../../redux/reducers/faqSlice";
-import { setFaqsById } from "../../redux/reducers/faqsSlice";
+import { setFaqs, setFaqsById } from "../../redux/reducers/faqsSlice";
 import FaqContent from "../../components/FaqContent";
+import { UserContext } from "../../context/user";
 
 const FaqDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
-  const userInfo = useSelector((state) => state.user);
+  const { userInfo } = useContext(UserContext);
+  const [dropMenuVisible, setDropMenuVisible] = useState(false);
+
   const faq = useSelector((state) => state.faq);
+  const faqs = useSelector((state) => state.faqs);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -66,6 +70,19 @@ const FaqDetail = ({ navigation }) => {
     }
   };
 
+  const onDelete = async () => {
+    const newState = faqs.filter((elm) => elm.id !== faq.id);
+    dispatch(setFaqs(newState));
+    try {
+      const response = await axios.delete(`${key.API}/faq/${faq.id}/`);
+      if (response.status === 204) {
+        navigation.pop();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -81,6 +98,25 @@ const FaqDetail = ({ navigation }) => {
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
                   <Text style={styles.title}>문의사항</Text>
+                </View>
+                <View style={{ position: "relative" }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      author.id === userInfo.id &&
+                      setDropMenuVisible((prev) => !prev)
+                    }
+                  >
+                    <Feather name="more-vertical" size={24} color="black" />
+                  </TouchableOpacity>
+                  {dropMenuVisible && (
+                    <View style={styles.dropMenuContainer}>
+                      <TouchableOpacity onPress={onDelete}>
+                        <View style={styles.dropMenu}>
+                          <Text style={styles.deleteText}>삭제하기</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </View>
               <View style={styles.inner}>
@@ -179,5 +215,21 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     paddingHorizontal: 20,
+  },
+  dropMenuContainer: {
+    position: "absolute",
+    top: 32,
+    right: 0,
+  },
+  dropMenu: {
+    backgroundColor: colors.gray,
+    width: 100,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    borderRadius: 8,
+  },
+  deleteText: {
+    color: colors.red,
   },
 });

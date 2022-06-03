@@ -11,12 +11,11 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import BoardContent from "../../components/BoardContent";
 import key from "../../lib/key.json";
 import axios from "axios";
 import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
-import { setCharmById } from "../../redux/reducers/charmsSlice";
+import { setCharmById, setCharms } from "../../redux/reducers/charmsSlice";
 import colors from "../../lib/colors.json";
 import { setCharm } from "../../redux/reducers/charmSlice";
 import Comment from "../../components/Comment";
@@ -29,6 +28,7 @@ const CharmDetail = ({ navigation, route }) => {
   const [dropMenuVisible, setDropMenuVisible] = useState(false);
   const { userInfo } = useContext(UserContext);
   const charm = useSelector((state) => state.charm);
+  const charms = useSelector((state) => state.charms);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -67,6 +67,19 @@ const CharmDetail = ({ navigation, route }) => {
     }
   };
 
+  const onDelete = async () => {
+    const newState = charms.filter((elm) => elm.id !== charm.id);
+    dispatch(setCharms(newState));
+    try {
+      const response = await axios.delete(`${key.API}/charm/${charm.id}/`);
+      if (response.status === 204) {
+        navigation.pop();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -94,7 +107,7 @@ const CharmDetail = ({ navigation, route }) => {
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={onDelete}>
                         <View style={styles.dropMenu}>
                           <Text style={styles.deleteText}>삭제하기</Text>
                         </View>

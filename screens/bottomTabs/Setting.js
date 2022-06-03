@@ -101,7 +101,9 @@ const Setting = ({ stackNavigation }) => {
                 <Text>개인정보 처리방침</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => stackNavigation.navigate("OpenSourceList")}
+            >
               <View style={styles.menu}>
                 <Text>오픈소스 라이선스</Text>
               </View>

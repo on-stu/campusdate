@@ -19,7 +19,7 @@ import colors from "../../lib/colors.json";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
 import { setReview } from "../../redux/reducers/reviewSlice";
-import { setReviewById } from "../../redux/reducers/reviewsSlice";
+import { setReviewById, setReviews } from "../../redux/reducers/reviewsSlice";
 import ReviewContent from "../../components/ReviewContent";
 
 const ReviewDetail = ({ navigation }) => {
@@ -27,6 +27,7 @@ const ReviewDetail = ({ navigation }) => {
   const [comment, setComment] = useState("");
   const { userInfo } = useContext(UserContext);
   const review = useSelector((state) => state.review);
+  const reviews = useSelector((state) => state.reviews);
   const dispatch = useDispatch();
   const [dropMenuVisible, setDropMenuVisible] = useState(false);
 
@@ -66,6 +67,18 @@ const ReviewDetail = ({ navigation }) => {
     }
   };
 
+  const onDelete = async () => {
+    const newState = reviews.filter((elm) => elm.id !== review.id);
+    dispatch(setReviews(newState));
+    try {
+      const response = await axios.delete(`${key.API}/review/${review.id}/`);
+      if (response.status === 204) {
+        navigation.pop();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -93,7 +106,7 @@ const ReviewDetail = ({ navigation }) => {
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={onDelete}>
                         <View style={styles.dropMenu}>
                           <Text style={styles.deleteText}>삭제하기</Text>
                         </View>
