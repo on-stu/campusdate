@@ -49,7 +49,7 @@ const ReviewPost = ({ navigation }) => {
       authorId: userInfo?.id,
     });
     if (response.status === 201) {
-      dispatch(setReviews([...reviews, response.data]));
+      dispatch(setReviews([response.data, ...reviews]));
       navigation.pop();
     } else {
       Alert.alert("경고", "예상치 못한 문제가 발생했습니다.");

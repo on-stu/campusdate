@@ -49,7 +49,7 @@ const NoticePost = ({ navigation }) => {
       authorId: userInfo?.id,
     });
     if (response.status === 201) {
-      dispatch(setNotices([...notices, response.data]));
+      dispatch(setNotices([response.data, ...notices]));
       navigation.pop();
     } else {
       Alert.alert("경고", "예상치 못한 문제가 발생했습니다.");

@@ -52,7 +52,7 @@ const FaqPost = ({ navigation }) => {
     });
     if (response.status === 201) {
       console.log(response.data);
-      dispatch(setFaqs([...faqs, response.data]));
+      dispatch(setFaqs([response.data, ...faqs]));
       navigation.pop();
     } else {
       Alert.alert("경고", "예상치 못한 문제가 발생했습니다.");
