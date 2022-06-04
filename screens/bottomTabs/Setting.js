@@ -98,7 +98,9 @@ const Setting = ({ stackNavigation }) => {
                 <Text>서비스 이용약관</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => stackNavigation.navigate("PrivacyTerms")}
+            >
               <View style={styles.menu}>
                 <Text>개인정보 처리방침</Text>
               </View>
