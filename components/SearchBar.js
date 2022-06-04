@@ -1,19 +1,22 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import colors from "../lib/colors.json";
 
-const SearchBar = ({ placeholder, value, onChangeText }) => {
+const SearchBar = ({ placeholder, value, onChangeText, onSubmit }) => {
   return (
     <View style={styles.searchBar}>
       <TextInput
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmit}
       />
-      <View style={styles.searchIcon}>
-        <Feather name="search" size={24} color={colors.darkgray} />
-      </View>
+      <TouchableOpacity onPress={onSubmit} style={styles.searchIcon}>
+        <View>
+          <Feather name="search" size={24} color={colors.darkgray} />
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

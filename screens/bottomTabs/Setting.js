@@ -15,11 +15,48 @@ import MyProfileCard from "../../components/MyProfileCard";
 import { deleteItem, getValue } from "../../functions/secureStore";
 import { UserContext } from "../../context/user";
 import SocketContext from "../../context/socket";
+import axios from "axios";
+import key from "../../lib/key.json";
+import { useDispatch } from "react-redux";
+import { initCharm } from "../../redux/reducers/charmSlice";
+import { initCharms } from "../../redux/reducers/charmsSlice";
+import { initEvent } from "../../redux/reducers/eventSlice";
+import { initFaq } from "../../redux/reducers/faqSlice";
+import { initFaqs } from "../../redux/reducers/faqsSlice";
+import { initEvents } from "../../redux/reducers/eventsSlice";
+import { initNotice } from "../../redux/reducers/noticeSlice";
+import { initNotices } from "../../redux/reducers/noticesSlice";
+import { initReview } from "../../redux/reducers/reviewSlice";
+import { initReviews } from "../../redux/reducers/reviewsSlice";
 
 const Setting = ({ stackNavigation }) => {
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { userInfo, setUserInfo, setUserChatList } = useContext(UserContext);
   const socket = useContext(SocketContext);
   const [notification, setNotification] = useState(true);
+  const dispatch = useDispatch();
+
+  const deleteUser = async () => {
+    try {
+      const token = await getValue("token");
+      console.log(token);
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      const response = await axios.delete(`${key.API}/user/`, {
+        headers,
+      });
+      if (response.status === 204) {
+        setUserInfo({});
+        socket.disconnect();
+        stackNavigation.reset({
+          routes: [{ name: "Login" }],
+        });
+        deleteItem("token");
+      }
+    } catch (error) {
+      Alert.alert("에러", `예기치 못한 오류가 발생했습니다\n${error.message}`);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,7 +89,44 @@ const Setting = ({ stackNavigation }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "캐시를 삭제하시겠습니까?",
+                  "캐시를 삭제하시면 자동으로 로그아웃됩니다.",
+                  [
+                    {
+                      text: "예",
+                      onPress: () => {
+                        deleteItem("token").then(() => {
+                          getValue("token").then((token) => {
+                            setUserInfo({});
+                            setUserChatList([]);
+                            dispatch(initCharm());
+                            dispatch(initCharms());
+                            dispatch(initEvent());
+                            dispatch(initEvents());
+                            dispatch(initNotice());
+                            dispatch(initNotices());
+                            dispatch(initFaq());
+                            dispatch(initFaqs());
+                            dispatch(initReview());
+                            dispatch(initReviews());
+                            socket.disconnect();
+                            stackNavigation.reset({
+                              routes: [{ name: "Login" }],
+                            });
+                          });
+                        });
+                      },
+                    },
+                    {
+                      text: "아니오",
+                    },
+                  ]
+                )
+              }
+            >
               <View style={styles.menu}>
                 <Text>캐시 삭제</Text>
               </View>
@@ -154,7 +228,23 @@ const Setting = ({ stackNavigation }) => {
                 <Text>로그아웃</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                Alert.alert(
+                  "회원탈퇴 하시겠습니까?",
+                  "회원탈퇴를 하셔도 게시물과 채팅 로그는 지워지지 않습니다.",
+                  [
+                    {
+                      text: "예",
+                      onPress: deleteUser,
+                    },
+                    {
+                      text: "아니오",
+                    },
+                  ]
+                )
+              }
+            >
               <View style={styles.menu}>
                 <Text>회원 탈퇴</Text>
               </View>

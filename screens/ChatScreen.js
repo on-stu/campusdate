@@ -41,10 +41,16 @@ const ChatScreen = ({ navigation, route }) => {
     const headers = {
       Authorization: `Token ${token}`,
     };
-    const response = await axios.get(`${key.API}/user/${userId}/`, {
-      headers,
-    });
-    setProfileInfo(response.data);
+    try {
+      const response = await axios.get(`${key.API}/user/${userId}/`, {
+        headers,
+      });
+      setProfileInfo(response.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setProfileInfo({ id: 0, nickname: "알 수 없는 사용자" });
+      }
+    }
   };
 
   const refreshChatMessages = async () => {

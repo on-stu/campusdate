@@ -20,9 +20,6 @@ import { setCharm } from "../../redux/reducers/charmSlice";
 import { setCharms } from "../../redux/reducers/charmsSlice";
 
 import { UserContext } from "../../context/user";
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
 
 const Charm = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -30,10 +27,14 @@ const Charm = ({ navigation }) => {
   const charms = useSelector((state) => state.charms);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
+  const [search, setSearch] = useState("");
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    axios.get(`${key.API}/charm/`).then((response) => {
+      dispatch(setCharms(response.data));
+      setRefreshing(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -47,17 +48,21 @@ const Charm = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>매력어필</Text>
+        <NoticeIcon height={72} width={122} />
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <View style={styles.header}>
-          <Text style={styles.title}>매력어필</Text>
-          <NoticeIcon height={72} width={122} />
-        </View>
-        <View style={styles.header}>
-          <SearchBar placeholder="매력어필 검색하기" />
+          <SearchBar
+            placeholder="매력어필 검색하기"
+            value={search}
+            onChangeText={setSearch}
+          />
         </View>
         <View style={styles.inner}>
           {charms.map((charm, i) => (

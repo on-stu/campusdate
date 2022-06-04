@@ -20,10 +20,6 @@ import { setEvent } from "../../redux/reducers/eventSlice";
 import { setEvents } from "../../redux/reducers/eventsSlice";
 import { UserContext } from "../../context/user";
 
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
-
 const Event = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
 
@@ -33,7 +29,10 @@ const Event = ({ navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    axios.get(`${key.API}/event/`).then((response) => {
+      dispatch(setEvents(response.data));
+      setRefreshing(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -47,15 +46,15 @@ const Event = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>이벤트</Text>
+        <EventIcon height={72} width={122} />
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>이벤트</Text>
-          <EventIcon height={72} width={122} />
-        </View>
         <View style={styles.header}>
           <SearchBar placeholder="이벤트 검색하기" />
         </View>

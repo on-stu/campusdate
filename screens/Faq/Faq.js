@@ -5,8 +5,9 @@ import {
   Text,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
 import FaqIcon from "../../img/faq.svg";
 import { Feather } from "@expo/vector-icons";
@@ -23,6 +24,16 @@ const Faq = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
   const faqs = useSelector((state) => state.faqs);
   const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    axios.get(`${key.API}/faq/`).then((response) => {
+      dispatch(setFaqs(response.data));
+      setRefreshing(false);
+    });
+  }, []);
+
   useEffect(() => {
     if (faqs.length === 0) {
       (async () => {
@@ -33,11 +44,15 @@ const Faq = ({ navigation }) => {
   }, [faqs]);
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <Text style={styles.title}>문의사항</Text>
-          <FaqIcon height={72} width={122} />
-        </View>
+      <View style={styles.header}>
+        <Text style={styles.title}>문의사항</Text>
+        <FaqIcon height={72} width={122} />
+      </View>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View style={styles.header}>
           <SearchBar placeholder="문의사항 검색하기" />
         </View>

@@ -1,5 +1,4 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import counterReducer from "./reducers/counterSlice";
 import noticeReducer from "./reducers/noticeSlice";
 import noticesReduceer from "./reducers/noticesSlice";
 import faqSlice from "./reducers/faqSlice";
@@ -13,7 +12,6 @@ import eventsSlice from "./reducers/eventsSlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     notice: noticeReducer,
     notices: noticesReduceer,
     faq: faqSlice,

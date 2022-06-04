@@ -24,14 +24,23 @@ const ChatItem = ({
   useEffect(() => {
     if (counterPartId) {
       (async () => {
-        const token = await getValue("token");
-        const headers = {
-          Authorization: `Token ${token}`,
-        };
-        const response = await axios.get(`${key.API}/user/${counterPartId}/`, {
-          headers,
-        });
-        setCounterPart(response.data);
+        try {
+          const token = await getValue("token");
+          const headers = {
+            Authorization: `Token ${token}`,
+          };
+          const response = await axios.get(
+            `${key.API}/user/${counterPartId}/`,
+            {
+              headers,
+            }
+          );
+          setCounterPart(response.data);
+        } catch (error) {
+          if (error.response.status === 404) {
+            setCounterPart({ id: 0, nickname: "알 수 없는 사용자" });
+          }
+        }
       })();
     }
   }, [counterPartId]);

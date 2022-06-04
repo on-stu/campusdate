@@ -38,15 +38,15 @@ const FindMyLove = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.top}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => navigation.pop()}>
-              <Feather name="chevron-left" size={24} color={colors.darkgray} />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.title}>내 연인 찾기</Text>
+      <View style={styles.top}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={() => navigation.pop()}>
+            <Feather name="chevron-left" size={24} color={colors.darkgray} />
+          </TouchableOpacity>
         </View>
+        <Text style={styles.title}>내 연인 찾기</Text>
+      </View>
+      <ScrollView>
         <View style={styles.inner}>
           <View style={styles.askContainer}>
             <Text style={styles.ask}>

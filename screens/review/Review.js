@@ -18,11 +18,7 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import { setReview } from "../../redux/reducers/reviewSlice";
 import { setReviews } from "../../redux/reducers/reviewsSlice";
-
 import { UserContext } from "../../context/user";
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
 
 const Review = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -33,7 +29,10 @@ const Review = ({ navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    axios.get(`${key.API}/review/`).then((response) => {
+      dispatch(setReviews(response.data));
+      setRefreshing(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -47,15 +46,15 @@ const Review = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>후기</Text>
+        <NoticeIcon height={72} width={122} />
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>후기</Text>
-          <NoticeIcon height={72} width={122} />
-        </View>
         <View style={styles.header}>
           <SearchBar placeholder="후기 검색하기" />
         </View>

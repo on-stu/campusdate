@@ -18,11 +18,7 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import { setNotices } from "../../redux/reducers/noticesSlice";
-
 import { UserContext } from "../../context/user";
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
 
 const Notice = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -33,7 +29,10 @@ const Notice = ({ navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    axios.get(`${key.API}/notice/`).then((response) => {
+      dispatch(setNotices(response.data));
+      setRefreshing(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -47,15 +46,15 @@ const Notice = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>공지사항</Text>
+        <NoticeIcon height={72} width={122} />
+      </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <Text style={styles.title}>공지사항</Text>
-          <NoticeIcon height={72} width={122} />
-        </View>
         <View style={styles.header}>
           <SearchBar placeholder="공지사항 검색하기" />
         </View>
