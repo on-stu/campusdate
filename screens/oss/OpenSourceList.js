@@ -28,15 +28,15 @@ const ListItem = ({ licenseName, last, onPress }) => {
 const OpenSourceList = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.pop()}>
-            <Feather name="chevron-left" size={24} color="black" />
-          </TouchableOpacity>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>오픈소스 라이선스</Text>
-          </View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.pop()}>
+          <Feather name="chevron-left" size={24} color="black" />
+        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>오픈소스 라이선스</Text>
         </View>
+      </View>
+      <ScrollView>
         <View style={styles.inner}>
           {ossLicenses.map((oss, i) => (
             <ListItem

@@ -91,7 +91,9 @@ const Setting = ({ stackNavigation }) => {
                 <Text>신고하기</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => stackNavigation.navigate("ServiceTerms")}
+            >
               <View style={styles.menu}>
                 <Text>서비스 이용약관</Text>
               </View>
