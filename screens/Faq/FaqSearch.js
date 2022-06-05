@@ -1,39 +1,39 @@
 import {
-  RefreshControl,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  RefreshControl,
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
+import FaqIcon from "../../img/faq.svg";
 import { Feather } from "@expo/vector-icons";
-import ListItem from "../../components/ListItem";
+import SearchBar from "../../components/SearchBar";
+import ListItemFaq from "../../components/ListItemFaq";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import key from "../../lib/key.json";
-import { setNotice } from "../../redux/reducers/noticeSlice";
-import { setNotices } from "../../redux/reducers/noticesSlice";
+import axios from "axios";
+import { setFaqs } from "../../redux/reducers/faqsSlice";
+import { setFaq } from "../../redux/reducers/faqSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
-
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-const Notice = ({ navigation }) => {
+const Faq = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
-
-  const notices = useSelector((state) => state.notices);
+  const faqs = useSelector((state) => state.faqs);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    axios.get(`${key.API}/notice/`).then((response) => {
-      dispatch(setNotices(response.data));
+    axios.get(`${key.API}/faq/`).then((response) => {
+      dispatch(setFaqs(response.data));
       wait(500).then(() => {
         setRefreshing(false);
       });
@@ -41,59 +41,55 @@ const Notice = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (notices.length === 0) {
+    if (faqs.length === 0) {
       (async () => {
-        const response = await axios.get(`${key.API}/notice/`);
-        dispatch(setNotices(response.data));
+        const response = await axios.get(`${key.API}/faq/`);
+        dispatch(setFaqs(response.data));
       })();
     }
-  }, [notices]);
-
+  }, [faqs]);
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="공지사항" onBackPress={() => navigation.pop()} />
+      <Header title="문의하기" onBackPress={() => navigation.pop()} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <View style={styles.inner}>
-          {notices.map((notice, i) => (
-            <ListItem
-              authorId={notice?.authorId}
-              createdAt={notice?.createdAt}
-              title={notice.title}
+          {faqs.map((faq, i) => (
+            <ListItemFaq
+              fullVisible={!faq?.isSecret || userInfo?.is_admin ? true : false}
+              authorId={faq?.authorId}
+              createdAt={faq?.createdAt}
+              title={faq?.title}
               key={i}
-              fullVisible
-              thumbsNum={notice?.thumbs?.length}
-              commentsNum={notice?.comments?.length}
+              done={faq?.done}
               onPress={() => {
-                dispatch(setNotice(notice));
-                navigation.navigate("NoticeDetail", {
-                  noticeId: notice.id,
-                });
+                if (!faq?.isSecret || userInfo?.is_admin) {
+                  dispatch(setFaq(faq));
+                  navigation.navigate("FaqDetail");
+                }
               }}
             />
           ))}
         </View>
       </ScrollView>
-      {userInfo?.is_admin && (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("NoticePost");
-          }}
-        >
-          <View style={styles.button}>
-            <Feather name="edit" size={24} color="white" />
-            <Text style={styles.buttonText}>글쓰기</Text>
-          </View>
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("FaqPost");
+        }}
+      >
+        <View style={styles.button}>
+          <Feather name="edit" size={24} color="white" />
+          <Text style={styles.buttonText}>문의하기</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-export default Notice;
+export default Faq;
 
 const styles = StyleSheet.create({
   container: {

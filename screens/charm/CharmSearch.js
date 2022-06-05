@@ -9,30 +9,35 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
+import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
+import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
-import { setEvent } from "../../redux/reducers/eventSlice";
-import { setEvents } from "../../redux/reducers/eventsSlice";
+import { setCharm } from "../../redux/reducers/charmSlice";
+import { setCharms } from "../../redux/reducers/charmsSlice";
+
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-const Event = ({ navigation }) => {
+const Charm = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
 
-  const events = useSelector((state) => state.events);
+  const charms = useSelector((state) => state.charms);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
+  const [search, setSearch] = useState("");
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    axios.get(`${key.API}/event/`).then((response) => {
-      dispatch(setEvents(response.data));
+    setSearch("");
+    axios.get(`${key.API}/charm/`).then((response) => {
+      dispatch(setCharms(response.data));
       wait(500).then(() => {
         setRefreshing(false);
       });
@@ -40,65 +45,70 @@ const Event = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (events.length === 0) {
+    (async () => {
+      const response = await axios.get(`${key.API}/charm/`);
+      dispatch(setCharms(response.data));
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (search === "") {
       (async () => {
-        const response = await axios.get(`${key.API}/event/`);
-        dispatch(setEvents(response.data));
+        const response = await axios.get(`${key.API}/charm/`);
+        dispatch(setCharms(response.data));
       })();
     }
-  }, [events]);
+  }, [search]);
+
+  const onSearch = async () => {
+    const response = await axios.get(`${key.API}/charm/?search=${search}`);
+    dispatch(setCharms(response.data));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="이벤트" onBackPress={() => navigation.pop()} />
+      <Header title="매력어필" onBackPress={() => navigation.pop()} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <View style={styles.inner}>
-          {events.length > 0 &&
-            events.map((event, i) => (
-              <ListItem
-                authorId={event?.authorId}
-                createdAt={event?.createdAt}
-                title={event.title}
-                key={i}
-                fullVisible
-                thumbsNum={event?.thumbs?.length}
-                commentsNum={event?.comments?.length}
-                onPress={() => {
-                  dispatch(setEvent(event));
-                  navigation.navigate("EventDetail");
-                }}
-              />
-            ))}
-          {events.length === 0 && (
-            <View style={styles.noEventsContainer}>
-              <Text style={styles.noEventText}>
-                진행중인 이벤트가 없습니다.
-              </Text>
-            </View>
-          )}
+          {charms.map((charm, i) => (
+            <ListItem
+              authorId={charm?.authorId}
+              createdAt={charm?.createdAt}
+              title={charm.title}
+              key={i}
+              fullVisible={!charm?.isAnonymous}
+              thumbsNum={charm?.thumbs?.length}
+              commentsNum={charm?.comments?.length}
+              onPress={() => {
+                dispatch(setCharm(charm));
+                navigation.navigate("CharmDetail", {
+                  charm: charm.id,
+                });
+              }}
+            />
+          ))}
         </View>
       </ScrollView>
-      {userInfo?.is_admin && (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("EventPost");
-          }}
-        >
-          <View style={styles.button}>
-            <Feather name="edit" size={24} color="white" />
-            <Text style={styles.buttonText}>글쓰기</Text>
-          </View>
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("CharmPost");
+        }}
+      >
+        <View style={styles.button}>
+          <Feather name="edit" size={24} color="white" />
+          <Text style={styles.buttonText}>글쓰기</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-export default Event;
+export default Charm;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,14 +148,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginLeft: 4,
-  },
-  noEventsContainer: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  noEventText: {
-    color: colors.darkgray,
   },
 });

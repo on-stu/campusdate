@@ -9,9 +9,7 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
-import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
-import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -19,6 +17,10 @@ import key from "../../lib/key.json";
 import { setReview } from "../../redux/reducers/reviewSlice";
 import { setReviews } from "../../redux/reducers/reviewsSlice";
 import { UserContext } from "../../context/user";
+import Header from "../../components/Header";
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 const Review = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -31,7 +33,9 @@ const Review = ({ navigation }) => {
     setRefreshing(true);
     axios.get(`${key.API}/review/`).then((response) => {
       dispatch(setReviews(response.data));
-      setRefreshing(false);
+      wait(500).then(() => {
+        setRefreshing(false);
+      });
     });
   }, []);
 
@@ -46,18 +50,12 @@ const Review = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>후기</Text>
-        <NoticeIcon height={72} width={122} />
-      </View>
+      <Header title="후기" onBackPress={() => navigation.pop()} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <SearchBar placeholder="후기 검색하기" />
-        </View>
         <View style={styles.inner}>
           {reviews.map((review, i) => (
             <ListItem

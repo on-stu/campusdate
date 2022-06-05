@@ -9,9 +9,7 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
-import FaqIcon from "../../img/faq.svg";
 import { Feather } from "@expo/vector-icons";
-import SearchBar from "../../components/SearchBar";
 import ListItemFaq from "../../components/ListItemFaq";
 import { useDispatch, useSelector } from "react-redux";
 import key from "../../lib/key.json";
@@ -19,6 +17,10 @@ import axios from "axios";
 import { setFaqs } from "../../redux/reducers/faqsSlice";
 import { setFaq } from "../../redux/reducers/faqSlice";
 import { UserContext } from "../../context/user";
+import Header from "../../components/Header";
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 const Faq = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -30,7 +32,9 @@ const Faq = ({ navigation }) => {
     setRefreshing(true);
     axios.get(`${key.API}/faq/`).then((response) => {
       dispatch(setFaqs(response.data));
-      setRefreshing(false);
+      wait(500).then(() => {
+        setRefreshing(false);
+      });
     });
   }, []);
 
@@ -44,18 +48,12 @@ const Faq = ({ navigation }) => {
   }, [faqs]);
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>문의사항</Text>
-        <FaqIcon height={72} width={122} />
-      </View>
+      <Header title="문의하기" onBackPress={() => navigation.pop()} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <SearchBar placeholder="문의사항 검색하기" />
-        </View>
         <View style={styles.inner}>
           {faqs.map((faq, i) => (
             <ListItemFaq

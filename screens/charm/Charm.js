@@ -9,17 +9,18 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
-import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
-import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { setCharm } from "../../redux/reducers/charmSlice";
 import { setCharms } from "../../redux/reducers/charmsSlice";
-
 import { UserContext } from "../../context/user";
+import Header from "../../components/Header";
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 const Charm = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -31,39 +32,44 @@ const Charm = ({ navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+    setSearch("");
     axios.get(`${key.API}/charm/`).then((response) => {
       dispatch(setCharms(response.data));
-      setRefreshing(false);
+      wait(500).then(() => {
+        setRefreshing(false);
+      });
     });
   }, []);
 
   useEffect(() => {
-    if (charms.length === 0) {
+    (async () => {
+      const response = await axios.get(`${key.API}/charm/`);
+      dispatch(setCharms(response.data));
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (search === "") {
       (async () => {
         const response = await axios.get(`${key.API}/charm/`);
         dispatch(setCharms(response.data));
       })();
     }
-  }, [charms]);
+  }, [search]);
+
+  const onSearch = async () => {
+    const response = await axios.get(`${key.API}/charm/?search=${search}`);
+    dispatch(setCharms(response.data));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>매력어필</Text>
-        <NoticeIcon height={72} width={122} />
-      </View>
+      <Header title="매력어필" onBackPress={() => navigation.pop()} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
-        <View style={styles.header}>
-          <SearchBar
-            placeholder="매력어필 검색하기"
-            value={search}
-            onChangeText={setSearch}
-          />
-        </View>
         <View style={styles.inner}>
           {charms.map((charm, i) => (
             <ListItem

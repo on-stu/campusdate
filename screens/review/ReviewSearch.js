@@ -9,30 +9,32 @@ import {
 } from "react-native";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
+import NoticeIcon from "../../img/notice.svg";
 import { Feather } from "@expo/vector-icons";
+import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
-import { setEvent } from "../../redux/reducers/eventSlice";
-import { setEvents } from "../../redux/reducers/eventsSlice";
+import { setReview } from "../../redux/reducers/reviewSlice";
+import { setReviews } from "../../redux/reducers/reviewsSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-const Event = ({ navigation }) => {
+const Review = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
 
-  const events = useSelector((state) => state.events);
+  const reviews = useSelector((state) => state.reviews);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    axios.get(`${key.API}/event/`).then((response) => {
-      dispatch(setEvents(response.data));
+    axios.get(`${key.API}/review/`).then((response) => {
+      dispatch(setReviews(response.data));
       wait(500).then(() => {
         setRefreshing(false);
       });
@@ -40,65 +42,56 @@ const Event = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (events.length === 0) {
+    if (reviews.length === 0) {
       (async () => {
-        const response = await axios.get(`${key.API}/event/`);
-        dispatch(setEvents(response.data));
+        const response = await axios.get(`${key.API}/review/`);
+        dispatch(setReviews(response.data));
       })();
     }
-  }, [events]);
+  }, [reviews]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="이벤트" onBackPress={() => navigation.pop()} />
+      <Header title="후기" onBackPress={() => navigation.pop()} />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
         <View style={styles.inner}>
-          {events.length > 0 &&
-            events.map((event, i) => (
-              <ListItem
-                authorId={event?.authorId}
-                createdAt={event?.createdAt}
-                title={event.title}
-                key={i}
-                fullVisible
-                thumbsNum={event?.thumbs?.length}
-                commentsNum={event?.comments?.length}
-                onPress={() => {
-                  dispatch(setEvent(event));
-                  navigation.navigate("EventDetail");
-                }}
-              />
-            ))}
-          {events.length === 0 && (
-            <View style={styles.noEventsContainer}>
-              <Text style={styles.noEventText}>
-                진행중인 이벤트가 없습니다.
-              </Text>
-            </View>
-          )}
+          {reviews.map((review, i) => (
+            <ListItem
+              authorId={review?.authorId}
+              createdAt={review?.createdAt}
+              title={review.title}
+              key={i}
+              fullVisible={!review?.isAnonymous}
+              thumbsNum={review?.thumbs?.length}
+              commentsNum={review?.comments?.length}
+              onPress={() => {
+                dispatch(setReview(review));
+                navigation.navigate("ReviewDetail");
+              }}
+            />
+          ))}
         </View>
       </ScrollView>
-      {userInfo?.is_admin && (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("EventPost");
-          }}
-        >
-          <View style={styles.button}>
-            <Feather name="edit" size={24} color="white" />
-            <Text style={styles.buttonText}>글쓰기</Text>
-          </View>
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("ReviewPost");
+        }}
+      >
+        <View style={styles.button}>
+          <Feather name="edit" size={24} color="white" />
+          <Text style={styles.buttonText}>글쓰기</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-export default Event;
+export default Review;
 
 const styles = StyleSheet.create({
   container: {
@@ -138,14 +131,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginLeft: 4,
-  },
-  noEventsContainer: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  noEventText: {
-    color: colors.darkgray,
   },
 });

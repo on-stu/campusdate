@@ -10,8 +10,10 @@ import {
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import colors from "../../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
+import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
 import { useDispatch, useSelector } from "react-redux";
+import EventIcon from "../../img/event.svg";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { setEvent } from "../../redux/reducers/eventSlice";
