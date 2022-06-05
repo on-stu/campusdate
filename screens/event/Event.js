@@ -18,6 +18,7 @@ import { setEvent } from "../../redux/reducers/eventSlice";
 import { setEvents } from "../../redux/reducers/eventsSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
+
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -50,7 +51,11 @@ const Event = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="이벤트" onBackPress={() => navigation.pop()} />
+      <Header
+        title="이벤트"
+        onBackPress={() => navigation.pop()}
+        onSearchPress={() => navigation.navigate("EventSearch")}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

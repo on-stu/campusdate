@@ -11,6 +11,7 @@ const SearchBar = ({ placeholder, value, onChangeText, onSubmit }) => {
         value={value}
         onChangeText={onChangeText}
         onSubmitEditing={onSubmit}
+        autoFocus
       />
       <TouchableOpacity onPress={onSubmit} style={styles.searchIcon}>
         <View>
@@ -25,7 +26,7 @@ export default SearchBar;
 
 const styles = StyleSheet.create({
   searchBar: {
-    marginTop: 10,
+    marginVertical: 10,
     width: "100%",
     position: "relative",
     padding: 10,

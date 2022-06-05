@@ -64,7 +64,11 @@ const Charm = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="매력어필" onBackPress={() => navigation.pop()} />
+      <Header
+        title="매력어필"
+        onBackPress={() => navigation.pop()}
+        onSearchPress={() => navigation.navigate("CharmSearch")}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

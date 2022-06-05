@@ -39,16 +39,18 @@ const Faq = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (faqs.length === 0) {
-      (async () => {
-        const response = await axios.get(`${key.API}/faq/`);
-        dispatch(setFaqs(response.data));
-      })();
-    }
+    (async () => {
+      const response = await axios.get(`${key.API}/faq/`);
+      dispatch(setFaqs(response.data));
+    })();
   }, [faqs]);
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="문의하기" onBackPress={() => navigation.pop()} />
+      <Header
+        title="문의하기"
+        onBackPress={() => navigation.pop()}
+        onSearchPress={() => navigation.navigate("FaqSearch")}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

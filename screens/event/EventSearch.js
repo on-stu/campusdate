@@ -1,5 +1,5 @@
 import {
-  RefreshControl,
+  Alert,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -7,58 +7,66 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import colors from "../../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 import SearchBar from "../../components/SearchBar";
 import ListItem from "../../components/ListItem";
-import { useDispatch, useSelector } from "react-redux";
-import EventIcon from "../../img/event.svg";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { setEvent } from "../../redux/reducers/eventSlice";
-import { setEvents } from "../../redux/reducers/eventsSlice";
-import { UserContext } from "../../context/user";
-import Header from "../../components/Header";
-const wait = (timeout) => {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
-};
 
-const Event = ({ navigation }) => {
-  const { userInfo } = useContext(UserContext);
-
-  const events = useSelector((state) => state.events);
+const EventSearch = ({ navigation }) => {
+  const [events, setEvents] = useState([]);
   const dispatch = useDispatch();
-  const [refreshing, setRefreshing] = useState(false);
+  const [search, setSearch] = useState("");
+  const [notFound, setNotFound] = useState(false);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    axios.get(`${key.API}/event/`).then((response) => {
-      dispatch(setEvents(response.data));
-      wait(500).then(() => {
-        setRefreshing(false);
-      });
-    });
-  }, []);
-
-  useEffect(() => {
-    if (events.length === 0) {
-      (async () => {
-        const response = await axios.get(`${key.API}/event/`);
-        dispatch(setEvents(response.data));
-      })();
+  const onSearch = async () => {
+    if (search.length < 2) {
+      Alert.alert("경고", "검색어는 두 글자 이상으로 해주세요.");
+    } else {
+      const response = await axios.get(`${key.API}/event/?search=${search}`);
+      setEvents(response.data);
+      if (response.data.length === 0) {
+        setNotFound(true);
+      }
     }
-  }, [events]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="이벤트" onBackPress={() => navigation.pop()} />
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+      <View style={styles.header}>
+        <View style={{ width: "10%" }}>
+          <TouchableOpacity onPress={() => navigation.pop()}>
+            <Feather name="chevron-left" size={24} color={colors.darkgray} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ width: "90%" }}>
+          <SearchBar
+            placeholder="검색하기"
+            onSubmit={onSearch}
+            value={search}
+            onChangeText={setSearch}
+          />
+        </View>
+      </View>
+      <ScrollView>
         <View style={styles.inner}>
+          {events.length === 0 && !notFound ? (
+            <View style={styles.notFoundContainer}>
+              <Text style={styles.notFoundText}>검색어를 입력해주세요.</Text>
+            </View>
+          ) : (
+            notFound && (
+              <View style={styles.notFoundContainer}>
+                <Text style={styles.notFoundText}>
+                  {search}에 대한 검색결과가 없습니다.
+                </Text>
+              </View>
+            )
+          )}
           {events.length > 0 &&
             events.map((event, i) => (
               <ListItem
@@ -75,32 +83,13 @@ const Event = ({ navigation }) => {
                 }}
               />
             ))}
-          {events.length === 0 && (
-            <View style={styles.noEventsContainer}>
-              <Text style={styles.noEventText}>
-                진행중인 이벤트가 없습니다.
-              </Text>
-            </View>
-          )}
         </View>
       </ScrollView>
-      {userInfo?.is_admin && (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("EventPost");
-          }}
-        >
-          <View style={styles.button}>
-            <Feather name="edit" size={24} color="white" />
-            <Text style={styles.buttonText}>글쓰기</Text>
-          </View>
-        </TouchableOpacity>
-      )}
     </SafeAreaView>
   );
 };
 
-export default Event;
+export default EventSearch;
 
 const styles = StyleSheet.create({
   container: {
@@ -149,5 +138,14 @@ const styles = StyleSheet.create({
   },
   noEventText: {
     color: colors.darkgray,
+  },
+  notFoundContainer: {
+    width: "100%",
+    marginVertical: 40,
+    padding: 20,
+    alignItems: "center",
+  },
+  notFoundText: {
+    color: colors.pink,
   },
 });

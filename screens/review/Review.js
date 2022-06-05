@@ -50,7 +50,11 @@ const Review = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="후기" onBackPress={() => navigation.pop()} />
+      <Header
+        title="후기"
+        onBackPress={() => navigation.pop()}
+        onSearchPress={() => navigation.navigate("ReviewSearch")}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

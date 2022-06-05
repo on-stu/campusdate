@@ -40,6 +40,11 @@ import OpenSourceList from "./screens/oss/OpenSourceList";
 import OpenSourceDetail from "./screens/oss/OpenSourceDetail";
 import ServiceTerms from "./screens/terms/ServiceTerms";
 import PrivacyTerms from "./screens/terms/PrivacyTerms";
+import CharmSearch from "./screens/charm/CharmSearch";
+import EventSearch from "./screens/event/EventSearch";
+import FaqSearch from "./screens/Faq/FaqSearch";
+import NoticeSearch from "./screens/notice/NoticeSearch";
+import ReviewSearch from "./screens/review/ReviewSearch";
 
 const Stack = createStackNavigator();
 
@@ -61,10 +66,6 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="FindMyLove" component={FindMyLove} />
         {isLogin && <Stack.Screen name="Login" component={LoginScreen} />}
         <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Faq" component={Faq} />
-        <Stack.Screen name="FaqDetail" component={FaqDetail} />
-        <Stack.Screen name="Notice" component={Notice} />
-        <Stack.Screen name="NoticePost" component={NoticePost} />
         <Stack.Screen name="MatchingLoading" component={MatchingLoading} />
         <Stack.Screen name="MatchingSuccess" component={MatchingSuccess} />
         <Stack.Screen name="MatchingFailed" component={MatchingFailed} />
@@ -75,18 +76,27 @@ export default function Navigation({ isLogin }) {
           name="MyIntroductionChange"
           component={MyIntroductionChange}
         />
-        <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
-        <Stack.Screen name="FaqPost" component={FaqPost} />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="Notice" component={Notice} />
+        <Stack.Screen name="NoticePost" component={NoticePost} />
+        <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
+        <Stack.Screen name="NoticeSearch" component={NoticeSearch} />
+        <Stack.Screen name="Faq" component={Faq} />
+        <Stack.Screen name="FaqDetail" component={FaqDetail} />
+        <Stack.Screen name="FaqPost" component={FaqPost} />
+        <Stack.Screen name="FaqSearch" component={FaqSearch} />
         <Stack.Screen name="Charm" component={Charm} />
         <Stack.Screen name="CharmPost" component={CharmPost} />
         <Stack.Screen name="CharmDetail" component={CharmDetail} />
+        <Stack.Screen name="CharmSearch" component={CharmSearch} />
         <Stack.Screen name="Review" component={Review} />
         <Stack.Screen name="ReviewPost" component={ReviewPost} />
         <Stack.Screen name="ReviewDetail" component={ReviewDetail} />
+        <Stack.Screen name="ReviewSearch" component={ReviewSearch} />
         <Stack.Screen name="Event" component={Event} />
         <Stack.Screen name="EventPost" component={EventPost} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
+        <Stack.Screen name="EventSearch" component={EventSearch} />
         <Stack.Screen name="OpenSourceList" component={OpenSourceList} />
         <Stack.Screen name="OpenSourceDetail" component={OpenSourceDetail} />
         <Stack.Screen name="ServiceTerms" component={ServiceTerms} />

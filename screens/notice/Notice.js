@@ -41,17 +41,19 @@ const Notice = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (notices.length === 0) {
-      (async () => {
-        const response = await axios.get(`${key.API}/notice/`);
-        dispatch(setNotices(response.data));
-      })();
-    }
+    (async () => {
+      const response = await axios.get(`${key.API}/notice/`);
+      dispatch(setNotices(response.data));
+    })();
   }, [notices]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="공지사항" onBackPress={() => navigation.pop()} />
+      <Header
+        title="공지사항"
+        onBackPress={() => navigation.pop()}
+        onSearchPress={() => navigation.navigate("NoticeSearch")}
+      />
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

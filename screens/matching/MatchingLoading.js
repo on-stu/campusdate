@@ -12,7 +12,7 @@ const MatchingLoading = ({ navigation }) => {
   const [percent, setPercent] = useState(0);
 
   useEffect(() => {
-    const percentTimer = setInterval(() => setPercent((prev) => prev + 1), 100);
+    const percentTimer = setInterval(() => setPercent((prev) => prev + 1), 10);
     if (percent === 100) {
       clearInterval(percentTimer);
       navigation.reset({
