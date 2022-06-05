@@ -41,13 +41,11 @@ const Event = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (events.length === 0) {
-      (async () => {
-        const response = await axios.get(`${key.API}/event/`);
-        dispatch(setEvents(response.data));
-      })();
-    }
-  }, [events]);
+    (async () => {
+      const response = await axios.get(`${key.API}/event/`);
+      dispatch(setEvents(response.data));
+    })();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

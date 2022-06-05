@@ -28,11 +28,9 @@ const Charm = ({ navigation }) => {
   const charms = useSelector((state) => state.charms);
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
-  const [search, setSearch] = useState("");
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setSearch("");
     axios.get(`${key.API}/charm/`).then((response) => {
       dispatch(setCharms(response.data));
       wait(500).then(() => {
@@ -47,20 +45,6 @@ const Charm = ({ navigation }) => {
       dispatch(setCharms(response.data));
     })();
   }, []);
-
-  useEffect(() => {
-    if (search === "") {
-      (async () => {
-        const response = await axios.get(`${key.API}/charm/`);
-        dispatch(setCharms(response.data));
-      })();
-    }
-  }, [search]);
-
-  const onSearch = async () => {
-    const response = await axios.get(`${key.API}/charm/?search=${search}`);
-    dispatch(setCharms(response.data));
-  };
 
   return (
     <SafeAreaView style={styles.container}>

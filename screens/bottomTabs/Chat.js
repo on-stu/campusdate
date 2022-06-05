@@ -14,18 +14,22 @@ import NotificationCircle from "../../components/NotificationCircle";
 import ChatItem from "../../components/ChatItem";
 import SocketContext from "../../context/socket";
 import { UserContext } from "../../context/user";
+import { useNavigation } from "@react-navigation/native";
 
 const Chat = ({ stackNavigation }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
   const [notReadMessages, setNotReadMessages] = useState([]);
+  const navigation = useNavigation();
   const socket = useContext(SocketContext);
   const { userInfo, userChatList, refreshChatList, setUserChatList } =
     useContext(UserContext);
-
   const [chatList, setChatList] = useState([]);
 
   useEffect(() => {
-    refreshChatList(userInfo);
+    const unsubscribe = navigation.addListener("focus", () => {
+      refreshChatList(userInfo);
+    });
+    return unsubscribe;
   }, [userInfo, socket]);
 
   useEffect(() => {

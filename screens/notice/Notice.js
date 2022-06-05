@@ -45,7 +45,7 @@ const Notice = ({ navigation }) => {
       const response = await axios.get(`${key.API}/notice/`);
       dispatch(setNotices(response.data));
     })();
-  }, [notices]);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

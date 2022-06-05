@@ -161,17 +161,11 @@ const MyProfile = ({ navigation }) => {
           <View style={styles.center}>
             <Text style={styles.text}>{`${getAge(userInfo?.birthday)}세`}</Text>
           </View>
-          <View style={styles.center}>
+          <View style={{ ...styles.center, marginVertical: 16 }}>
             <TouchableOpacity onPress={pickImage}>
               <BigProfile uri={photoUrl !== "" && photoUrl} fullVisible />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity>
-            <View style={styles.left}>
-              <Text style={styles.property}>이름 변경하기</Text>
-              <Feather name="chevron-right" size={24} color={colors.darkgray} />
-            </View>
-          </TouchableOpacity>
           <TouchableOpacity>
             <View style={styles.left}>
               <Text style={styles.property}>비밀번호 변경하기</Text>

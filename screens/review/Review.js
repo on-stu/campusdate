@@ -40,13 +40,11 @@ const Review = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (reviews.length === 0) {
-      (async () => {
-        const response = await axios.get(`${key.API}/review/`);
-        dispatch(setReviews(response.data));
-      })();
-    }
-  }, [reviews]);
+    (async () => {
+      const response = await axios.get(`${key.API}/review/`);
+      dispatch(setReviews(response.data));
+    })();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

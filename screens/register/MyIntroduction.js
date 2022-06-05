@@ -44,7 +44,7 @@ const MyIntroduction = ({ navigation }) => {
               />
               <View style={styles.subTitle}>
                 <Text style={styles.ask}>
-                  혹시 자신에 대해 더 소개할 말이 있으신가요?{" "}
+                  혹시 자신에 대해 더 소개할 말이 있으신가요?{"\n"}
                   {`(${introduction.length}자 / 500자)`}
                 </Text>
                 <Text style={styles.property}>나는 이런 사람이에요.</Text>

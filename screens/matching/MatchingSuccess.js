@@ -6,8 +6,15 @@ import Button from "../../components/Button";
 import ProfileCard from "../../components/ProfileCard";
 
 import { UserContext } from "../../context/user";
-const MatchingSuccess = ({ navigation }) => {
+import SocketContext from "../../context/socket";
+const MatchingSuccess = ({ navigation, route }) => {
+  const {
+    params: {
+      matchedUser: { data: profileInfo },
+    },
+  } = route;
   const { userInfo } = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -21,14 +28,40 @@ const MatchingSuccess = ({ navigation }) => {
         >{`${userInfo?.nickname}님과 맞는 인연을 찾았어요!`}</Text>
       </View>
       <View style={styles.profileContainer}>
-        <ProfileCard nickname="손다인" age={22} />
+        <ProfileCard
+          nickname={profileInfo.nickname}
+          birthday={profileInfo.birthday}
+          info={profileInfo.whoAmI}
+          photoUrl={profileInfo.photoUrl}
+          onButtonPress={() =>
+            navigation.navigate("Profile", {
+              userId: profileInfo?.id,
+              preventChat: true,
+            })
+          }
+        />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.text}>아래 매칭 수락하기 버튼을 눌러서</Text>
         <Text style={styles.text}>그 분과 이야기 해보세요!</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button text="매칭 수락하기" onPress={() => navigation.pop()} />
+        <Button
+          text="매칭 수락하기"
+          onPress={() => {
+            socket.emit("createRoom", userInfo?.id, profileInfo?.id, (chat) => {
+              navigation.reset({
+                routes: [
+                  { name: "BottomTab" },
+                  {
+                    name: "ChatScreen",
+                    params: { counterPartId: profileInfo.id, chatInfo: chat },
+                  },
+                ],
+              });
+            });
+          }}
+        />
       </View>
     </SafeAreaView>
   );

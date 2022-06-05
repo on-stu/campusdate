@@ -18,16 +18,14 @@ const MatchingFailed = ({ navigation }) => {
         <Text style={styles.text}>매칭에 실패하였습니다! ㅜㅜ</Text>
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.text}>현재 서비스 이용 고객이 많지 않습니다.</Text>
-        <Text style={styles.text}>대신 아래 매칭 기다리기를 누르시면,</Text>
+        <Text style={styles.text}>현재 서비스 이용 고객이 많지 않거나,</Text>
         <Text style={styles.text}>
-          {userInfo?.nickname}님과 맞는 분을 찾는 대로
+          이미 매칭이 이루어졌던 분들 밖에 남지 않았어요.
         </Text>
-        <Text style={styles.text}>알림을 보내드릴게요</Text>
+        <Text style={styles.text}>다음에 다시 시도해주세요!</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button text="매칭 수락하기" onPress={() => navigation.pop()} />
-        <BackButton text="취소" onPress={() => navigation.pop()} />
+        <Button text="다음에 시도하기" onPress={() => navigation.pop()} />
       </View>
     </SafeAreaView>
   );

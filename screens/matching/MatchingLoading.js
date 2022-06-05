@@ -4,19 +4,53 @@ import MatchingIcon from "../../img/love.svg";
 import ProgressBar from "../../components/ProgressBar";
 import colors from "../../lib/colors.json";
 import BackButton from "../../components/BackButton";
-
+import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
+import { getValue } from "../../functions/secureStore";
+import axios from "axios";
 const MatchingLoading = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
 
   const [percent, setPercent] = useState(0);
+  const [matchedUser, setMatchedUser] = useState({});
 
   useEffect(() => {
+    (async () => {
+      const token = await getValue("token");
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      const response = await axios.get(`${key.API}/usersbysex/`, { headers });
+
+      if (response.data.length > 0) {
+        setMatchedUser(response.data[0]);
+      } else {
+        setMatchedUser(false);
+      }
+    })();
     const percentTimer = setInterval(() => setPercent((prev) => prev + 1), 10);
-    if (percent === 100) {
+    if (percent === 100 && matchedUser) {
       clearInterval(percentTimer);
       navigation.reset({
-        routes: [{ name: "BottomTab" }, { name: "MatchingFailed" }],
+        routes: [
+          { name: "BottomTab" },
+          {
+            name: "MatchingSuccess",
+            params: {
+              matchedUser,
+            },
+          },
+        ],
+      });
+    } else if (percent === 100) {
+      clearInterval(percentTimer);
+      navigation.reset({
+        routes: [
+          { name: "BottomTab" },
+          {
+            name: "MatchingFailed",
+          },
+        ],
       });
     }
     return () => {

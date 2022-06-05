@@ -51,7 +51,7 @@ const EachBox = ({ title, tagsArray }) => {
 
 const Profile = ({ navigation, route }) => {
   const {
-    params: { userId },
+    params: { userId, preventChat },
   } = route;
   const [profileInfo, setProfileInfo] = useState({});
   const [whoAmIHash, setWhoAmIHash] = useState([]);
@@ -147,23 +147,39 @@ const Profile = ({ navigation, route }) => {
           </View>
         </View>
       </ScrollView>
-      <View
-        style={{
-          ...styles.center,
-          flexDirection: "column",
-        }}
-      >
-        <Button
-          text="채팅 해보기"
-          onPress={() => {
-            socket.emit("createRoom", userInfo?.id, profileInfo?.id, () => {
-              navigation.reset({
-                routes: [{ name: "BottomTab" }],
-              });
-            });
+      {!preventChat && (
+        <View
+          style={{
+            ...styles.center,
+            flexDirection: "column",
           }}
-        />
-      </View>
+        >
+          <Button
+            text="채팅 해보기"
+            onPress={() => {
+              socket.emit(
+                "createRoom",
+                userInfo?.id,
+                profileInfo?.id,
+                (chat) => {
+                  navigation.reset({
+                    routes: [
+                      { name: "BottomTab" },
+                      {
+                        name: "ChatScreen",
+                        params: {
+                          counterPartId: profileInfo.id,
+                          chatInfo: chat,
+                        },
+                      },
+                    ],
+                  });
+                }
+              );
+            }}
+          />
+        </View>
+      )}
     </SafeAreaView>
   );
 };

@@ -43,7 +43,7 @@ const Faq = ({ navigation }) => {
       const response = await axios.get(`${key.API}/faq/`);
       dispatch(setFaqs(response.data));
     })();
-  }, [faqs]);
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <Header

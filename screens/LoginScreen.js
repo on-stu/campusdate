@@ -101,7 +101,12 @@ const LoginScreen = ({ navigation }) => {
                 <View style={styles.eachText}>
                   <Text style={styles.text}>비밀번호를 잊으셨나요?</Text>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("ProfilePhoto")}
+                    onPress={() =>
+                      Alert.alert(
+                        "준비중",
+                        "현재 비밀번호 재설정 기능은 개발중에 있습니다.\nminsu0523@naver.com으로 메일 보내주시면 조치를 취해드리겠습니다."
+                      )
+                    }
                   >
                     <Text style={styles.underline}>비밀번호 재설정</Text>
                   </TouchableOpacity>

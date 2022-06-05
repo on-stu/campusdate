@@ -175,21 +175,19 @@ export default function App() {
     socket.on("receiveMessage", (message) => {
       console.log(message);
     });
-  }, []);
-
-  useEffectOnce(() => {
     socket.on("chatRoomCreated", (chatRoomId, chatRoomInfo) => {
       socket.emit("join", chatRoomId);
       addChatRoom(chatRoomInfo);
     });
+  }, []);
 
+  useEffectOnce(() => {
     socket.on("pushEvent", (event) => {
       console.log(event);
     });
   }, []);
 
   useEffect(() => {
-    console.log(isLoading);
     if (!isLoading) {
       (async () => {
         await SplashScreen.hideAsync();
