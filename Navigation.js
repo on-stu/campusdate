@@ -45,6 +45,7 @@ import EventSearch from "./screens/event/EventSearch";
 import FaqSearch from "./screens/Faq/FaqSearch";
 import NoticeSearch from "./screens/notice/NoticeSearch";
 import ReviewSearch from "./screens/review/ReviewSearch";
+import AgreeTerms from "./screens/register/AgreeTerms";
 
 const Stack = createStackNavigator();
 
@@ -54,6 +55,7 @@ export default function Navigation({ isLogin }) {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isLogin && <Stack.Screen name="Login" component={LoginScreen} />}
         <Stack.Screen name="BottomTab" component={BottomTab} />
+        <Stack.Screen name="AgreeTerms" component={AgreeTerms} />
         <Stack.Screen name="EmailAndPassword" component={EmailAndPassword} />
         <Stack.Screen name="BasicInfomation" component={BasicInfomation} />
         <Stack.Screen name="ProfilePhoto" component={ProfilePhoto} />

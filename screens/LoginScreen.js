@@ -93,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
                 <View style={styles.eachText}>
                   <Text style={styles.text}>계정이 없으신가요?</Text>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate("EmailAndPassword")}
+                    onPress={() => navigation.navigate("AgreeTerms")}
                   >
                     <Text style={styles.underline}>가입하기</Text>
                   </TouchableOpacity>

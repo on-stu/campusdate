@@ -88,7 +88,12 @@ const EmailAndPassword = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="가입하기" percent="1 / 8" />
+              <Title
+                text="가입하기"
+                percent="1 / 8"
+                navigation={navigation}
+                backbutton
+              />
               <LoginImg width={300} height={300} />
               <View style={styles.textContainer}>
                 <Text style={styles.property}>이메일</Text>
