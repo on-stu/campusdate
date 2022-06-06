@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
@@ -21,7 +27,11 @@ const SmallProfile = ({ uri, onPress, fullVisible }) => {
               source={{ uri: uri }}
             />
             {!fullVisible && (
-              <BlurView intensity={10} style={styles.blurContainer}></BlurView>
+              <BlurView
+                intensity={10}
+                style={styles.blurContainer}
+                tint="default"
+              ></BlurView>
             )}
           </View>
         </TouchableOpacity>
@@ -56,10 +66,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   blurContainer: {
+    position: "absolute",
     width: 56,
     height: 56,
     borderRadius: 28,
-    position: "absolute",
+    zIndex: 100,
   },
 });
 export default SmallProfile;

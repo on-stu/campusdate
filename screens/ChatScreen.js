@@ -8,8 +8,15 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Dimensions,
 } from "react-native";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
@@ -21,11 +28,13 @@ import MyChat from "../components/MyChat";
 import { UserContext } from "../context/user";
 import YourChat from "../components/YourChat";
 import SafeAreaAndroid from "../components/SafeAreaAndroid";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-const ChatScreen = ({ navigation, route }) => {
+const ChatScreen = ({ route }) => {
   const [profileInfo, setProfileInfo] = useState();
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
+  const navigation = useNavigation();
   const {
     params: { chatInfo, counterPartId },
   } = route;
@@ -34,7 +43,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const socket = useContext(SocketContext);
 
-  const { userInfo, userChatList, refreshChatList } = useContext(UserContext);
+  const { userInfo, userChatList } = useContext(UserContext);
 
   const getProfile = async (userId) => {
     const token = await getValue("token");
@@ -81,10 +90,6 @@ const ChatScreen = ({ navigation, route }) => {
     });
   }, [userChatList]);
 
-  useEffect(() => {
-    console.log(chatMessages[chatMessages.length - 1]);
-  }, [chatMessages]);
-
   const onSendMessage = () => {
     socket.emit(
       "sendMessage",
@@ -96,78 +101,82 @@ const ChatScreen = ({ navigation, route }) => {
     setMessage("");
   };
 
+  useEffect(() => {
+    socket.emit("readAll", chatInfo.id, userInfo.id);
+  }, [chatMessages]);
+
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <TouchableWithoutFeedback>
-          <>
-            <View style={styles.header}>
-              <TouchableOpacity onPress={() => navigation.pop()}>
-                <Feather name="chevron-left" size={24} color="black" />
-              </TouchableOpacity>
-              <View style={styles.titleContainer}>
-                <Text style={styles.title}>{profileInfo?.nickname}</Text>
-              </View>
-            </View>
-            <ScrollView
-              ref={scrollViewRef}
-              onContentSizeChange={() =>
-                scrollViewRef.current.scrollToEnd({ animated: true })
-              }
-            >
-              <View style={styles.container}>
-                <View>
-                  {chatMessages.map((chat, i) => {
-                    if (chat.senderId === `${userInfo.id}`) {
-                      return (
-                        <MyChat
-                          key={i}
-                          text={chat.content}
-                          fullVisible
-                          photoUrl={userInfo.photoUrl}
-                          isRead={chat.isRead}
-                        />
-                      );
-                    } else {
-                      if (!chat.isRead) {
-                        socket.emit("readMessage", chatInfo.id, chat.id);
-                      }
-                      return (
-                        <YourChat
-                          key={i}
-                          text={chat.content}
-                          fullVisible
-                          photoUrl={profileInfo?.photoUrl}
-                        />
-                      );
-                    }
-                  })}
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={44}
+        >
+          <TouchableWithoutFeedback>
+            <>
+              <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.pop()}>
+                  <Feather name="chevron-left" size={24} color="black" />
+                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.title}>{profileInfo?.nickname}</Text>
                 </View>
               </View>
-            </ScrollView>
-          </>
-        </TouchableWithoutFeedback>
+              <ScrollView
+                ref={scrollViewRef}
+                onContentSizeChange={() =>
+                  scrollViewRef.current.scrollToEnd({ animated: true })
+                }
+              >
+                <View style={styles.container}>
+                  <View>
+                    {chatMessages.map((chat, i) => {
+                      if (chat.senderId === `${userInfo.id}`) {
+                        return (
+                          <MyChat
+                            key={i}
+                            text={chat.content}
+                            fullVisible
+                            photoUrl={userInfo.photoUrl}
+                            isRead={chat.isRead}
+                          />
+                        );
+                      } else {
+                        return (
+                          <YourChat
+                            key={i}
+                            text={chat.content}
+                            fullVisible
+                            photoUrl={profileInfo?.photoUrl}
+                          />
+                        );
+                      }
+                    })}
+                  </View>
+                </View>
+              </ScrollView>
+            </>
+          </TouchableWithoutFeedback>
 
-        <View style={styles.footer}>
-          <View style={styles.textInputContainer}>
-            <TextInput
-              style={styles.textInput}
-              placeholder="메시지를 입력해주세요"
-              value={message}
-              onChangeText={setMessage}
-              blurOnSubmit={false}
-              multiline={false}
-              onSubmitEditing={onSendMessage}
-            />
-            <TouchableOpacity onPress={onSendMessage}>
-              <Feather name="send" size={24} color={colors.pink} />
-            </TouchableOpacity>
+          <View style={styles.footer}>
+            <View style={styles.textInputContainer}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="메시지를 입력해주세요"
+                value={message}
+                onChangeText={setMessage}
+                blurOnSubmit={false}
+                multiline={false}
+                onSubmitEditing={onSendMessage}
+              />
+              <TouchableOpacity onPress={onSendMessage}>
+                <Feather name="send" size={24} color={colors.pink} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -183,14 +192,13 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
+    width: Dimensions.get("screen").width,
     padding: 15,
   },
   textInputContainer: {
     bottom: 0,
     height: 40,
     flex: 1,
-    marginRight: 15,
     backgroundColor: colors.gray,
     borderColor: "transparent",
     padding: 10,

@@ -22,28 +22,23 @@ const ChatItem = ({
   const [counterPart, setCounterPart] = useState({});
   const { userInfo } = useContext(UserContext);
   useEffect(() => {
-    if (counterPartId) {
-      (async () => {
-        try {
-          const token = await getValue("token");
-          const headers = {
-            Authorization: `Token ${token}`,
-          };
-          const response = await axios.get(
-            `${key.API}/user/${counterPartId}/`,
-            {
-              headers,
-            }
-          );
-          setCounterPart(response.data);
-        } catch (error) {
-          if (error.response.status === 404) {
-            setCounterPart({ id: 0, nickname: "알 수 없는 사용자" });
-          }
+    (async () => {
+      try {
+        const token = await getValue("token");
+        const headers = {
+          Authorization: `Token ${token}`,
+        };
+        const response = await axios.get(`${key.API}/user/${counterPartId}/`, {
+          headers,
+        });
+        setCounterPart(response.data);
+      } catch (error) {
+        if (error.response.status === 404) {
+          setCounterPart({ id: 0, nickname: "알 수 없는 사용자" });
         }
-      })();
-    }
-  }, [counterPartId]);
+      }
+    })();
+  }, []);
 
   const timeString = getTimeString(lastAt);
   return (

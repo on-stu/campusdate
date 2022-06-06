@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import NotificationCircle from "../../components/NotificationCircle";
@@ -32,22 +32,19 @@ const Chat = ({ stackNavigation }) => {
     return unsubscribe;
   }, []);
 
-  // // useEffect(() => {
-  // //   socket.on("receiveMessage", (msg) => {
-  // //     addNewMessage(msg);
-  // //   });
-  // // }, [socket]);
+  const getTotalNotCount = () => {
+    let count = 0;
+    userChatList.map((chatroom) => {
+      chatroom.chats.map((chat) => {
+        if (!chat.isRead && chat.senderId !== userInfo.id.toString()) {
+          count += 1;
+        }
+      });
+    });
+    return count;
+  };
 
-  // const addNewMessage = (msg) => {
-  //   const newChatList = userChatList?.map((chatRoom) => {
-  //     if (chatRoom.id === msg.chatRoomId) {
-  //       return { ...chatRoom, chats: [...chatRoom.chats, msg] };
-  //     } else {
-  //       return chatRoom;
-  //     }
-  //   });
-  //   setUserChatList(newChatList);
-  // };
+  const totalNotRead = useMemo(() => getTotalNotCount(), [userChatList]);
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
@@ -55,7 +52,7 @@ const Chat = ({ stackNavigation }) => {
         <View style={styles.header}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>채팅</Text>
-            <NotificationCircle num={notReadMessages.length} />
+            <NotificationCircle num={totalNotRead} />
           </View>
           <TouchableOpacity
             onPress={() => {
@@ -76,28 +73,25 @@ const Chat = ({ stackNavigation }) => {
               counterPartId = participant;
             }
           });
-
+          const notRead = userChatList[i]?.chats.filter(
+            (elm) =>
+              elm.senderId !== userInfo.id.toString() && elm.isRead === false
+          ).length;
           return (
             <View style={styles.inner} key={i}>
               <ChatItem
                 counterPartId={counterPartId}
-                lastAt={chat.lastAt}
+                lastAt={chat?.lastAt}
                 onPress={() => {
                   stackNavigation.navigate({
                     name: "ChatScreen",
                     params: { counterPartId, chatInfo: chat },
                   });
                 }}
-                notRead={
-                  userChatList[i].chats.filter(
-                    (elm) =>
-                      elm.senderId !== userInfo.id.toString() &&
-                      elm.isRead === false
-                  ).length
-                }
-                chats={userChatList[i].chats}
+                notRead={notRead}
+                chats={userChatList[i]?.chats}
                 lastItem={
-                  userChatList[i].chats[userChatList[i].chats.length - 1]
+                  userChatList[i]?.chats[userChatList[i].chats.length - 1]
                 }
               />
             </View>

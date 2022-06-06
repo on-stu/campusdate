@@ -76,6 +76,39 @@ export default function App() {
 
   const addChat = () => {};
 
+  const addNewMessage = (msg) => {
+    setChatList((prev) =>
+      prev.map((chatroom) => {
+        if (chatroom.id === msg.chatRoomId) {
+          return { ...chatroom, chats: [...chatroom.chats, msg] };
+        } else {
+          return chatroom;
+        }
+      })
+    );
+  };
+
+  const addReadMessage = (msg) => {
+    setChatList((prev) =>
+      prev.map((chatroom) => {
+        if (chatroom.id === msg.chatRoomId) {
+          return {
+            ...chatroom,
+            chats: chatroom.chats.map((chat) => {
+              if (chat.id === msg.id) {
+                return msg;
+              } else {
+                return chat;
+              }
+            }),
+          };
+        } else {
+          return chatroom;
+        }
+      })
+    );
+  };
+
   const UserValue = useMemo(
     () => ({
       userInfo: user,
@@ -87,7 +120,7 @@ export default function App() {
       addChatRoom: addChatRoom,
       addChat: addChat,
     }),
-    [user, setUser, chatList, setChatList]
+    [user, setUser, chatList, setChatList, addNewMessage]
   );
 
   //notification
@@ -128,7 +161,6 @@ export default function App() {
         await Font.loadAsync(customFont);
         await new Promise((resolve) => setTimeout(resolve, 2000));
         const token = await getValue("token");
-        console.log(token);
         if (token) {
           setIsLogin(true);
           await refreshUser();
@@ -173,36 +205,13 @@ export default function App() {
       });
     });
     socket.on("receiveMessage", (message) => {
-      const newChatList = chatList.map((chatroom) => {
-        if (chatroom.id === message.chatRoomId) {
-          console.log("hihi");
-          let newChats = [];
-          console.log(chatroom.chats);
-          const temp = chatroom.chats;
-          newChats.push(temp);
-          newChats.push(message);
-          console.log(newChats.length);
-          return { ...chatroom, chats: newChats };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatList(newChatList);
+      addNewMessage(message);
     });
-    socket.on("readMessage", (readMessage) => {
-      const newChatList = chatList.map((chatroom) => {
-        if (chatroom.id === readMessage.chatRoomId) {
-          console.log("bibi");
-          chatroom.chats.map((chat) => {
-            if (chat.id === readMessage.id) {
-              return readMessage;
-            } else {
-              return chat;
-            }
-          });
-        }
-      });
-      setChatList(newChatList);
+    socket.on("allReaded", (messages) => {
+      console.log(messages);
+      if (messages.length > 0) {
+        messages.map((message) => addReadMessage(message));
+      }
     });
     socket.on("chatRoomCreated", (chatRoomId, chatRoomInfo) => {
       socket.emit("join", chatRoomId);

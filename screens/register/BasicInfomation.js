@@ -59,6 +59,7 @@ const BasicInfomation = ({ navigation }) => {
         {show && (
           <DateTimePicker
             style={{ width: 300, height: 300 }}
+            locale="ko"
             mode="date"
             value={birthday}
             onChange={(event, date) => {

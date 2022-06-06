@@ -128,17 +128,6 @@ const Home = ({ stackNavigation }) => {
         dispatch(setReviews(response.data));
       }
     })();
-    socket.on("receiveMessage", (msg) => {
-      const newChatList = userChatList?.map((chatRoom) => {
-        if (chatRoom.id === msg.chatRoomId) {
-          return { ...chatRoom, chats: [...chatRoom.chats, msg] };
-        } else {
-          return chatRoom;
-        }
-      });
-      setUserChatList(newChatList);
-    });
-    return () => socket.off("receiveMessage");
   }, []);
 
   return (

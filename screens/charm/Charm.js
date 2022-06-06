@@ -1,4 +1,5 @@
 import {
+  Platform,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -60,23 +61,25 @@ const Charm = ({ navigation }) => {
         }
       >
         <View style={styles.inner}>
-          {charms.map((charm, i) => (
-            <ListItem
-              authorId={charm?.authorId}
-              createdAt={charm?.createdAt}
-              title={charm.title}
-              key={i}
-              fullVisible={!charm?.isAnonymous}
-              thumbsNum={charm?.thumbs?.length}
-              commentsNum={charm?.comments?.length}
-              onPress={() => {
-                dispatch(setCharm(charm));
-                navigation.navigate("CharmDetail", {
-                  charm: charm.id,
-                });
-              }}
-            />
-          ))}
+          {charms.map((charm, i) => {
+            return (
+              <ListItem
+                authorId={charm?.authorId}
+                createdAt={charm?.createdAt}
+                title={charm.title}
+                key={i}
+                fullVisible={!charm?.isAnonymous}
+                thumbsNum={charm?.thumbs?.length}
+                commentsNum={charm?.comments?.length}
+                onPress={() => {
+                  dispatch(setCharm(charm));
+                  navigation.navigate("CharmDetail", {
+                    charm: charm.id,
+                  });
+                }}
+              />
+            );
+          })}
         </View>
       </ScrollView>
 

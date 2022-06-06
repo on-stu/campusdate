@@ -23,24 +23,24 @@ const OpenSourceDetail = ({ navigation, route }) => {
             <Feather name="chevron-left" size={24} color="black" />
           </TouchableOpacity>
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>{oss.libraryName}</Text>
+            <Text style={styles.title}>{oss?.libraryName}</Text>
           </View>
         </View>
         <View style={styles.inner}>
           <Text style={styles.property}>description</Text>
-          <Text>{oss._description}</Text>
+          <Text>{oss?._description}</Text>
           <Text style={styles.property}>license</Text>
-          <Text>{oss._license}</Text>
+          <Text>{oss?._license}</Text>
           <Text style={styles.property}>author</Text>
-          <Text>{oss.author.name}</Text>
+          <Text>{oss?.author?.name}</Text>
           <Text style={styles.property}>homepage</Text>
-          <Text>{oss.homepage}</Text>
+          <Text>{oss?.homepage}</Text>
           <Text style={styles.property}>repository</Text>
-          <Text>{oss.repository.url}</Text>
+          <Text>{oss?.repository?.url}</Text>
           <Text style={styles.property}>version</Text>
-          <Text>{oss.version}</Text>
+          <Text>{oss?.version}</Text>
           <Text style={styles.property}>license content</Text>
-          <Text>{oss._licenseContent}</Text>
+          <Text>{oss?._licenseContent}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>

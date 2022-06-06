@@ -64,59 +64,61 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <TouchableWithoutFeedback
-          onPress={() => {
-            Keyboard.dismiss();
-          }}
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-          <View style={styles.container}>
-            <View style={styles.top}>
-              <LogoImg width={280} height={280} />
-            </View>
-            <View style={styles.bottom}>
-              <ShadowInput
-                value={email}
-                onChangeText={setEmail}
-                placeholder="이메일"
-                email
-              />
-              <ShadowInput
-                secure={true}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="비밀번호"
-              />
-              <Button text="로그인" onPress={onSubmit} />
-              <TouchableOpacity
-                style={styles.buttonContainer}
-                onPress={() => navigation.navigate("AgreeTerms")}
-              >
-                <View style={styles.button}>
-                  <Text style={styles.buttonText}>가입하기</Text>
-                </View>
-              </TouchableOpacity>
-              <View style={styles.textContainer}>
-                <View style={styles.eachText}>
-                  <Text style={styles.text}>비밀번호를 잊으셨나요?</Text>
-                  <TouchableOpacity
-                    onPress={() =>
-                      Alert.alert(
-                        "준비중",
-                        "현재 비밀번호 재설정 기능은 개발중에 있습니다.\nminsu0523@naver.com으로 메일 보내주시면 조치를 취해드리겠습니다."
-                      )
-                    }
-                  >
-                    <Text style={styles.underline}>비밀번호 재설정</Text>
-                  </TouchableOpacity>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              Keyboard.dismiss();
+            }}
+          >
+            <View style={styles.container}>
+              <View style={styles.top}>
+                <LogoImg width={280} height={280} />
+              </View>
+              <View style={styles.bottom}>
+                <ShadowInput
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="이메일"
+                  email
+                />
+                <ShadowInput
+                  secure={true}
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="비밀번호"
+                />
+                <Button text="로그인" onPress={onSubmit} />
+                <TouchableOpacity
+                  style={styles.buttonContainer}
+                  onPress={() => navigation.navigate("AgreeTerms")}
+                >
+                  <View style={styles.button}>
+                    <Text style={styles.buttonText}>가입하기</Text>
+                  </View>
+                </TouchableOpacity>
+                <View style={styles.textContainer}>
+                  <View style={styles.eachText}>
+                    <Text style={styles.text}>비밀번호를 잊으셨나요?</Text>
+                    <TouchableOpacity
+                      onPress={() =>
+                        Alert.alert(
+                          "준비중",
+                          "현재 비밀번호 재설정 기능은 개발중에 있습니다.\nminsu0523@naver.com으로 메일 보내주시면 조치를 취해드리겠습니다."
+                        )
+                      }
+                    >
+                      <Text style={styles.underline}>비밀번호 재설정</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   );
 };

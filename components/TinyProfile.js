@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 28,
     position: "absolute",
+    zIndex: 100,
   },
 });
 export default TinyProfile;
