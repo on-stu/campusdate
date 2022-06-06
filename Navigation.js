@@ -46,6 +46,7 @@ import FaqSearch from "./screens/Faq/FaqSearch";
 import NoticeSearch from "./screens/notice/NoticeSearch";
 import ReviewSearch from "./screens/review/ReviewSearch";
 import AgreeTerms from "./screens/register/AgreeTerms";
+import ChangePassword from "./screens/my/ChangePassword";
 
 const Stack = createStackNavigator();
 
@@ -72,6 +73,7 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="MatchingSuccess" component={MatchingSuccess} />
         <Stack.Screen name="MatchingFailed" component={MatchingFailed} />
         <Stack.Screen name="MyWhoAmI" component={MyWhoAmI} />
+        <Stack.Screen name="ChangePassword" component={ChangePassword} />
         <Stack.Screen name="MyIdealsChange" component={MyIdealsChange} />
         <Stack.Screen name="MyHobbiesChange" component={MyHobbiesChange} />
         <Stack.Screen

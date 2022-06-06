@@ -166,7 +166,9 @@ const MyProfile = ({ navigation }) => {
               <BigProfile uri={photoUrl !== "" && photoUrl} fullVisible />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ChangePassword")}
+          >
             <View style={styles.left}>
               <Text style={styles.property}>비밀번호 변경하기</Text>
               <Feather name="chevron-right" size={24} color={colors.darkgray} />

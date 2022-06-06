@@ -68,7 +68,7 @@ const MyHobbiesChange = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="프로필 변경" />
+              <Title text="프로필 변경" backbutton navigation={navigation} />
               <View style={styles.subTitle}>
                 <Text style={styles.ask}>어떤 취미를 가지고 계세요?</Text>
                 <Text style={styles.property}>나의 취미</Text>

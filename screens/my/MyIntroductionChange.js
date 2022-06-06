@@ -54,7 +54,7 @@ const MyIntroductionChange = ({ navigation }) => {
         >
           <View style={styles.container}>
             <View style={styles.inputContainer}>
-              <Title text="프로필 변경" />
+              <Title text="프로필 변경" backbutton navigation={navigation} />
               <View style={styles.subTitle}>
                 <Text style={styles.ask}>
                   혹시 자신에 대해 더 소개할 말이 있으신가요?

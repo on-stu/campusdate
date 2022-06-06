@@ -28,6 +28,7 @@ const Chat = ({ stackNavigation }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refreshChatList(userInfo);
+      console.log("hi");
     });
     return unsubscribe;
   }, [userInfo, socket]);
@@ -108,7 +109,7 @@ const Chat = ({ stackNavigation }) => {
         })}
         {chatList.length === 0 && (
           <View style={styles.innerCenter}>
-            <Text>현재 진행중인 채팅이 없습니다.</Text>
+            <Text style={styles.subtitle}>현재 진행중인 채팅이 없습니다.</Text>
           </View>
         )}
       </ScrollView>
@@ -149,5 +150,8 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
+  },
+  subtitle: {
+    color: colors.darkgray,
   },
 });
