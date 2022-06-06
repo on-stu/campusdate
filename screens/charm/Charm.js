@@ -82,6 +82,7 @@ const Charm = ({ navigation }) => {
 
       <TouchableOpacity
         onPress={() => {
+          console.log("wow");
           navigation.navigate("CharmPost");
         }}
       >
@@ -117,7 +118,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    position: "absolute",
     alignSelf: "center",
     backgroundColor: colors.pink,
     paddingHorizontal: 20,

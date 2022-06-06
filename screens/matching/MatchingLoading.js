@@ -63,21 +63,23 @@ const MatchingLoading = ({ navigation }) => {
   }, [percent]);
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
-      <View style={styles.header}>
-        <Text style={styles.title}>매칭하기</Text>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>매칭하기</Text>
+        </View>
+        <MatchingIcon width={300} height={300} />
+        <View style={styles.textContainer}>
+          <Text
+            style={styles.text}
+          >{`${userInfo?.nickname}님과 맞는 인연을 찾아보고 있어요!`}</Text>
+          <Text style={styles.text}>잠시만 기다려주세요 ~</Text>
+        </View>
+        <View style={styles.loading}>
+          <Text style={styles.percentNum}>{percent}%</Text>
+          <ProgressBar percent={percent} />
+        </View>
+        <BackButton text="취소하기" onPress={() => navigation.pop()} />
       </View>
-      <MatchingIcon width={300} height={300} />
-      <View style={styles.textContainer}>
-        <Text
-          style={styles.text}
-        >{`${userInfo?.nickname}님과 맞는 인연을 찾아보고 있어요!`}</Text>
-        <Text style={styles.text}>잠시만 기다려주세요 ~</Text>
-      </View>
-      <View style={styles.loading}>
-        <Text style={styles.percentNum}>{percent}%</Text>
-        <ProgressBar percent={percent} />
-      </View>
-      <BackButton text="취소하기" onPress={() => navigation.pop()} />
     </SafeAreaView>
   );
 };
