@@ -14,6 +14,7 @@ import key from "../lib/key.json";
 import { getValue } from "../functions/secureStore";
 import { UserContext } from "../context/user";
 import { Feather } from "@expo/vector-icons";
+import SafeAreaAndroid from "../components/SafeAreaAndroid";
 
 const FindMyLove = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -37,7 +38,7 @@ const FindMyLove = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.top}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={() => navigation.pop()}>

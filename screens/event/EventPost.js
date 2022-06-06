@@ -22,6 +22,7 @@ import key from "../../lib/key.json";
 import MiniCheck from "../../components/MiniCheck";
 import { setEvents } from "../../redux/reducers/eventsSlice";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const EventPost = ({ navigation }) => {
   const [canPost, setCanPost] = useState(false);
@@ -57,7 +58,7 @@ const EventPost = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

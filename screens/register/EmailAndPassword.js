@@ -18,6 +18,7 @@ import colors from "../../lib/colors.json";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const EmailAndPassword = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -79,7 +80,7 @@ const EmailAndPassword = ({ navigation }) => {
   }, [email, password, confirm]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

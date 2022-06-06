@@ -18,6 +18,7 @@ import { setReview } from "../../redux/reducers/reviewSlice";
 import { setReviews } from "../../redux/reducers/reviewsSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -47,7 +48,7 @@ const Review = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <Header
         title="후기"
         onBackPress={() => navigation.pop()}

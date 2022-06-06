@@ -16,6 +16,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import colors from "../../lib/colors.json";
 
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const MyIntroduction = ({ navigation }) => {
   const [introduction, setIntroduction] = useState("");
@@ -27,7 +28,7 @@ const MyIntroduction = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

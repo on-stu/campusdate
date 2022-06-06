@@ -20,6 +20,7 @@ import { useEffectOnce } from "../functions/useEffectOnce";
 import MyChat from "../components/MyChat";
 import { UserContext } from "../context/user";
 import YourChat from "../components/YourChat";
+import SafeAreaAndroid from "../components/SafeAreaAndroid";
 
 const ChatScreen = ({ navigation, route }) => {
   const [profileInfo, setProfileInfo] = useState();
@@ -33,8 +34,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const socket = useContext(SocketContext);
 
-  const { userInfo, setUserChatList, userChatList, refreshChatList } =
-    useContext(UserContext);
+  const { userInfo, userChatList, refreshChatList } = useContext(UserContext);
 
   const getProfile = async (userId) => {
     const token = await getValue("token");
@@ -58,24 +58,8 @@ const ChatScreen = ({ navigation, route }) => {
     setChatMessages(response.data.chats);
   };
 
-  const addChatMessage = (message) => {
-    if (!chatMessages.includes(message)) {
-      setChatMessages((prev) => [...prev, message]);
-    }
-  };
-
   useEffect(() => {
-    socket.on("receiveMessage", (message) => addChatMessage(message));
-    socket.on("readMessage", (readMessage) => {
-      setChatMessages((prev) => {
-        return prev.map((msg) =>
-          msg.id === readMessage.id ? readMessage : msg
-        );
-      });
-    });
     return () => {
-      socket.off("readMessage");
-      refreshChatList();
       scrollViewRef.current = null;
     };
   }, [scrollViewRef, socket]);
@@ -90,14 +74,15 @@ const ChatScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    const newChatList = userChatList?.map((chatRoom) => {
-      if (chatRoom.id === chatInfo.id) {
-        return { ...chatRoom, chats: chatMessages };
-      } else {
-        return chatRoom;
+    userChatList.map((chatroom) => {
+      if (chatroom.id === chatInfo.id) {
+        setChatMessages(chatroom.chats);
       }
     });
-    setUserChatList(newChatList);
+  }, [userChatList]);
+
+  useEffect(() => {
+    console.log(chatMessages[chatMessages.length - 1]);
   }, [chatMessages]);
 
   const onSendMessage = () => {
@@ -112,7 +97,7 @@ const ChatScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

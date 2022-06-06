@@ -18,6 +18,7 @@ import { setFaqs } from "../../redux/reducers/faqsSlice";
 import { setFaq } from "../../redux/reducers/faqSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -45,7 +46,7 @@ const Faq = ({ navigation }) => {
     })();
   }, []);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <Header
         title="문의하기"
         onBackPress={() => navigation.pop()}

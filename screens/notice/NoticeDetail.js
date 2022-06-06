@@ -21,6 +21,7 @@ import colors from "../../lib/colors.json";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const NoticeDetail = ({ navigation, route }) => {
   const {
@@ -85,7 +86,7 @@ const NoticeDetail = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

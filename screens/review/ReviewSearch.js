@@ -18,6 +18,7 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import { setReview } from "../../redux/reducers/reviewSlice";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const ReviewSearch = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -39,7 +40,7 @@ const ReviewSearch = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <View style={{ width: "10%" }}>
           <TouchableOpacity onPress={() => navigation.pop()}>

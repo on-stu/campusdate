@@ -22,6 +22,7 @@ import key from "../../lib/key.json";
 import MiniCheck from "../../components/MiniCheck";
 import { UserContext } from "../../context/user";
 import { setReviews } from "../../redux/reducers/reviewsSlice";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const ReviewPost = ({ navigation }) => {
   const [canPost, setCanPost] = useState(false);
@@ -57,7 +58,7 @@ const ReviewPost = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

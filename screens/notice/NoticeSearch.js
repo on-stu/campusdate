@@ -17,6 +17,7 @@ import key from "../../lib/key.json";
 import { setNotice } from "../../redux/reducers/noticeSlice";
 import { UserContext } from "../../context/user";
 import SearchBar from "../../components/SearchBar";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const NoticeSearch = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -38,7 +39,7 @@ const NoticeSearch = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <View style={{ width: "10%" }}>
           <TouchableOpacity onPress={() => navigation.pop()}>

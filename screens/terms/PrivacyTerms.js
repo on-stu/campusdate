@@ -9,10 +9,11 @@ import {
 import React from "react";
 import { Feather } from "@expo/vector-icons";
 import PrivacyInner from "../../components/PrivacyInner";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const PrivacyTerms = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Feather name="chevron-left" size={24} color="black" />

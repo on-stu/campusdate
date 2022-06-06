@@ -8,6 +8,7 @@ import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
 import { getValue } from "../../functions/secureStore";
 import axios from "axios";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 const MatchingLoading = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
 
@@ -28,6 +29,9 @@ const MatchingLoading = ({ navigation }) => {
         setMatchedUser(false);
       }
     })();
+  }, []);
+
+  useEffect(() => {
     const percentTimer = setInterval(() => setPercent((prev) => prev + 1), 10);
     if (percent === 100 && matchedUser) {
       clearInterval(percentTimer);
@@ -58,7 +62,7 @@ const MatchingLoading = ({ navigation }) => {
     };
   }, [percent]);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>매칭하기</Text>
       </View>

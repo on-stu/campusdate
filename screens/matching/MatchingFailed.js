@@ -5,11 +5,12 @@ import colors from "../../lib/colors.json";
 import Button from "../../components/Button";
 import BackButton from "../../components/BackButton";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const MatchingFailed = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>매칭실패</Text>
       </View>

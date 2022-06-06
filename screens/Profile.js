@@ -19,6 +19,7 @@ import { getBlurNickname } from "../functions/getBlurNickname";
 import SocketContext from "../context/socket";
 import { UserContext } from "../context/user";
 import { getAge } from "../functions/getAge";
+import SafeAreaAndroid from "../components/SafeAreaAndroid";
 
 const EachBox = ({ title, tagsArray }) => {
   return (
@@ -96,7 +97,7 @@ const Profile = ({ navigation, route }) => {
   }, [profileInfo]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView>
         <View style={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.pop()}>

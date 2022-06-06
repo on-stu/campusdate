@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { setCharm } from "../../redux/reducers/charmSlice";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const CharmSearch = ({ navigation }) => {
   const [charms, setCharms] = useState([]);
@@ -36,7 +37,7 @@ const CharmSearch = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <View style={{ width: "10%" }}>
           <TouchableOpacity onPress={() => navigation.pop()}>

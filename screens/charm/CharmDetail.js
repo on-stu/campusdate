@@ -21,6 +21,7 @@ import { setCharm } from "../../redux/reducers/charmSlice";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
 import CharmContent from "../../components/CharmContent";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const CharmDetail = ({ navigation, route }) => {
   const [author, setAuthor] = useState({});
@@ -81,7 +82,7 @@ const CharmDetail = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

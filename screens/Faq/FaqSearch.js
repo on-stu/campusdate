@@ -17,6 +17,7 @@ import key from "../../lib/key.json";
 import axios from "axios";
 import { setFaq } from "../../redux/reducers/faqSlice";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const FaqSearch = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
@@ -38,7 +39,7 @@ const FaqSearch = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <View style={{ width: "10%" }}>
           <TouchableOpacity onPress={() => navigation.pop()}>

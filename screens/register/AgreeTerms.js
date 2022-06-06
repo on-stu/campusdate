@@ -14,6 +14,7 @@ import PrivacyInner from "../../components/PrivacyInner";
 import Hr from "../../components/Hr";
 import ServiceInner from "../../components/ServiceInner";
 import MiniCheck from "../../components/MiniCheck";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const AgreeTerms = ({ navigation }) => {
   const [serviceAgree, setServiceAgree] = useState(false);
@@ -29,7 +30,7 @@ const AgreeTerms = ({ navigation }) => {
   }, [serviceAgree, privacyAgree]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.container}>
         <View style={styles.inner}>
           <Title

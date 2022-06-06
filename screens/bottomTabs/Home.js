@@ -27,6 +27,7 @@ import { setCharms } from "../../redux/reducers/charmsSlice";
 import { setCharm } from "../../redux/reducers/charmSlice";
 import { setReview } from "../../redux/reducers/reviewSlice";
 import { setReviews } from "../../redux/reducers/reviewsSlice";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const Header = ({ university, photoUrl, navigation }) => {
   return (
@@ -141,7 +142,7 @@ const Home = ({ stackNavigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header
           university={userInfo?.university}

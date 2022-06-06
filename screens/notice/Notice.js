@@ -18,6 +18,7 @@ import { setNotice } from "../../redux/reducers/noticeSlice";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -48,7 +49,7 @@ const Notice = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <Header
         title="공지사항"
         onBackPress={() => navigation.pop()}

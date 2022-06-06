@@ -19,6 +19,7 @@ import key from "../lib/key.json";
 import SocketContext from "../context/socket";
 import { UserContext } from "../context/user";
 import { save } from "../functions/secureStore";
+import SafeAreaAndroid from "../components/SafeAreaAndroid";
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -62,7 +63,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
@@ -89,15 +90,15 @@ const LoginScreen = ({ navigation }) => {
                 placeholder="비밀번호"
               />
               <Button text="로그인" onPress={onSubmit} />
-              <View style={styles.textContainer}>
-                <View style={styles.eachText}>
-                  <Text style={styles.text}>계정이 없으신가요?</Text>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("AgreeTerms")}
-                  >
-                    <Text style={styles.underline}>가입하기</Text>
-                  </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonContainer}
+                onPress={() => navigation.navigate("AgreeTerms")}
+              >
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}>가입하기</Text>
                 </View>
+              </TouchableOpacity>
+              <View style={styles.textContainer}>
                 <View style={styles.eachText}>
                   <Text style={styles.text}>비밀번호를 잊으셨나요?</Text>
                   <TouchableOpacity
@@ -167,4 +168,18 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     color: colors.darkgray,
   },
+  buttonContainer: {
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  button: {
+    backgroundColor: colors.purple,
+    width: 300,
+    height: 50,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+  },
+  buttonText: { color: "#ffffff", fontWeight: "700", fontSize: 20 },
 });

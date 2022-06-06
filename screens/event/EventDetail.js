@@ -21,6 +21,7 @@ import { setEvent } from "../../redux/reducers/eventSlice";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
 import EventContent from "../../components/EventContent";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const EventDetail = ({ navigation, route }) => {
   const [author, setAuthor] = useState({});
@@ -82,7 +83,7 @@ const EventDetail = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

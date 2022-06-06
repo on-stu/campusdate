@@ -15,6 +15,7 @@ import ChatItem from "../../components/ChatItem";
 import SocketContext from "../../context/socket";
 import { UserContext } from "../../context/user";
 import { useNavigation } from "@react-navigation/native";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const Chat = ({ stackNavigation }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
@@ -23,40 +24,33 @@ const Chat = ({ stackNavigation }) => {
   const socket = useContext(SocketContext);
   const { userInfo, userChatList, refreshChatList, setUserChatList } =
     useContext(UserContext);
-  const [chatList, setChatList] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refreshChatList(userInfo);
-      console.log("hi");
     });
     return unsubscribe;
-  }, [userInfo, socket]);
+  }, []);
 
-  useEffect(() => {
-    setChatList(userChatList);
-  }, [userChatList]);
+  // // useEffect(() => {
+  // //   socket.on("receiveMessage", (msg) => {
+  // //     addNewMessage(msg);
+  // //   });
+  // // }, [socket]);
 
-  const addNewMessage = (msg) => {
-    const newChatList = userChatList?.map((chatRoom) => {
-      if (chatRoom.id === msg.chatRoomId) {
-        return { ...chatRoom, chats: [...chatRoom.chats, msg] };
-      } else {
-        return chatRoom;
-      }
-    });
-    setUserChatList(newChatList);
-  };
-
-  useEffect(() => {
-    socket.on("receiveMessage", (msg) => {
-      addNewMessage(msg);
-    });
-    return () => socket.off("receiveMessage");
-  }, [socket]);
+  // const addNewMessage = (msg) => {
+  //   const newChatList = userChatList?.map((chatRoom) => {
+  //     if (chatRoom.id === msg.chatRoomId) {
+  //       return { ...chatRoom, chats: [...chatRoom.chats, msg] };
+  //     } else {
+  //       return chatRoom;
+  //     }
+  //   });
+  //   setUserChatList(newChatList);
+  // };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView>
         <View style={styles.header}>
           <View style={styles.titleContainer}>
@@ -75,9 +69,9 @@ const Chat = ({ stackNavigation }) => {
             )}
           </TouchableOpacity>
         </View>
-        {chatList.map((chat, i) => {
+        {userChatList.map((chat, i) => {
           let counterPartId;
-          chat.participants.map((participant) => {
+          chat?.participants?.map((participant) => {
             if (participant !== userInfo.id) {
               counterPartId = participant;
             }
@@ -95,19 +89,21 @@ const Chat = ({ stackNavigation }) => {
                   });
                 }}
                 notRead={
-                  chatList[i].chats.filter(
+                  userChatList[i].chats.filter(
                     (elm) =>
-                      elm.senderId !== userInfo.id.toString &&
+                      elm.senderId !== userInfo.id.toString() &&
                       elm.isRead === false
                   ).length
                 }
-                chats={chatList[i].chats}
-                lastItem={chatList[i].chats[chatList[i].chats.length - 1]}
+                chats={userChatList[i].chats}
+                lastItem={
+                  userChatList[i].chats[userChatList[i].chats.length - 1]
+                }
               />
             </View>
           );
         })}
-        {chatList.length === 0 && (
+        {userChatList.length === 0 && (
           <View style={styles.innerCenter}>
             <Text style={styles.subtitle}>현재 진행중인 채팅이 없습니다.</Text>
           </View>

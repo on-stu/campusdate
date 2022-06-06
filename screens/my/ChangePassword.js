@@ -16,6 +16,7 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
 import { getValue } from "../../functions/secureStore";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 function ValidatePassword(password) {
   if (
@@ -61,7 +62,7 @@ const ChangePassword = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.inputContainer}>
         <Title text="비밀번호 변경" backbutton navigation={navigation} />
         <View style={styles.subTitle}>

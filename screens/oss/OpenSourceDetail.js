@@ -9,13 +9,14 @@ import {
 import React from "react";
 import colors from "../../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const OpenSourceDetail = ({ navigation, route }) => {
   const {
     params: { oss },
   } = route;
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.pop()}>

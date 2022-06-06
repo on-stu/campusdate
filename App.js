@@ -173,13 +173,42 @@ export default function App() {
       });
     });
     socket.on("receiveMessage", (message) => {
-      console.log(message);
+      const newChatList = chatList.map((chatroom) => {
+        if (chatroom.id === message.chatRoomId) {
+          console.log("hihi");
+          let newChats = [];
+          console.log(chatroom.chats);
+          const temp = chatroom.chats;
+          newChats.push(temp);
+          newChats.push(message);
+          console.log(newChats.length);
+          return { ...chatroom, chats: newChats };
+        } else {
+          return chatroom;
+        }
+      });
+      setChatList(newChatList);
+    });
+    socket.on("readMessage", (readMessage) => {
+      const newChatList = chatList.map((chatroom) => {
+        if (chatroom.id === readMessage.chatRoomId) {
+          console.log("bibi");
+          chatroom.chats.map((chat) => {
+            if (chat.id === readMessage.id) {
+              return readMessage;
+            } else {
+              return chat;
+            }
+          });
+        }
+      });
+      setChatList(newChatList);
     });
     socket.on("chatRoomCreated", (chatRoomId, chatRoomInfo) => {
       socket.emit("join", chatRoomId);
       addChatRoom(chatRoomInfo);
     });
-  }, []);
+  }, [socket]);
 
   useEffectOnce(() => {
     socket.on("pushEvent", (event) => {

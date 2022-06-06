@@ -20,6 +20,7 @@ import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 import { UserContext } from "../../context/user";
 import { calculateIdeals } from "../../functions/calculateScore";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const MyIdeals = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -53,7 +54,7 @@ const MyIdeals = ({ navigation }) => {
   }, [ideals]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

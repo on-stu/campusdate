@@ -22,6 +22,7 @@ import { setFaq } from "../../redux/reducers/faqSlice";
 import { setFaqs, setFaqsById } from "../../redux/reducers/faqsSlice";
 import FaqContent from "../../components/FaqContent";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const FaqDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
@@ -84,7 +85,7 @@ const FaqDetail = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

@@ -18,6 +18,7 @@ import BigProfile from "../../components/BigProfile";
 import { manipulateAsync } from "expo-image-manipulator";
 import { UserContext } from "../../context/user";
 import AvatarIcon from "../../img/avatar.svg";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const ProfilePhoto = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -88,7 +89,7 @@ const ProfilePhoto = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

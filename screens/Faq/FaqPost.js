@@ -23,6 +23,7 @@ import MiniCheck from "../../components/MiniCheck";
 import { setNotices } from "../../redux/reducers/noticesSlice";
 import { setFaqs } from "../../redux/reducers/faqsSlice";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const FaqPost = ({ navigation }) => {
   const [canPost, setCanPost] = useState(false);
@@ -60,7 +61,7 @@ const FaqPost = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

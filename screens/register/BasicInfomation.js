@@ -20,6 +20,7 @@ import Check from "../../components/Check";
 import { UserContext } from "../../context/user";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUp from "../../components/PopUp";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const BasicInfomation = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -53,7 +54,7 @@ const BasicInfomation = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <PopUp visible={show} setVisible={setShow}>
         {show && (
           <DateTimePicker

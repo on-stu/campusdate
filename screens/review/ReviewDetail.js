@@ -21,6 +21,7 @@ import { UserContext } from "../../context/user";
 import { setReview } from "../../redux/reducers/reviewSlice";
 import { setReviewById, setReviews } from "../../redux/reducers/reviewsSlice";
 import ReviewContent from "../../components/ReviewContent";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const ReviewDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
@@ -80,7 +81,7 @@ const ReviewDetail = ({ navigation }) => {
     }
   };
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}

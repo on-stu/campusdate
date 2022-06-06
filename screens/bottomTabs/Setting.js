@@ -28,6 +28,7 @@ import { initNotice } from "../../redux/reducers/noticeSlice";
 import { initNotices } from "../../redux/reducers/noticesSlice";
 import { initReview } from "../../redux/reducers/reviewSlice";
 import { initReviews } from "../../redux/reducers/reviewsSlice";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const Setting = ({ stackNavigation }) => {
   const { userInfo, setUserInfo, setUserChatList } = useContext(UserContext);
@@ -59,7 +60,7 @@ const Setting = ({ stackNavigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.title}>설정</Text>

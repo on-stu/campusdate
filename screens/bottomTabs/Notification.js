@@ -10,12 +10,13 @@ import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import NotificationCircle from "../../components/NotificationCircle";
 import colors from "../../lib/colors.json";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const Notification = () => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
   const [notifications, setNotifications] = useState([]);
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView>
         <View style={styles.header}>
           <View style={styles.titleContainer}>

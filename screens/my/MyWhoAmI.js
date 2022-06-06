@@ -22,6 +22,7 @@ import { getValue } from "../../functions/secureStore";
 import axios from "axios";
 import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const options = categories.ideals;
 
@@ -59,7 +60,7 @@ const MyWhoAmI = ({ navigation }) => {
   }, [userInfo]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

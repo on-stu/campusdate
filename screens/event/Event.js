@@ -18,6 +18,7 @@ import { setEvent } from "../../redux/reducers/eventSlice";
 import { setEvents } from "../../redux/reducers/eventsSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -48,7 +49,7 @@ const Event = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <Header
         title="이벤트"
         onBackPress={() => navigation.pop()}

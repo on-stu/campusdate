@@ -23,6 +23,7 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import { UserContext } from "../../context/user";
 import { getValue } from "../../functions/secureStore";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const MyIdealsChange = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -67,7 +68,7 @@ const MyIdealsChange = ({ navigation }) => {
   }, [userInfo]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

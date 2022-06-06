@@ -11,6 +11,7 @@ import ossLicenses from "../../lib/ossLicenses.json";
 import colors from "../../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 import Hr from "../../components/Hr";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const ListItem = ({ licenseName, last, onPress }) => {
   return (
@@ -27,7 +28,7 @@ const ListItem = ({ licenseName, last, onPress }) => {
 
 const OpenSourceList = ({ navigation }) => {
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Feather name="chevron-left" size={24} color="black" />

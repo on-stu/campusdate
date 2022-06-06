@@ -21,6 +21,7 @@ import Option from "../../components/Option";
 
 import { UserContext } from "../../context/user";
 import { calculateIdeals } from "../../functions/calculateScore";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const WhoAmI = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -51,7 +52,7 @@ const WhoAmI = ({ navigation }) => {
   }, [ideals]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

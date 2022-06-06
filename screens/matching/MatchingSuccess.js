@@ -7,6 +7,7 @@ import ProfileCard from "../../components/ProfileCard";
 
 import { UserContext } from "../../context/user";
 import SocketContext from "../../context/socket";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 const MatchingSuccess = ({ navigation, route }) => {
   const {
     params: {
@@ -17,7 +18,7 @@ const MatchingSuccess = ({ navigation, route }) => {
   const socket = useContext(SocketContext);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <View style={styles.header}>
         <Text style={styles.title}>매칭성공</Text>
       </View>

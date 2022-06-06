@@ -21,6 +21,7 @@ import categories from "../../lib/categories.json";
 import Option from "../../components/Option";
 import { UserContext } from "../../context/user";
 import { calculateHobbies } from "../../functions/calculateScore";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const options = categories.hobbies;
 
@@ -47,7 +48,7 @@ const MyHobbies = ({ navigation }) => {
   }, [hobbies]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {

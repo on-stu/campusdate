@@ -18,6 +18,7 @@ import { setCharm } from "../../redux/reducers/charmSlice";
 import { setCharms } from "../../redux/reducers/charmsSlice";
 import { UserContext } from "../../context/user";
 import Header from "../../components/Header";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -47,7 +48,7 @@ const Charm = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <Header
         title="매력어필"
         onBackPress={() => navigation.pop()}

@@ -22,6 +22,7 @@ import axios from "axios";
 import key from "../lib/key.json";
 import { UserContext } from "../context/user";
 import { getAge } from "../functions/getAge";
+import SafeAreaAndroid from "../components/SafeAreaAndroid";
 
 const EachBox = ({ title, tagsArray, onPress }) => {
   return (
@@ -147,7 +148,7 @@ const MyProfile = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <ScrollView>
         <View style={styles.headerContainer}>
           <TouchableOpacity onPress={() => navigation.pop()}>

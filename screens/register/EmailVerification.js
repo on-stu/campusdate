@@ -26,6 +26,7 @@ import { Alert } from "react-native";
 import { save } from "../../functions/secureStore";
 import { UserContext } from "../../context/user";
 import SocketContext from "../../context/socket";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const EmailVerification = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -104,7 +105,7 @@ const EmailVerification = ({ navigation }) => {
           </Picker>
         </View>
       </PopUp>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
         <KeyboardAwareScrollView contentContainerStyle={styles.container}>
           <TouchableWithoutFeedback
             onPress={() => {

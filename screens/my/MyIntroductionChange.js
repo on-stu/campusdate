@@ -19,6 +19,7 @@ import { getValue } from "../../functions/secureStore";
 import key from "../../lib/key.json";
 import axios from "axios";
 import { UserContext } from "../../context/user";
+import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const MyIntroductionChange = ({ navigation }) => {
   const [introduction, setIntroduction] = useState("");
@@ -45,7 +46,7 @@ const MyIntroductionChange = ({ navigation }) => {
   }, [userInfo]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <TouchableWithoutFeedback
           onPress={() => {
