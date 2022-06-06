@@ -11,8 +11,6 @@ import key from "./lib/key.json";
 import SocketContext, { socket } from "./context/socket";
 import { useEffectOnce } from "./functions/useEffectOnce";
 import { UserContext } from "./context/user";
-import { Alert } from "react-native";
-
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
@@ -49,6 +47,21 @@ export default function App() {
     }
   };
 
+  const uploadToken = async () => {
+    const token = await getValue("token");
+    const headers = {
+      Authorization: `Token ${token}`,
+    };
+    const response = await axios.put(
+      `${key.API}/user/`,
+      { userNotificationToken: expoPushToken },
+      {
+        headers,
+      }
+    );
+    setUser(response.data);
+  };
+
   const getChatRoom = async (chatRoomId) => {
     try {
       const response = await axios.get(`${key.API}/chatroom/${chatRoomId}/`);
@@ -69,12 +82,9 @@ export default function App() {
   const addChatRoom = (chatRoom) => {
     const existInState = chatList.filter((l) => l.id === chatRoom.id);
     if (existInState.length === 0) {
-      console.log("successfully added");
       setChatList((prev) => [...prev, chatRoom]);
     }
   };
-
-  const addChat = () => {};
 
   const addNewMessage = (msg) => {
     setChatList((prev) =>
@@ -118,7 +128,6 @@ export default function App() {
       refreshChatList: refreshChatList,
       setUserChatList: setChatList,
       addChatRoom: addChatRoom,
-      addChat: addChat,
     }),
     [user, setUser, chatList, setChatList, addNewMessage]
   );
@@ -164,6 +173,9 @@ export default function App() {
         if (token) {
           setIsLogin(true);
           await refreshUser();
+          if (expoPushToken) {
+            await uploadToken();
+          }
         } else {
           setUser({});
           setIsLogin(false);
@@ -282,7 +294,6 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     alert("Must use physical device for Push Notifications");
   }
