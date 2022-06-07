@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
 
 const SmallProfile = ({ uri, onPress, fullVisible }) => {
   return (
@@ -24,15 +23,9 @@ const SmallProfile = ({ uri, onPress, fullVisible }) => {
                 borderWidth: 0,
                 borderRadius: 28,
               }}
+              blurRadius={!fullVisible ? 20 : 0}
               source={{ uri: uri }}
             />
-            {!fullVisible && (
-              <BlurView
-                intensity={10}
-                style={styles.blurContainer}
-                tint="default"
-              ></BlurView>
-            )}
           </View>
         </TouchableOpacity>
       ) : (

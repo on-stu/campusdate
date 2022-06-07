@@ -9,14 +9,9 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
+  Keyboard,
 } from "react-native";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getValue } from "../functions/secureStore";
 import axios from "axios";
 import key from "../lib/key.json";
@@ -28,9 +23,10 @@ import MyChat from "../components/MyChat";
 import { UserContext } from "../context/user";
 import YourChat from "../components/YourChat";
 import SafeAreaAndroid from "../components/SafeAreaAndroid";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { sendPushNotification } from "../functions/sendPushNotification";
 import * as Notifications from "expo-notifications";
+import { getBlurNickname } from "../functions/getBlurNickname";
 
 const ChatScreen = ({ route }) => {
   const [profileInfo, setProfileInfo] = useState();
@@ -46,6 +42,11 @@ const ChatScreen = ({ route }) => {
   const socket = useContext(SocketContext);
 
   const { userInfo, userChatList } = useContext(UserContext);
+
+  const isAccepted = useMemo(
+    () => userInfo.accepted.includes(counterPartId),
+    [userInfo]
+  );
 
   const getProfile = async (userId) => {
     const token = await getValue("token");
@@ -68,6 +69,13 @@ const ChatScreen = ({ route }) => {
     const response = await axios.get(`${key.API}/chatroom/${chatInfo.id}/`);
     setChatMessages(response.data.chats);
   };
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () =>
+      scrollViewRef.current.scrollToEnd({ animated: true })
+    );
+    return () => showSubscription.remove();
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -102,6 +110,16 @@ const ChatScreen = ({ route }) => {
       }
     });
   }, [userChatList]);
+
+  useEffect(() => {
+    if (socket.disconnected) {
+      socket.connect();
+    }
+    const shouldJoin = [userInfo.id, ...userInfo.chatRooms];
+    shouldJoin.map((roomId) => {
+      socket.emit("join", roomId);
+    });
+  }, [socket]);
 
   const onSendMessage = () => {
     socket.emit(
@@ -138,7 +156,11 @@ const ChatScreen = ({ route }) => {
                   <Feather name="chevron-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.title}>{profileInfo?.nickname}</Text>
+                  <Text style={styles.title}>
+                    {userInfo.accepted.includes(counterPartId)
+                      ? profileInfo?.nickname
+                      : getBlurNickname(profileInfo?.nickname)}
+                  </Text>
                 </View>
               </View>
               <ScrollView
@@ -155,8 +177,6 @@ const ChatScreen = ({ route }) => {
                           <MyChat
                             key={i}
                             text={chat.content}
-                            fullVisible
-                            photoUrl={userInfo.photoUrl}
                             isRead={chat.isRead}
                           />
                         );
@@ -165,8 +185,14 @@ const ChatScreen = ({ route }) => {
                           <YourChat
                             key={i}
                             text={chat.content}
-                            fullVisible
+                            fullVisible={isAccepted}
                             photoUrl={profileInfo?.photoUrl}
+                            onPress={() =>
+                              navigation.navigate("Profile", {
+                                userId: profileInfo?.id,
+                                preventChat: true,
+                              })
+                            }
                           />
                         );
                       }
@@ -176,23 +202,51 @@ const ChatScreen = ({ route }) => {
               </ScrollView>
             </>
           </TouchableWithoutFeedback>
-
-          <View style={styles.footer}>
-            <View style={styles.textInputContainer}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="메시지를 입력해주세요"
-                value={message}
-                onChangeText={setMessage}
-                blurOnSubmit={false}
-                multiline={false}
-                onSubmitEditing={onSendMessage}
-              />
-              <TouchableOpacity onPress={onSendMessage}>
-                <Feather name="send" size={24} color={colors.pink} />
-              </TouchableOpacity>
+          {isAccepted || chatInfo.creatorId === userInfo.id ? (
+            <View style={styles.footer}>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="메시지를 입력해주세요"
+                  value={message}
+                  onChangeText={setMessage}
+                  blurOnSubmit={false}
+                  multiline={false}
+                  onSubmitEditing={onSendMessage}
+                />
+                <TouchableOpacity onPress={onSendMessage}>
+                  <Feather name="send" size={24} color={colors.pink} />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View style={styles.footerAsk}>
+              <View style={styles.askContainer}>
+                <Text style={styles.ask}>{`${getBlurNickname(
+                  profileInfo.nickname
+                )}님께서 메시지를 보냈습니다.`}</Text>
+                <Text style={styles.ask}>
+                  프로필 확인과 채팅을 위해 아래 수락버튼을 눌러주세요.
+                </Text>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    socket.emit("acceptUser", userInfo.id, counterPartId)
+                  }
+                >
+                  <View style={styles.acceptButton}>
+                    <Text style={styles.acceptText}>수락</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <View style={styles.refuseButton}>
+                    <Text style={styles.acceptText}>거절</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </KeyboardAvoidingView>
       </View>
     </SafeAreaView>
@@ -258,5 +312,42 @@ const styles = StyleSheet.create({
   },
   commentsContainer: {
     paddingHorizontal: 20,
+  },
+  footerAsk: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderTopWidth: 0.5,
+    borderColor: colors.gray,
+    width: Dimensions.get("screen").width,
+    paddingVertical: 15,
+    paddingBottom: 20,
+  },
+  acceptButton: {
+    backgroundColor: colors.pink,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginHorizontal: 4,
+  },
+  refuseButton: {
+    backgroundColor: colors.purple,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderRadius: 10,
+    marginHorizontal: 4,
+  },
+  acceptText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  askContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 300,
+    marginBottom: 20,
+  },
+  ask: {
+    color: colors.pink,
   },
 });

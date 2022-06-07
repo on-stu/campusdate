@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import NotificationCircle from "../../components/NotificationCircle";
@@ -26,15 +26,16 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refreshChatList(userInfo);
+      if (socket.disconnected) {
+        socket.connect();
+      }
+      const shouldJoin = [userInfo.id, ...userInfo.chatRooms];
+      shouldJoin.map((roomId) => {
+        socket.emit("join", roomId);
+      });
     });
     return unsubscribe;
   }, []);
-
-  useEffect(() => {
-    if (socket.disconnected) {
-      socket.connect();
-    }
-  }, [socket]);
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
@@ -78,6 +79,7 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
                     params: { counterPartId, chatInfo: chat },
                   });
                 }}
+                fullVisible={userInfo.accepted.includes(counterPartId)}
                 notRead={notRead}
                 chats={userChatList[i]?.chats}
                 lastItem={

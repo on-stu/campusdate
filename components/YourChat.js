@@ -3,10 +3,10 @@ import React from "react";
 import TinyProfile from "./TinyProfile";
 import colors from "../lib/colors.json";
 
-const YourChat = ({ photoUrl, text, fullVisible }) => {
+const YourChat = ({ photoUrl, text, fullVisible, onPress }) => {
   return (
     <View style={styles.container}>
-      <TinyProfile uri={photoUrl} fullVisible={fullVisible} />
+      <TinyProfile uri={photoUrl} fullVisible={fullVisible} onPress={onPress} />
       <View style={styles.messageBox}>
         <Text style={styles.message}>{text}</Text>
       </View>

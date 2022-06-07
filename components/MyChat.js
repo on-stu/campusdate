@@ -3,7 +3,7 @@ import React from "react";
 import TinyProfile from "./TinyProfile";
 import colors from "../lib/colors.json";
 
-const MyChat = ({ photoUrl, text, fullVisible, isRead }) => {
+const MyChat = ({ text, isRead }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.readMessage}>{isRead ? "읽음" : "읽지 않음"}</Text>

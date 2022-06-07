@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Image, StyleSheet } from "react-native";
-import { BlurView } from "expo-blur";
 import colors from "../lib/colors.json";
 
 const BigProfile = ({ uri, fullVisible }) => {
@@ -17,10 +16,8 @@ const BigProfile = ({ uri, fullVisible }) => {
             margin: 12,
           }}
           source={{ uri: uri }}
+          blurRadius={!fullVisible ? 20 : 0}
         />
-      )}
-      {!fullVisible && (
-        <BlurView intensity={30} style={styles.blurContainer}></BlurView>
       )}
     </View>
   );

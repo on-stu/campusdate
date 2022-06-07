@@ -7,6 +7,7 @@ import {
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
@@ -165,14 +166,13 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: "row",
     alignItems: "center",
-    width: "100%",
+    width: Dimensions.get("screen").width,
     padding: 15,
   },
   textInputContainer: {
     bottom: 0,
     height: 40,
     flex: 1,
-    marginRight: 15,
     backgroundColor: colors.gray,
     borderColor: "transparent",
     padding: 10,

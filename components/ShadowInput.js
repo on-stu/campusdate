@@ -20,7 +20,9 @@ const ShadowInput = ({
         value={value}
         secureTextEntry={secure}
         autoCapitalize="none"
-        autoComplete="off"
+        autoCorrect={false}
+        contextMenuHidden={true}
+        textContentType="none"
       />
     </View>
   );

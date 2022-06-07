@@ -4,7 +4,7 @@ import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
 import TinyProfile from "./TinyProfile";
 
-const SmallProfileCard = ({ photoUrl, nickname, fullVisible }) => {
+const SmallProfileCard = ({ photoUrl, nickname, fullVisible, onPress }) => {
   const [blurNickname, setBlurNickname] = useState("");
   useEffect(() => {
     if (nickname?.slice !== undefined) {
@@ -16,7 +16,7 @@ const SmallProfileCard = ({ photoUrl, nickname, fullVisible }) => {
   }, [nickname]);
   return (
     <View style={styles.container}>
-      <TinyProfile uri={photoUrl} fullVisible={fullVisible} />
+      <TinyProfile uri={photoUrl} fullVisible={fullVisible} onPress={onPress} />
       <View style={styles.info}>
         <View style={styles.top}>
           <Text style={styles.nickname}>

@@ -9,18 +9,20 @@ import axios from "axios";
 import key from "../lib/key.json";
 import { getTimeString } from "../functions/getTimeString";
 import { UserContext } from "../context/user";
+import { getBlurNickname } from "../functions/getBlurNickname";
 
 const ChatItem = ({
   isMute,
   counterPartId,
   onPress,
   lastAt,
-  chats,
+  fullVisible,
   notRead,
   lastItem,
 }) => {
   const [counterPart, setCounterPart] = useState({});
   const { userInfo } = useContext(UserContext);
+  const [fullVisibleState, setFullVisibleState] = useState(fullVisible);
   useEffect(() => {
     (async () => {
       try {
@@ -35,20 +37,28 @@ const ChatItem = ({
       } catch (error) {
         if (error.response.status === 404) {
           setCounterPart({ id: 0, nickname: "알 수 없는 사용자" });
+          setFullVisibleState(true);
         }
       }
     })();
   }, []);
 
-  const timeString = getTimeString(lastAt);
+  const timeString = getTimeString(lastItem?.createdAt);
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.chatRoomBox}>
         <View style={styles.profileContainer}>
-          <SmallProfile fullVisible={true} uri={counterPart.photoUrl} />
+          <SmallProfile
+            fullVisible={fullVisibleState}
+            uri={counterPart.photoUrl}
+          />
           <View style={styles.middleContainer}>
             <View style={styles.nameContainer}>
-              <Text style={styles.nickname}>{counterPart.nickname}</Text>
+              <Text style={styles.nickname}>
+                {fullVisibleState
+                  ? counterPart.nickname
+                  : getBlurNickname(counterPart.nickname)}
+              </Text>
               {isMute && (
                 <Feather name="bell-off" size={16} color={colors.darkgray} />
               )}

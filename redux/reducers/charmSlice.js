@@ -16,7 +16,6 @@ export const charmSlice = createSlice({
     setCharm: (state, action) => {
       try {
         state = Object.assign(state, action.payload);
-        console.log(state);
       } catch (error) {
         console.log(error);
       }

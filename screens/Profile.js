@@ -52,7 +52,7 @@ const EachBox = ({ title, tagsArray }) => {
 
 const Profile = ({ navigation, route }) => {
   const {
-    params: { userId, preventChat },
+    params: { userId, preventChat, preventFullVisible },
   } = route;
   const [profileInfo, setProfileInfo] = useState({});
   const [whoAmIHash, setWhoAmIHash] = useState([]);
@@ -93,6 +93,9 @@ const Profile = ({ navigation, route }) => {
       setIdealsHash((prev) => [...prev, `${otherSex}에요.`]);
       setHobbiesHash(profileInfo?.myHobbies?.map((item, i) => `#${item}`));
       setHobbiesHash((prev) => [...prev, `에요.`]);
+      if (userInfo.accepted.includes(profileInfo.id) && !preventFullVisible) {
+        setFullVisible(true);
+      }
     }
   }, [profileInfo]);
 

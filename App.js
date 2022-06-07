@@ -145,6 +145,15 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
+  const NotificationValue = useMemo(() => {
+    return {
+      notification,
+      setNotification,
+      notificationListener: notificationListener.current,
+      responseListener: responseListener.current,
+    };
+  }, []);
+
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
       save("pushToken", token);
@@ -233,7 +242,6 @@ export default function App() {
       addNewMessage(message);
     });
     socket.on("allReaded", (messages) => {
-      console.log(messages);
       if (messages.length > 0) {
         messages.map((message) => addReadMessage(message));
       }
@@ -242,13 +250,10 @@ export default function App() {
       socket.emit("join", chatRoomId);
       addChatRoom(chatRoomInfo);
     });
-  }, [socket]);
-
-  useEffectOnce(() => {
-    socket.on("pushEvent", (event) => {
-      console.log(event);
+    socket.on("accepted", (userInfo) => {
+      setUser(userInfo);
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (!isLoading && fetchingDone) {
