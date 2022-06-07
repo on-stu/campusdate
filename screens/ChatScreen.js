@@ -223,7 +223,7 @@ const ChatScreen = ({ route }) => {
             <View style={styles.footerAsk}>
               <View style={styles.askContainer}>
                 <Text style={styles.ask}>{`${getBlurNickname(
-                  profileInfo.nickname
+                  profileInfo?.nickname
                 )}님께서 메시지를 보냈습니다.`}</Text>
                 <Text style={styles.ask}>
                   프로필 확인과 채팅을 위해 아래 수락버튼을 눌러주세요.

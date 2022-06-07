@@ -23,7 +23,7 @@ import axios from "axios";
 import key from "../../lib/key.json";
 import emailValue from "../../lib/email.json";
 import { Alert } from "react-native";
-import { save } from "../../functions/secureStore";
+import { getValue, save } from "../../functions/secureStore";
 import { UserContext } from "../../context/user";
 import SocketContext from "../../context/socket";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
@@ -72,15 +72,37 @@ const EmailVerification = ({ navigation }) => {
     }
   };
 
+  const uploadToken = async (token, expoPushToken) => {
+    const headers = {
+      Authorization: `Token ${token}`,
+    };
+    const response = await axios.put(
+      `${key.API}/user/`,
+      { userNotificationToken: expoPushToken },
+      {
+        headers,
+      }
+    );
+    setUserInfo(response.data);
+  };
+
   const onSubmit = async () => {
+    console.log(userInfo);
     const response = await axios.post(`${key.API}/register/`, {
       ...userInfo,
       chatRooms: [],
     });
+    const expoPushToken = await getValue("pushToken");
     const {
       data: { userInfo: user, token },
     } = response;
     setUserInfo(user);
+    if (
+      !user.userNotificationToken &&
+      expoPushToken !== user.data?.userNotificationToken
+    ) {
+      await uploadToken(token, expoPushToken);
+    }
     save("token", token);
     socket.connect();
     socket.emit("join", user.id);

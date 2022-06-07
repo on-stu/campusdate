@@ -77,7 +77,7 @@ const ProfilePhoto = ({ navigation }) => {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       base64: true,
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.1,

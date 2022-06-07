@@ -252,6 +252,7 @@ export default function App() {
     });
     socket.on("accepted", (userInfo) => {
       setUser(userInfo);
+      console.log("wow");
     });
   }, [socket]);
 
