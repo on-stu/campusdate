@@ -20,6 +20,7 @@ const ShadowInput = ({
         value={value}
         secureTextEntry={secure}
         autoCapitalize="none"
+        autoComplete="off"
       />
     </View>
   );

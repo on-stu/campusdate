@@ -5,7 +5,7 @@ import * as Font from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-import { getValue } from "./functions/secureStore";
+import { getValue, save } from "./functions/secureStore";
 import axios from "axios";
 import key from "./lib/key.json";
 import SocketContext, { socket } from "./context/socket";
@@ -31,6 +31,7 @@ export default function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useState(false);
   const [chatList, setChatList] = useState([]);
+  const [fetchingDone, setFetchingDone] = useState(false);
 
   const refreshUser = async () => {
     const token = await getValue("token");
@@ -41,9 +42,15 @@ export default function App() {
       if (token) {
         const userInfo = await axios.get(`${key.API}/user/`, { headers });
         setUser(userInfo.data);
+        if (userInfo.status === 200) {
+          setIsLogin(true);
+          setFetchingDone(true);
+        }
       }
     } catch (error) {
       setUser(false);
+      setIsLogin(false);
+      setFetchingDone(true);
     }
   };
 
@@ -139,9 +146,10 @@ export default function App() {
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      save("pushToken", token);
+      setExpoPushToken(token);
+    });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current =
@@ -171,7 +179,6 @@ export default function App() {
         await new Promise((resolve) => setTimeout(resolve, 2000));
         const token = await getValue("token");
         if (token) {
-          setIsLogin(true);
           await refreshUser();
           if (expoPushToken) {
             await uploadToken();
@@ -188,6 +195,12 @@ export default function App() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    if (expoPushToken && user?.userNotificationToken !== expoPushToken) {
+      uploadToken();
+    }
+  }, [expoPushToken]);
 
   useEffect(() => {
     if (socket.disconnected && user?.id) {
@@ -238,7 +251,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isLoading && fetchingDone) {
       (async () => {
         await SplashScreen.hideAsync();
       })();
@@ -257,26 +270,6 @@ export default function App() {
       <StatusBar style="dark" />
     </>
   );
-}
-
-async function sendPushNotification(expoPushToken) {
-  const message = {
-    to: expoPushToken,
-    sound: "default",
-    title: "Original Title",
-    body: "And here is the body!",
-    data: { someData: "goes here" },
-  };
-
-  await fetch("https://exp.host/--/api/v2/push/send", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Accept-encoding": "gzip, deflate",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(message),
-  });
 }
 
 async function registerForPushNotificationsAsync() {

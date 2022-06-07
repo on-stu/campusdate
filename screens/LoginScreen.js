@@ -15,10 +15,9 @@ import colors from "../lib/colors.json";
 import { TouchableOpacity } from "react-native";
 import axios from "axios";
 import key from "../lib/key.json";
-
 import SocketContext from "../context/socket";
 import { UserContext } from "../context/user";
-import { save } from "../functions/secureStore";
+import { getValue, save } from "../functions/secureStore";
 import SafeAreaAndroid from "../components/SafeAreaAndroid";
 
 const LoginScreen = ({ navigation }) => {
@@ -35,8 +34,24 @@ const LoginScreen = ({ navigation }) => {
     }
   }, [userInfo]);
 
+  const uploadToken = async (expoPushToken) => {
+    const token = await getValue("token");
+    const headers = {
+      Authorization: `Token ${token}`,
+    };
+    const response = await axios.put(
+      `${key.API}/user/`,
+      { userNotificationToken: expoPushToken },
+      {
+        headers,
+      }
+    );
+    setUserInfo(response.data);
+  };
+
   const onSubmit = async () => {
     try {
+      const expoPushToken = await getValue("pushToken");
       const response = await axios.post(`${key.API}/login/`, {
         email,
         password,
@@ -53,6 +68,12 @@ const LoginScreen = ({ navigation }) => {
       const user = await axios.get(`${key.API}/user/`, { headers });
       // console.log(user.data);
       setUserInfo(user.data);
+      if (
+        !user.data.userNotificationToken &&
+        expoPushToken !== user.data?.userNotificationToken
+      ) {
+        await uploadToken(expoPushToken);
+      }
       navigation.reset({
         routes: [{ name: "BottomTab" }],
       });

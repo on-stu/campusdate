@@ -6,10 +6,28 @@ import Setting from "./Setting";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import { TouchableOpacity } from "react-native";
+import { useContext, useMemo } from "react";
+import { UserContext } from "../../context/user";
+import BottomTabIcon from "../../components/BottomTabIcon";
 
 const Tab = createBottomTabNavigator();
 
 function BottomTab({ navigation }) {
+  const { userChatList, userInfo } = useContext(UserContext);
+
+  const getTotalNotCount = () => {
+    let count = 0;
+    userChatList.map((chatroom) => {
+      chatroom.chats.map((chat) => {
+        if (!chat.isRead && chat.senderId !== userInfo.id.toString()) {
+          count += 1;
+        }
+      });
+    });
+    return count;
+  };
+
+  const totalNotRead = useMemo(() => getTotalNotCount(), [userChatList]);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -36,14 +54,16 @@ function BottomTab({ navigation }) {
       />
       <Tab.Screen
         name="Chat"
-        children={() => <Chat stackNavigation={navigation} />}
+        children={() => (
+          <Chat stackNavigation={navigation} totalNotRead={totalNotRead} />
+        )}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
-              <Feather
-                name="message-circle"
-                size={24}
-                color={focused ? "white" : colors.darkgray}
+              <BottomTabIcon
+                iconName="chat"
+                focused={focused}
+                totalNotRead={totalNotRead}
               />
             );
           },

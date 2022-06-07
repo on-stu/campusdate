@@ -211,6 +211,17 @@ const Setting = ({ stackNavigation }) => {
                       deleteItem("token").then(() => {
                         getValue("token").then((token) => {
                           setUserInfo({});
+                          setUserChatList([]);
+                          dispatch(initCharm());
+                          dispatch(initCharms());
+                          dispatch(initEvent());
+                          dispatch(initEvents());
+                          dispatch(initNotice());
+                          dispatch(initNotices());
+                          dispatch(initFaq());
+                          dispatch(initFaqs());
+                          dispatch(initReview());
+                          dispatch(initReviews());
                           socket.disconnect();
                           stackNavigation.reset({
                             routes: [{ name: "Login" }],

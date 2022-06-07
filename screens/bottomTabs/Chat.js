@@ -17,13 +17,11 @@ import { UserContext } from "../../context/user";
 import { useNavigation } from "@react-navigation/native";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
-const Chat = ({ stackNavigation }) => {
+const Chat = ({ stackNavigation, totalNotRead }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
-  const [notReadMessages, setNotReadMessages] = useState([]);
   const navigation = useNavigation();
   const socket = useContext(SocketContext);
-  const { userInfo, userChatList, refreshChatList, setUserChatList } =
-    useContext(UserContext);
+  const { userInfo, userChatList, refreshChatList } = useContext(UserContext);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -32,19 +30,11 @@ const Chat = ({ stackNavigation }) => {
     return unsubscribe;
   }, []);
 
-  const getTotalNotCount = () => {
-    let count = 0;
-    userChatList.map((chatroom) => {
-      chatroom.chats.map((chat) => {
-        if (!chat.isRead && chat.senderId !== userInfo.id.toString()) {
-          count += 1;
-        }
-      });
-    });
-    return count;
-  };
-
-  const totalNotRead = useMemo(() => getTotalNotCount(), [userChatList]);
+  useEffect(() => {
+    if (socket.disconnected) {
+      socket.connect();
+    }
+  }, [socket]);
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>

@@ -29,6 +29,8 @@ import { UserContext } from "../context/user";
 import YourChat from "../components/YourChat";
 import SafeAreaAndroid from "../components/SafeAreaAndroid";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { sendPushNotification } from "../functions/sendPushNotification";
+import * as Notifications from "expo-notifications";
 
 const ChatScreen = ({ route }) => {
   const [profileInfo, setProfileInfo] = useState();
@@ -83,6 +85,17 @@ const ChatScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: false,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+        iosDisplayInForeground: false,
+      }),
+    });
+  }, []);
+
+  useEffect(() => {
     userChatList.map((chatroom) => {
       if (chatroom.id === chatInfo.id) {
         setChatMessages(chatroom.chats);
@@ -96,6 +109,11 @@ const ChatScreen = ({ route }) => {
       chatInfo.id,
       userInfo.id,
       counterPartId,
+      message
+    );
+    sendPushNotification(
+      profileInfo.userNotificationToken,
+      userInfo.nickname,
       message
     );
     setMessage("");
