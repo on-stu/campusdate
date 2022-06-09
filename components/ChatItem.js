@@ -11,13 +11,21 @@ import { getTimeString } from "../functions/getTimeString";
 import { UserContext } from "../context/user";
 import { getBlurNickname } from "../functions/getBlurNickname";
 
-const ChatItem = ({ isMute, counterPartId, onPress, notRead, lastItem }) => {
+const ChatItem = ({ isMute, participants, onPress, notRead, lastItem }) => {
   const [counterPart, setCounterPart] = useState({});
   const { userInfo } = useContext(UserContext);
+  const [counterPartId, setCounterPartId] = useState();
+
+  useEffect(() => {
+    setCounterPartId(participants.filter((elm) => elm !== userInfo.id)[0]);
+    if (counterPartId) {
+      getCounterPart();
+    }
+  }, [participants, counterPartId]);
 
   const isAccepted = useMemo(
     () => userInfo.accepted.includes(counterPartId),
-    [userInfo]
+    [userInfo, counterPartId]
   );
   const getCounterPart = async () => {
     try {
@@ -35,9 +43,6 @@ const ChatItem = ({ isMute, counterPartId, onPress, notRead, lastItem }) => {
       }
     }
   };
-  useEffect(() => {
-    getCounterPart();
-  }, []);
 
   const timeString = getTimeString(lastItem?.createdAt);
   return (

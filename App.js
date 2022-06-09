@@ -101,7 +101,11 @@ export default function App() {
     setChatList((prev) =>
       prev.map((chatroom) => {
         if (chatroom.id === msg.chatRoomId) {
-          return { ...chatroom, chats: [...chatroom.chats, msg] };
+          return {
+            ...chatroom,
+            chats: [...chatroom.chats, msg],
+            lastAt: msg.createdAt,
+          };
         } else {
           return chatroom;
         }

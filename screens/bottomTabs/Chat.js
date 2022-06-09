@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
 import NotificationCircle from "../../components/NotificationCircle";
@@ -21,7 +21,18 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
   const navigation = useNavigation();
   const socket = useContext(SocketContext);
-  const { userInfo, userChatList, refreshChatList } = useContext(UserContext);
+  const { userInfo, userChatList, refreshChatList, setUserChatList } =
+    useContext(UserContext);
+
+  const sortedChatList = useMemo(() => {
+    const tempList = userChatList;
+    tempList.sort((a, b) => {
+      const chatA = new Date(a.lastAt);
+      const chatB = new Date(b.lastAt);
+      return chatB.getTime() - chatA.getTime();
+    });
+    return tempList;
+  }, [userChatList]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -57,39 +68,31 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
             )}
           </TouchableOpacity>
         </View>
-        {userChatList.map((chat, i) => {
-          let counterPartId;
-          chat?.participants?.map((participant) => {
-            if (participant !== userInfo.id) {
-              counterPartId = participant;
-            }
-          });
-          const notRead = userChatList[i]?.chats.filter(
+        {sortedChatList.map((chat, i) => {
+          const notRead = sortedChatList[i]?.chats.filter(
             (elm) =>
               elm.senderId !== userInfo.id.toString() && elm.isRead === false
           ).length;
           return (
             <View style={styles.inner} key={i}>
               <ChatItem
-                counterPartId={counterPartId}
-                lastAt={chat?.lastAt}
+                participants={chat?.participants}
                 onPress={() => {
                   stackNavigation.navigate({
                     name: "ChatScreen",
                     params: { id: chat.id },
                   });
                 }}
-                fullVisible={userInfo.accepted.includes(counterPartId)}
                 notRead={notRead}
-                chats={userChatList[i]?.chats}
+                chats={sortedChatList[i]?.chats}
                 lastItem={
-                  userChatList[i]?.chats[userChatList[i].chats.length - 1]
+                  sortedChatList[i]?.chats[sortedChatList[i].chats.length - 1]
                 }
               />
             </View>
           );
         })}
-        {userChatList.length === 0 && (
+        {sortedChatList.length === 0 && (
           <View style={styles.innerCenter}>
             <Text style={styles.subtitle}>현재 진행중인 채팅이 없습니다.</Text>
           </View>
