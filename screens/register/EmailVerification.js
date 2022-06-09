@@ -7,6 +7,7 @@ import {
   Keyboard,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React, { useContext } from "react";
 import Title from "../../components/Title";
@@ -128,7 +129,11 @@ const EmailVerification = ({ navigation }) => {
         </View>
       </PopUp>
       <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
-        <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={styles.container}
+          enableOnAndroid={true}
+          enableAutomaticScroll={Platform.OS === "ios"}
+        >
           <TouchableWithoutFeedback
             onPress={() => {
               Keyboard.dismiss();

@@ -76,7 +76,7 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
                 onPress={() => {
                   stackNavigation.navigate({
                     name: "ChatScreen",
-                    params: { counterPartId, chatInfo: chat },
+                    params: { id: chat.id },
                   });
                 }}
                 fullVisible={userInfo.accepted.includes(counterPartId)}

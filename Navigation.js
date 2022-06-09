@@ -47,12 +47,70 @@ import NoticeSearch from "./screens/notice/NoticeSearch";
 import ReviewSearch from "./screens/review/ReviewSearch";
 import AgreeTerms from "./screens/register/AgreeTerms";
 import ChangePassword from "./screens/my/ChangePassword";
+import { Linking } from "react-native";
+import * as Notifications from "expo-notifications";
 
 const Stack = createStackNavigator();
 
 export default function Navigation({ isLogin }) {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={{
+        prefixes: ["campusdate://"],
+        config: {
+          screens: {
+            ChatScreen: {
+              path: "chat/:id",
+              parse: {
+                id: String,
+              },
+            },
+          },
+        },
+        async getInitialURL() {
+          // Check if app was opened from a deep link
+          const url = await Linking.getInitialURL();
+
+          if (url != null) {
+            return url;
+          }
+
+          // Check if there is an initial firebase notification
+          const response =
+            await Notifications.getLastNotificationResponseAsync();
+          const message = response?.notification.request.content.data;
+
+          return message?.url;
+        },
+        subscribe(listener) {
+          const onReceiveURL = ({ url }) => listener(url);
+
+          // Listen to incoming links from deep linking
+          const listening = Linking.addEventListener("url", onReceiveURL);
+
+          // Listen to expo push notifications
+          const subscription =
+            Notifications.addNotificationResponseReceivedListener(
+              (response) => {
+                const url = response.notification.request.content.data.url;
+
+                // Any custom logic to see whether the URL needs to be handled
+                //...
+
+                // Let React Navigation handle the URL
+                Linking.openURL(url);
+                listener(url);
+              }
+            );
+
+          return () => {
+            // Clean up the event listeners
+            listening.remove();
+            subscription.remove();
+          };
+        },
+      }}
+    >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isLogin && <Stack.Screen name="Login" component={LoginScreen} />}
         <Stack.Screen name="BottomTab" component={BottomTab} />

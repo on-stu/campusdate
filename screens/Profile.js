@@ -156,6 +156,7 @@ const Profile = ({ navigation, route }) => {
           style={{
             ...styles.center,
             flexDirection: "column",
+            marginBottom: 16,
           }}
         >
           <Button

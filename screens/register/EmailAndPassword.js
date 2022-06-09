@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Platform,
 } from "react-native";
 import React, { useContext } from "react";
 import Title from "../../components/Title";
@@ -82,7 +83,11 @@ const EmailAndPassword = ({ navigation }) => {
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
-      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.container}
+        enableOnAndroid={true}
+        enableAutomaticScroll={Platform.OS === "ios"}
+      >
         <TouchableWithoutFeedback
           onPress={() => {
             Keyboard.dismiss();
@@ -179,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   container: {
     flex: 1,

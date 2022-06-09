@@ -143,7 +143,7 @@ const Home = ({ stackNavigation }) => {
             <Banner
               title="매칭하기"
               texts={["지금 이 순간,", "널 사랑하고 싶다."]}
-              svg={<MatchingIcon height={100} />}
+              svg={<MatchingIcon height={100} width={150} />}
               onPress={() => stackNavigation.navigate("MatchingLoading")}
             />
             <Banner
@@ -153,7 +153,7 @@ const Home = ({ stackNavigation }) => {
                   ? ["용기있는 자가", "미인을 얻는다."]
                   : ["용기있는 자가", "미남을 얻는다."]
               }
-              svg={<FindingIcon height={80} />}
+              svg={<FindingIcon height={80} width={150} />}
               onPress={() => stackNavigation.navigate("FindMyLove")}
             />
           </View>

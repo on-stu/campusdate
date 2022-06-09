@@ -10,7 +10,9 @@ import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 const MatchingFailed = ({ navigation }) => {
   const { userInfo } = useContext(UserContext);
   return (
-    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
+    <SafeAreaView
+      style={{ ...SafeAreaAndroid.AndroidSafeArea, alignItems: "center" }}
+    >
       <View style={styles.header}>
         <Text style={styles.title}>매칭실패</Text>
       </View>

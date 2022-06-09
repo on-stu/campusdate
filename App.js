@@ -9,19 +9,21 @@ import { getValue, save } from "./functions/secureStore";
 import axios from "axios";
 import key from "./lib/key.json";
 import SocketContext, { socket } from "./context/socket";
-import { useEffectOnce } from "./functions/useEffectOnce";
 import { UserContext } from "./context/user";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { Linking } from "react-native";
 
+//fonts
 const customFont = {
   WaterMelon: require("./assets/116watermelon.otf"),
 };
 
+//notification
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: false,
   }),
 });
@@ -32,6 +34,8 @@ export default function App() {
   const [user, setUser] = useState(false);
   const [chatList, setChatList] = useState([]);
   const [fetchingDone, setFetchingDone] = useState(false);
+  const [readingScreen, setReadingScreen] = useState("");
+  const [pushPath, setPushPath] = useState("");
 
   const refreshUser = async () => {
     const token = await getValue("token");
@@ -135,8 +139,18 @@ export default function App() {
       refreshChatList: refreshChatList,
       setUserChatList: setChatList,
       addChatRoom: addChatRoom,
+      readingScreen: readingScreen,
+      setReadingScreen: setReadingScreen,
     }),
-    [user, setUser, chatList, setChatList, addNewMessage]
+    [
+      user,
+      setUser,
+      chatList,
+      setChatList,
+      addNewMessage,
+      readingScreen,
+      setReadingScreen,
+    ]
   );
 
   //notification
@@ -144,15 +158,6 @@ export default function App() {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
-
-  const NotificationValue = useMemo(() => {
-    return {
-      notification,
-      setNotification,
-      notificationListener: notificationListener.current,
-      responseListener: responseListener.current,
-    };
-  }, []);
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
@@ -169,7 +174,7 @@ export default function App() {
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        const url = response.notification.request.content.data.url;
       });
 
     return () => {
@@ -179,6 +184,31 @@ export default function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (
+      readingScreen &&
+      notification?.request?.content?.data?.chatRoomId === readingScreen
+    ) {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: false,
+          shouldPlaySound: false,
+          shouldSetBadge: false,
+          iosDisplayInForeground: false,
+        }),
+      });
+    } else {
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+          iosDisplayInForeground: true,
+        }),
+      });
+    }
+  }, [notification, readingScreen]);
 
   useEffect(() => {
     (async () => {
@@ -195,6 +225,7 @@ export default function App() {
         } else {
           setUser({});
           setIsLogin(false);
+          setFetchingDone(true);
         }
       } catch (e) {
         console.warn(e);
@@ -252,7 +283,6 @@ export default function App() {
     });
     socket.on("accepted", (userInfo) => {
       setUser(userInfo);
-      console.log("wow");
     });
   }, [socket]);
 
@@ -269,7 +299,7 @@ export default function App() {
       <UserContext.Provider value={UserValue}>
         <SocketContext.Provider value={socket}>
           <Provider store={store}>
-            <Navigation isLogin={isLogin} user={user} />
+            <Navigation isLogin={isLogin} user={user} pushPath={pushPath} />
           </Provider>
         </SocketContext.Provider>
       </UserContext.Provider>

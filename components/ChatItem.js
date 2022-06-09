@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Feather } from "@expo/vector-icons";
 import SmallProfile from "./SmallProfile";
 import colors from "../lib/colors.json";
@@ -11,36 +11,32 @@ import { getTimeString } from "../functions/getTimeString";
 import { UserContext } from "../context/user";
 import { getBlurNickname } from "../functions/getBlurNickname";
 
-const ChatItem = ({
-  isMute,
-  counterPartId,
-  onPress,
-  lastAt,
-  fullVisible,
-  notRead,
-  lastItem,
-}) => {
+const ChatItem = ({ isMute, counterPartId, onPress, notRead, lastItem }) => {
   const [counterPart, setCounterPart] = useState({});
   const { userInfo } = useContext(UserContext);
-  const [fullVisibleState, setFullVisibleState] = useState(fullVisible);
-  useEffect(() => {
-    (async () => {
-      try {
-        const token = await getValue("token");
-        const headers = {
-          Authorization: `Token ${token}`,
-        };
-        const response = await axios.get(`${key.API}/user/${counterPartId}/`, {
-          headers,
-        });
-        setCounterPart(response.data);
-      } catch (error) {
-        if (error.response.status === 404) {
-          setCounterPart({ id: 0, nickname: "알 수 없는 사용자" });
-          setFullVisibleState(true);
-        }
+
+  const isAccepted = useMemo(
+    () => userInfo.accepted.includes(counterPartId),
+    [userInfo]
+  );
+  const getCounterPart = async () => {
+    try {
+      const token = await getValue("token");
+      const headers = {
+        Authorization: `Token ${token}`,
+      };
+      const response = await axios.get(`${key.API}/user/${counterPartId}/`, {
+        headers,
+      });
+      setCounterPart(response.data);
+    } catch (error) {
+      if (error.response.status === 404) {
+        setCounterPart({ id: 0, nickname: "알 수 없는 사용자" });
       }
-    })();
+    }
+  };
+  useEffect(() => {
+    getCounterPart();
   }, []);
 
   const timeString = getTimeString(lastItem?.createdAt);
@@ -48,14 +44,11 @@ const ChatItem = ({
     <TouchableOpacity onPress={onPress}>
       <View style={styles.chatRoomBox}>
         <View style={styles.profileContainer}>
-          <SmallProfile
-            fullVisible={fullVisibleState}
-            uri={counterPart.photoUrl}
-          />
+          <SmallProfile fullVisible={isAccepted} uri={counterPart.photoUrl} />
           <View style={styles.middleContainer}>
             <View style={styles.nameContainer}>
               <Text style={styles.nickname}>
-                {fullVisibleState
+                {isAccepted || counterPart.id === 0
                   ? counterPart.nickname
                   : getBlurNickname(counterPart.nickname)}
               </Text>

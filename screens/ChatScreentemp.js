@@ -33,10 +33,8 @@ const ChatScreen = ({ route }) => {
   const [message, setMessage] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const navigation = useNavigation();
-  const [chatInfo, setChatInfo] = useState({});
-  const [counterPartId, setCounterPartId] = useState(0);
   const {
-    params: { id },
+    params: { chatInfo, counterPartId },
   } = route;
 
   const scrollViewRef = useRef(null);
@@ -48,26 +46,8 @@ const ChatScreen = ({ route }) => {
 
   const isAccepted = useMemo(
     () => userInfo.accepted.includes(counterPartId),
-    [userInfo, counterPartId]
+    [userInfo]
   );
-
-  useEffect(() => {
-    userChatList.map((chat) => {
-      if (chat.id === id) {
-        setChatInfo(chat);
-        setChatMessages(chat.chats);
-        setCounterPartId(
-          chat.participants.filter((elm) => elm !== userInfo.id)[0]
-        );
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (counterPartId !== 0 && !profileInfo) {
-      getProfile(counterPartId);
-    }
-  }, [counterPartId]);
 
   const getProfile = async (userId) => {
     const token = await getValue("token");
@@ -87,10 +67,10 @@ const ChatScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    setReadingScreen(id);
+    setReadingScreen(chatInfo.id);
 
     return () => setReadingScreen("");
-  }, [id]);
+  }, [chatInfo]);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", () =>
@@ -104,6 +84,12 @@ const ChatScreen = ({ route }) => {
       scrollViewRef.current = null;
     };
   }, [scrollViewRef, socket]);
+
+  useEffectOnce(() => {
+    if (profileInfo?.id === undefined) {
+      getProfile(counterPartId);
+    }
+  }, []);
 
   useEffect(() => {
     userChatList.map((chatroom) => {
@@ -135,7 +121,7 @@ const ChatScreen = ({ route }) => {
       profileInfo.userNotificationToken,
       userInfo.nickname,
       message,
-      { chatRoomId: chatInfo.id, url: `campusdate://chat/${chatInfo.id}` }
+      { chatRoomId: chatInfo.id, url: `chat/${chatInfo.id}` }
     );
     setMessage("");
   };

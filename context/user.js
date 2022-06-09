@@ -9,4 +9,6 @@ export const UserContext = createContext({
   setUserChatList: () => {},
   addChatRoom: () => {},
   addChat: () => {},
+  readingScreen: "",
+  setReadingScreen: () => {},
 });

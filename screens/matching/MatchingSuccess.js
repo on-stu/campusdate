@@ -24,7 +24,9 @@ const MatchingSuccess = ({ navigation, route }) => {
   const socket = useContext(SocketContext);
 
   return (
-    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
+    <SafeAreaView
+      style={{ ...SafeAreaAndroid.AndroidSafeArea, alignItems: "center" }}
+    >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.pop()}>
