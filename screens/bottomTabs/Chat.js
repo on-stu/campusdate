@@ -21,8 +21,7 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
   const [isNotificationOn, setIsNotificationOn] = useState(true);
   const navigation = useNavigation();
   const socket = useContext(SocketContext);
-  const { userInfo, userChatList, refreshChatList, setUserChatList } =
-    useContext(UserContext);
+  const { userInfo, userChatList, refreshChatList } = useContext(UserContext);
 
   const sortedChatList = useMemo(() => {
     const tempList = userChatList;
