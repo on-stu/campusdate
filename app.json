@@ -18,7 +18,8 @@
     "ios": {
       "bundleIdentifier": "com.codingssu.campusdate",
       "buildNumber": "0.1.1",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "icon": "./assets/iosLogo.png"
     },
     "android": {
       "package": "com.codingssu.campusdate",
