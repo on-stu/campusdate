@@ -60,17 +60,20 @@ export default function App() {
 
   const uploadToken = async () => {
     const token = await getValue("token");
+
     const headers = {
       Authorization: `Token ${token}`,
     };
-    const response = await axios.put(
-      `${key.API}/user/`,
-      { userNotificationToken: expoPushToken },
-      {
-        headers,
-      }
-    );
-    setUser(response.data);
+    if (expoPushToken) {
+      const response = await axios.put(
+        `${key.API}/user/`,
+        { userNotificationToken: expoPushToken },
+        {
+          headers,
+        }
+      );
+      setUser(response.data);
+    }
   };
 
   const getChatRoom = async (chatRoomId) => {
@@ -165,8 +168,11 @@ export default function App() {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
-      save("pushToken", token);
-      setExpoPushToken(token);
+      if (token) {
+        console.log(token);
+        save("pushToken", token);
+        setExpoPushToken(token);
+      }
     });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
@@ -179,6 +185,7 @@ export default function App() {
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         const url = response.notification.request.content.data.url;
+        Linking.openURL(url);
       });
 
     return () => {

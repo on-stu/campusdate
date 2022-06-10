@@ -82,15 +82,15 @@ const Setting = ({ stackNavigation }) => {
           <Hr />
           <View style={styles.left}>
             <Text style={styles.property}>앱 설정</Text>
-            <TouchableOpacity onPress={() => setNotification((prev) => !prev)}>
-              <View style={styles.menu}>
-                <Text>알림 설정</Text>
-                <Text style={styles.value}>
-                  {notification ? "켜짐" : "꺼짐"}
-                </Text>
-              </View>
+            <TouchableOpacity
+              style={styles.menu}
+              onPress={() => setNotification((prev) => !prev)}
+            >
+              <Text>알림 설정</Text>
+              <Text style={styles.value}>{notification ? "켜짐" : "꺼짐"}</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              style={styles.menu}
               onPress={() =>
                 Alert.alert(
                   "캐시를 삭제하시겠습니까?",
@@ -128,31 +128,27 @@ const Setting = ({ stackNavigation }) => {
                 )
               }
             >
-              <View style={styles.menu}>
-                <Text>캐시 삭제</Text>
-              </View>
+              <Text>캐시 삭제</Text>
             </TouchableOpacity>
           </View>
           <Hr />
           <View style={styles.left}>
             <Text style={styles.property}>이용안내</Text>
-            <TouchableOpacity>
-              <View style={styles.menu}>
-                <Text>앱 버전</Text>
-                <Text style={styles.value}>0.1.0</Text>
-              </View>
+            <TouchableOpacity style={styles.menu}>
+              <Text>앱 버전</Text>
+              <Text style={styles.value}>0.1.0</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => stackNavigation.navigate("Notice")}
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>공지사항</Text>
-              </View>
+              <Text>공지사항</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => stackNavigation.navigate("Faq")}>
-              <View style={styles.menu}>
-                <Text>문의하기</Text>
-              </View>
+            <TouchableOpacity
+              onPress={() => stackNavigation.navigate("Faq")}
+              style={styles.menu}
+            >
+              <Text>문의하기</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
@@ -161,31 +157,27 @@ const Setting = ({ stackNavigation }) => {
                   "신고하실 사항은\nminsu0523@naver.com로\n메일보내주시기 바랍니다"
                 )
               }
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>신고하기</Text>
-              </View>
+              <Text>신고하기</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => stackNavigation.navigate("ServiceTerms")}
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>서비스 이용약관</Text>
-              </View>
+              <Text>서비스 이용약관</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => stackNavigation.navigate("PrivacyTerms")}
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>개인정보 처리방침</Text>
-              </View>
+              <Text>개인정보 처리방침</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => stackNavigation.navigate("OpenSourceList")}
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>오픈소스 라이선스</Text>
-              </View>
+              <Text>오픈소스 라이선스</Text>
             </TouchableOpacity>
           </View>
           <Hr />
@@ -193,10 +185,9 @@ const Setting = ({ stackNavigation }) => {
             <Text style={styles.property}>결제</Text>
             <TouchableOpacity
               onPress={() => Alert.alert("알림", "준비중입니다.")}
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>결제 내역</Text>
-              </View>
+              <Text>결제 내역</Text>
             </TouchableOpacity>
           </View>
           <Hr />
@@ -235,10 +226,9 @@ const Setting = ({ stackNavigation }) => {
                   },
                 ])
               }
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>로그아웃</Text>
-              </View>
+              <Text>로그아웃</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>
@@ -256,10 +246,9 @@ const Setting = ({ stackNavigation }) => {
                   ]
                 )
               }
+              style={styles.menu}
             >
-              <View style={styles.menu}>
-                <Text>회원 탈퇴</Text>
-              </View>
+              <Text>회원 탈퇴</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -298,7 +287,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   left: {
-    width: "100%",
+    width: Dimensions.get("screen").width - 40,
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "center",

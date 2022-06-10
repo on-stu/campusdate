@@ -13,7 +13,7 @@ const SearchBar = ({ placeholder, value, onChangeText, onSubmit }) => {
         onSubmitEditing={onSubmit}
         autoFocus
       />
-      <TouchableOpacity onPress={onSubmit} style={styles.searchIcon}>
+      <TouchableOpacity onPress={onSubmit} style={styles.searchIconContainer}>
         <View>
           <Feather name="search" size={24} color={colors.darkgray} />
         </View>
@@ -27,6 +27,7 @@ export default SearchBar;
 const styles = StyleSheet.create({
   searchBar: {
     marginVertical: 10,
+    height: 40,
     width: "100%",
     position: "relative",
     padding: 10,
@@ -34,11 +35,11 @@ const styles = StyleSheet.create({
     borderColor: colors.darkgray,
     borderRadius: 10,
   },
-  searchIcon: {
+  searchIconContainer: {
     position: "absolute",
-    top: 5,
-    right: 10,
-    display: "flex",
+    height: 40,
     justifyContent: "center",
+    right: 4,
+    padding: 4,
   },
 });

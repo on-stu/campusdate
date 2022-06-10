@@ -62,7 +62,9 @@ const ChangePassword = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
+    <SafeAreaView
+      style={{ ...SafeAreaAndroid.AndroidSafeArea, alignItems: "center" }}
+    >
       <View style={styles.inputContainer}>
         <Title text="비밀번호 변경" backbutton navigation={navigation} />
         <View style={styles.subTitle}>

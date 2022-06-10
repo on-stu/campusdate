@@ -31,7 +31,7 @@ import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const EmailVerification = ({ navigation }) => {
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [university, setUniversity] = useState("대학을 선택해주세요");
+  const [university, setUniversity] = useState("부산대학교");
   const [univEmail, setUnivEmail] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [visible, setVisible] = useState(false);
@@ -154,10 +154,10 @@ const EmailVerification = ({ navigation }) => {
                   </Text>
                 </View>
                 <View style={styles.section}>
-                  <SelectButton
-                    text={university}
-                    onPress={() => setVisible(true)}
-                  />
+                  <SelectButton text={university} />
+                  <Text style={styles.purple}>
+                    현재는 부산대학교만 가능해요!
+                  </Text>
                 </View>
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>인증용 대학교 웹 메일</Text>
@@ -283,5 +283,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     color: "#fff",
+  },
+  purple: {
+    color: colors.purple,
   },
 });

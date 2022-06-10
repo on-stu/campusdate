@@ -84,6 +84,7 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
                 }}
                 notRead={notRead}
                 chats={sortedChatList[i]?.chats}
+                lastAt={chat.lastAt}
                 lastItem={
                   sortedChatList[i]?.chats[sortedChatList[i].chats.length - 1]
                 }

@@ -4,6 +4,7 @@ import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 
 const TinyProfile = ({ uri, onPress, fullVisible }) => {
+  // console.log(uri);
   return (
     <>
       {uri ? (
@@ -16,6 +17,7 @@ const TinyProfile = ({ uri, onPress, fullVisible }) => {
                 resizeMode: "cover",
                 borderWidth: 0,
                 borderRadius: 28,
+                zIndex: 10,
               }}
               blurRadius={!fullVisible ? 10 : 0}
               source={{ uri: uri }}

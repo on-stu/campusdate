@@ -1,17 +1,19 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
 import MatchingIcon from "../../img/sad.svg";
 import colors from "../../lib/colors.json";
 import Button from "../../components/Button";
-import BackButton from "../../components/BackButton";
-import { UserContext } from "../../context/user";
+
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const MatchingFailed = ({ navigation }) => {
-  const { userInfo } = useContext(UserContext);
   return (
     <SafeAreaView
-      style={{ ...SafeAreaAndroid.AndroidSafeArea, alignItems: "center" }}
+      style={{
+        ...SafeAreaAndroid.AndroidSafeArea,
+        alignItems: "center",
+        width: Dimensions.get("screen").width,
+      }}
     >
       <View style={styles.header}>
         <Text style={styles.title}>매칭실패</Text>
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   buttonContainer: {
-    position: "absolute",
-    bottom: 60,
+    marginTop: 20,
   },
 });

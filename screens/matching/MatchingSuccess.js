@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -44,10 +45,10 @@ const MatchingSuccess = ({ navigation, route }) => {
         </View>
         <View style={styles.profileContainer}>
           <ProfileCard
-            nickname={profileInfo.nickname}
-            birthday={profileInfo.birthday}
-            info={profileInfo.whoAmI}
-            photoUrl={profileInfo.photoUrl}
+            nickname={profileInfo?.nickname}
+            birthday={profileInfo?.birthday}
+            info={profileInfo?.whoAmI}
+            photoUrl={profileInfo?.photoUrl}
             onButtonPress={() =>
               navigation.navigate("Profile", {
                 userId: profileInfo?.id,
@@ -75,8 +76,7 @@ const MatchingSuccess = ({ navigation, route }) => {
                       {
                         name: "ChatScreen",
                         params: {
-                          counterPartId: profileInfo.id,
-                          chatInfo: chat,
+                          id: chat.id,
                         },
                       },
                     ],
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
+    width: Dimensions.get("screen").width,
   },
   header: {
     width: "100%",

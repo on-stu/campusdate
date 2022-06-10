@@ -11,11 +11,18 @@ import { getTimeString } from "../functions/getTimeString";
 import { UserContext } from "../context/user";
 import { getBlurNickname } from "../functions/getBlurNickname";
 
-const ChatItem = ({ isMute, participants, onPress, notRead, lastItem }) => {
+const ChatItem = ({
+  isMute,
+  participants,
+  onPress,
+  notRead,
+  lastItem,
+  lastAt,
+}) => {
   const [counterPart, setCounterPart] = useState({});
   const { userInfo } = useContext(UserContext);
   const [counterPartId, setCounterPartId] = useState();
-
+  console.log(counterPart);
   useEffect(() => {
     setCounterPartId(participants.filter((elm) => elm !== userInfo.id)[0]);
     if (counterPartId) {
@@ -44,7 +51,9 @@ const ChatItem = ({ isMute, participants, onPress, notRead, lastItem }) => {
     }
   };
 
-  const timeString = getTimeString(lastItem?.createdAt);
+  const timeString = lastItem
+    ? getTimeString(lastItem?.createdAt)
+    : getTimeString(lastAt);
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.chatRoomBox}>
