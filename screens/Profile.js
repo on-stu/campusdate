@@ -172,8 +172,7 @@ const Profile = ({ navigation, route }) => {
                       {
                         name: "ChatScreen",
                         params: {
-                          counterPartId: profileInfo.id,
-                          chatInfo: chat,
+                          id: chat.id,
                         },
                       },
                     ],
