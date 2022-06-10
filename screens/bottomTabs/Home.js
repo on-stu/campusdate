@@ -49,18 +49,16 @@ const Header = ({ university, photoUrl, navigation }) => {
 
 const Banner = ({ title, texts, svg, onPress }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.banner}>
-        <View>
-          <Text style={styles.bannerTitle}>{title}</Text>
-          {texts?.map((text, key) => (
-            <Text style={styles.bannerSubtitle} key={key}>
-              {text}
-            </Text>
-          ))}
-        </View>
-        <View style={styles.bannerBottom}>{svg}</View>
+    <TouchableOpacity onPress={onPress} style={styles.banner}>
+      <View>
+        <Text style={styles.bannerTitle}>{title}</Text>
+        {texts?.map((text, key) => (
+          <Text style={styles.bannerSubtitle} key={key}>
+            {text}
+          </Text>
+        ))}
       </View>
+      <View style={styles.bannerBottom}>{svg}</View>
     </TouchableOpacity>
   );
 };

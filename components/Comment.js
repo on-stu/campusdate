@@ -12,17 +12,18 @@ const Comment = ({ comment, createdAt, creatorId }) => {
   const [creator, setCreator] = useState({});
 
   useEffect(() => {
-    (async () => {
-      const token = await getValue("token");
-      const headers = {
-        Authorization: `Token ${token}`,
-      };
-      const response = await axios.get(`${key.API}/user/${creatorId}/`, {
-        headers,
-      });
-      setCreator(response.data);
-    })();
-  }, []);
+    if (creator === {} || !creator.photoUrl)
+      (async () => {
+        const token = await getValue("token");
+        const headers = {
+          Authorization: `Token ${token}`,
+        };
+        const response = await axios.get(`${key.API}/user/${creatorId}/`, {
+          headers,
+        });
+        setCreator(response.data);
+      })();
+  }, [creator]);
 
   return (
     <>

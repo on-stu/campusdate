@@ -219,8 +219,11 @@ const ChatScreen = ({ route }) => {
                   multiline={false}
                   onSubmitEditing={onSendMessage}
                 />
-                <TouchableOpacity onPress={onSendMessage}>
-                  <Feather name="send" size={24} color={colors.pink} />
+                <TouchableOpacity
+                  onPress={onSendMessage}
+                  style={{ height: "100%", justifyContent: "center" }}
+                >
+                  <Feather name="send" size={22} color={colors.pink} />
                 </TouchableOpacity>
               </View>
             </View>

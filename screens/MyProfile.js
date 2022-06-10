@@ -23,6 +23,8 @@ import key from "../lib/key.json";
 import { UserContext } from "../context/user";
 import { getAge } from "../functions/getAge";
 import SafeAreaAndroid from "../components/SafeAreaAndroid";
+import Header from "../components/Header";
+import Title from "../components/Title";
 
 const EachBox = ({ title, tagsArray, onPress }) => {
   return (
@@ -149,23 +151,22 @@ const MyProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
+      <Title
+        text={`${userInfo?.nickname}님의 프로필`}
+        backbutton
+        navigation={navigation}
+      />
       <ScrollView>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.pop()}>
-            <Feather name="chevron-left" size={24} color={colors.darkgray} />
-          </TouchableOpacity>
-        </View>
         <View style={styles.inner}>
-          <View style={styles.center}>
-            <Text style={styles.title}>{userInfo?.nickname}</Text>
-          </View>
-          <View style={styles.center}>
-            <Text style={styles.text}>{`${getAge(userInfo?.birthday)}세`}</Text>
-          </View>
           <View style={{ ...styles.center, marginVertical: 16 }}>
             <TouchableOpacity onPress={pickImage}>
               <BigProfile uri={photoUrl !== "" && photoUrl} fullVisible />
             </TouchableOpacity>
+          </View>
+          <View style={styles.center}>
+            <Text style={styles.property}>{`${getAge(
+              userInfo?.birthday
+            )}세`}</Text>
           </View>
           <TouchableOpacity
             onPress={() => navigation.navigate("ChangePassword")}

@@ -82,6 +82,7 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
                     params: { id: chat.id },
                   });
                 }}
+                navigation={navigation}
                 notRead={notRead}
                 chats={sortedChatList[i]?.chats}
                 lastAt={chat.lastAt}

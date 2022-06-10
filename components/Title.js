@@ -11,18 +11,30 @@ import colors from "../lib/colors.json";
 
 const Title = ({ text, percent, backbutton, navigation }) => {
   return (
-    <View style={styles.container}>
+    <View style={percent ? styles.container : styles.containerWithoutPercent}>
       {backbutton && (
-        <TouchableOpacity onPress={() => navigation.pop()}>
+        <TouchableOpacity
+          onPress={() => navigation.pop()}
+          style={
+            !percent && {
+              position: "absolute",
+              left: 8,
+              alignItems: "center",
+              height: "100%",
+            }
+          }
+        >
           <Feather name="chevron-left" size={24} color={colors.darkgray} />
         </TouchableOpacity>
       )}
-      <View style={styles.left}>
+      <View style={percent && styles.left}>
         <Text style={styles.title}>{text}</Text>
       </View>
-      <View style={styles.right}>
-        <Text style={styles.percent}>{percent}</Text>
-      </View>
+      {percent && (
+        <View style={styles.right}>
+          <Text style={styles.percent}>{percent}</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -53,5 +65,13 @@ const styles = StyleSheet.create({
   },
   percent: {
     fontWeight: "700",
+  },
+  containerWithoutPercent: {
+    padding: 10,
+    width: Dimensions.get("screen").width,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
   },
 });

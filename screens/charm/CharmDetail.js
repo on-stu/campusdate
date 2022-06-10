@@ -18,13 +18,13 @@ import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
 import { setCharmById, setCharms } from "../../redux/reducers/charmsSlice";
 import colors from "../../lib/colors.json";
-import { setCharm } from "../../redux/reducers/charmSlice";
+import { initCharm, setCharm } from "../../redux/reducers/charmSlice";
 import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
 import CharmContent from "../../components/CharmContent";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
-const CharmDetail = ({ navigation, route }) => {
+const CharmDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
   const [dropMenuVisible, setDropMenuVisible] = useState(false);
@@ -34,7 +34,7 @@ const CharmDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (charm.authorId && author !== {}) {
+    if (charm.authorId && author !== {} && !author.photoUrl) {
       (async () => {
         const token = await getValue("token");
         const headers = {
@@ -49,7 +49,7 @@ const CharmDetail = ({ navigation, route }) => {
         setAuthor(authorResponse.data);
       })();
     }
-  }, [charm]);
+  }, [charm, author]);
 
   const onCommentSubmit = async () => {
     try {
@@ -145,8 +145,11 @@ const CharmDetail = ({ navigation, route }) => {
               value={comment}
               onChangeText={setComment}
             />
-            <TouchableOpacity onPress={onCommentSubmit}>
-              <Feather name="send" size={24} color={colors.pink} />
+            <TouchableOpacity
+              onPress={onCommentSubmit}
+              style={{ height: "100%", justifyContent: "center" }}
+            >
+              <Feather name="send" size={22} color={colors.pink} />
             </TouchableOpacity>
           </View>
         </View>

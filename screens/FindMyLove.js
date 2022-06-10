@@ -49,16 +49,28 @@ const FindMyLove = ({ navigation }) => {
       </View>
       <ScrollView>
         <View style={styles.inner}>
-          <View style={styles.askContainer}>
-            <Text style={styles.ask}>
-              캠퍼스 데이트에 가입된{" "}
-              {userInfo?.sex === "male" ? "여성" : "남성"}
-              분들입니다.
-            </Text>
-            <Text style={styles.ask}>
-              프로필을 확인하시고 먼저 연락을 걸어보세요!
-            </Text>
-          </View>
+          {userList.length > 0 ? (
+            <View style={styles.askContainer}>
+              <Text style={styles.ask}>
+                캠퍼스 데이트에 가입된{" "}
+                {userInfo?.sex === "male" ? "여성" : "남성"}
+                분들입니다.
+              </Text>
+              <Text style={styles.ask}>
+                프로필을 확인하시고 먼저 연락을 걸어보세요!
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.askContainer}>
+              <Text style={styles.ask}>
+                현재 캠퍼스 데이트에 가입된{" "}
+                {userInfo?.sex === "male" ? "여성" : "남성"}
+                분들이 없거나,
+              </Text>
+              <Text style={styles.ask}>이미 연락중입니다.</Text>
+              <Text style={styles.ask}>나중에 다시 시도해주세요.</Text>
+            </View>
+          )}
           {userList?.map((data, i) => {
             const user = data.data;
             return (
@@ -112,6 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.pink,
     alignSelf: "center",
+    textAlign: "center",
   },
   askContainer: {
     marginBottom: 20,

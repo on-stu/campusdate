@@ -18,11 +18,11 @@ const ChatItem = ({
   notRead,
   lastItem,
   lastAt,
+  navigation,
 }) => {
   const [counterPart, setCounterPart] = useState({});
   const { userInfo } = useContext(UserContext);
   const [counterPartId, setCounterPartId] = useState();
-  console.log(counterPart);
   useEffect(() => {
     setCounterPartId(participants.filter((elm) => elm !== userInfo.id)[0]);
     if (counterPartId) {
@@ -58,7 +58,16 @@ const ChatItem = ({
     <TouchableOpacity onPress={onPress}>
       <View style={styles.chatRoomBox}>
         <View style={styles.profileContainer}>
-          <SmallProfile fullVisible={isAccepted} uri={counterPart.photoUrl} />
+          <SmallProfile
+            fullVisible={isAccepted}
+            uri={counterPart.photoUrl}
+            onPress={() =>
+              navigation.navigate("Profile", {
+                userId: counterPartId,
+                preventChat: true,
+              })
+            }
+          />
           <View style={styles.middleContainer}>
             <View style={styles.nameContainer}>
               <Text style={styles.nickname}>

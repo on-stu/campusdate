@@ -149,9 +149,13 @@ const EventDetail = ({ navigation, route }) => {
               placeholder="댓글을 입력해주세요"
               value={comment}
               onChangeText={setComment}
+              onSubmitEditing={onCommentSubmit}
             />
-            <TouchableOpacity onPress={onCommentSubmit}>
-              <Feather name="send" size={24} color={colors.pink} />
+            <TouchableOpacity
+              onPress={onCommentSubmit}
+              style={{ height: "100%", justifyContent: "center" }}
+            >
+              <Feather name="send" size={22} color={colors.pink} />
             </TouchableOpacity>
           </View>
         </View>
