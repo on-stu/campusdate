@@ -100,23 +100,21 @@ const Setting = ({ stackNavigation }) => {
                       text: "예",
                       onPress: () => {
                         deleteItem("token").then(() => {
-                          getValue("token").then((token) => {
-                            setUserInfo({});
-                            setUserChatList([]);
-                            dispatch(initCharm());
-                            dispatch(initCharms());
-                            dispatch(initEvent());
-                            dispatch(initEvents());
-                            dispatch(initNotice());
-                            dispatch(initNotices());
-                            dispatch(initFaq());
-                            dispatch(initFaqs());
-                            dispatch(initReview());
-                            dispatch(initReviews());
-                            socket.disconnect();
-                            stackNavigation.reset({
-                              routes: [{ name: "Login" }],
-                            });
+                          setUserInfo({});
+                          setUserChatList([]);
+                          dispatch(initCharm());
+                          dispatch(initCharms());
+                          dispatch(initEvent());
+                          dispatch(initEvents());
+                          dispatch(initNotice());
+                          dispatch(initNotices());
+                          dispatch(initFaq());
+                          dispatch(initFaqs());
+                          dispatch(initReview());
+                          dispatch(initReviews());
+                          socket.disconnect();
+                          stackNavigation.reset({
+                            routes: [{ name: "Login" }],
                           });
                         });
                       },
@@ -200,23 +198,11 @@ const Setting = ({ stackNavigation }) => {
                     text: "예",
                     onPress: () => {
                       deleteItem("token").then(() => {
-                        getValue("token").then((token) => {
-                          setUserInfo({});
-                          setUserChatList([]);
-                          dispatch(initCharm());
-                          dispatch(initCharms());
-                          dispatch(initEvent());
-                          dispatch(initEvents());
-                          dispatch(initNotice());
-                          dispatch(initNotices());
-                          dispatch(initFaq());
-                          dispatch(initFaqs());
-                          dispatch(initReview());
-                          dispatch(initReviews());
-                          socket.disconnect();
-                          stackNavigation.reset({
-                            routes: [{ name: "Login" }],
-                          });
+                        setUserInfo({});
+                        setUserChatList([]);
+                        socket.disconnect();
+                        stackNavigation.reset({
+                          routes: [{ name: "Login" }],
                         });
                       });
                     },

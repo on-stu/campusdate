@@ -68,7 +68,6 @@ const LongBanner = ({
   items,
   onPress,
   navigation,
-  dispatch,
   reducerFunction,
   detailPathname,
 }) => {
@@ -102,14 +101,12 @@ const LongBanner = ({
 };
 
 const Home = ({ stackNavigation }) => {
-  const { userInfo, setUserChatList, userChatList } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const notices = useSelector((state) => state.notices);
   const charms = useSelector((state) => state.charms);
   const reviews = useSelector((state) => state.reviews);
-  const events = useSelector((state) => state.events);
 
   const dispatch = useDispatch();
-  const socket = useContext(SocketContext);
 
   useEffect(() => {
     (async () => {
