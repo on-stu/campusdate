@@ -24,10 +24,7 @@ import Comment from "../../components/Comment";
 import { UserContext } from "../../context/user";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
-const NoticeDetail = ({ navigation, route }) => {
-  const {
-    params: { noticeId },
-  } = route;
+const NoticeDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
   const [dropMenuVisible, setDropMenuVisible] = useState(false);

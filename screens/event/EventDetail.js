@@ -24,7 +24,7 @@ import { UserContext } from "../../context/user";
 import EventContent from "../../components/EventContent";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
-const EventDetail = ({ navigation, route }) => {
+const EventDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
   const [dropMenuVisible, setDropMenuVisible] = useState(false);
