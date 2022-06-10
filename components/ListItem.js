@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import colors from "../lib/colors.json";
 import { Feather } from "@expo/vector-icons";
 import SmallProfileCard from "./SmallProfileCard";
@@ -8,6 +8,7 @@ import { getValue } from "../functions/secureStore";
 import key from "../lib/key.json";
 import axios from "axios";
 import { getTimeString } from "../functions/getTimeString";
+import { UserContext } from "../context/user";
 
 const ListItem = ({
   authorId,
@@ -18,8 +19,10 @@ const ListItem = ({
   onPress,
   last,
   fullVisible,
+  navigation,
 }) => {
   const [author, setAuthor] = useState({});
+  const { userInfo } = useContext(UserContext);
   useEffect(() => {
     if (authorId) {
       (async () => {
@@ -43,6 +46,14 @@ const ListItem = ({
             nickname={author?.nickname}
             photoUrl={author?.photoUrl}
             fullVisible={fullVisible}
+            onPress={() =>
+              navigation.navigate("Profile", {
+                userId: authorId,
+                preventChat:
+                  userInfo.skipUser.includes(authorId) ||
+                  userInfo?.sex === author?.sex,
+              })
+            }
           />
           <Text style={styles.time}>{timeString}</Text>
         </View>

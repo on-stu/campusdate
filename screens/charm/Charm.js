@@ -68,6 +68,7 @@ const Charm = ({ navigation }) => {
                 createdAt={charm?.createdAt}
                 title={charm.title}
                 key={i}
+                navigation={navigation}
                 fullVisible={!charm?.isAnonymous}
                 thumbsNum={charm?.thumbs?.length}
                 commentsNum={charm?.comments?.length}

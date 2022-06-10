@@ -2,7 +2,7 @@
   "expo": {
     "name": "캠퍼스 데이트",
     "slug": "campusDate",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +17,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.codingssu.campusdate",
-      "buildNumber": "0.1.0",
+      "buildNumber": "0.1.1",
       "supportsTablet": false
     },
     "android": {
