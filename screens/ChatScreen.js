@@ -133,7 +133,9 @@ const ChatScreen = ({ route }) => {
     );
     sendPushNotification(
       profileInfo.userNotificationToken,
-      userInfo.nickname,
+      userInfo.accepted.includes(counterPartId)
+        ? userInfo.nickname
+        : getBlurNickname(userInfo.nickname),
       message,
       { chatRoomId: chatInfo.id, url: `campusdate://chat/${chatInfo.id}` }
     );
