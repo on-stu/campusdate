@@ -70,7 +70,7 @@ const Chat = ({ stackNavigation, totalNotRead }) => {
         {sortedChatList.map((chat, i) => {
           const notRead = sortedChatList[i]?.chats.filter(
             (elm) =>
-              elm.senderId !== userInfo.id.toString() && elm.isRead === false
+              elm.senderId !== userInfo?.id?.toString() && elm.isRead === false
           ).length;
           return (
             <View style={styles.inner} key={i}>

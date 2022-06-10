@@ -122,6 +122,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
 });

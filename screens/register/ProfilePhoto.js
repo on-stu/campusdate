@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   container: {
     flex: 1,

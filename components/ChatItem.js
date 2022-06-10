@@ -24,7 +24,7 @@ const ChatItem = ({ isMute, participants, onPress, notRead, lastItem }) => {
   }, [participants, counterPartId]);
 
   const isAccepted = useMemo(
-    () => userInfo.accepted.includes(counterPartId),
+    () => userInfo?.accepted?.includes(counterPartId),
     [userInfo, counterPartId]
   );
   const getCounterPart = async () => {

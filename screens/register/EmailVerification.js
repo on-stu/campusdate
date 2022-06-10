@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   section: {
     width: Dimensions.get("screen").width,

@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useContext } from "react";
 import Title from "../../components/Title";
@@ -19,7 +20,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
 import { UserContext } from "../../context/user";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUp from "../../components/PopUp";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
@@ -28,6 +28,7 @@ const BasicInfomation = ({ navigation }) => {
   const [nickname, setNickname] = useState("");
   const [sex, setSex] = useState("male");
   const [show, setShow] = useState(false);
+  const [birthdayText, setBirthdayText] = useState("");
   const [birthday, setBirthday] = useState(new Date(2000, 0, 1));
   const { userInfo, setUserInfo } = useContext(UserContext);
 
@@ -54,24 +55,22 @@ const BasicInfomation = ({ navigation }) => {
     navigation.navigate("ProfilePhoto");
   };
 
+  useEffect(() => {
+    if (birthdayText.length === 8) {
+      const year = birthdayText.slice(0, 4);
+      const month = birthdayText.slice(4, 6);
+      const day = birthdayText.slice(6, 8);
+      if (year > 1960 && month < 13 && month > 0 && 0 < day && day < 31) {
+        const newDate = new Date(year, month - 1, day);
+        setBirthday(newDate);
+      } else {
+        Alert.alert("생년월일을 확인해주세요");
+      }
+    }
+  }, [birthdayText]);
+
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
-      <PopUp visible={show} setVisible={setShow}>
-        {show && (
-          <DateTimePicker
-            style={{ width: 300, height: 300 }}
-            locale="ko"
-            mode="date"
-            value={birthday}
-            onChange={(event, date) => {
-              const currentDateInt = Date.parse(date);
-              const currentDate = new Date(currentDateInt).setUTCHours(9);
-              setBirthday(new Date(currentDate));
-            }}
-            display="spinner"
-          />
-        )}
-      </PopUp>
       <KeyboardAwareScrollView
         contentContainerStyle={styles.container}
         enableOnAndroid={true}
@@ -96,7 +95,6 @@ const BasicInfomation = ({ navigation }) => {
                   <Text style={styles.property}>이름</Text>
                 </View>
                 <ShadowInput value={nickname} onChangeText={setNickname} />
-
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>성별</Text>
                 </View>
@@ -116,15 +114,13 @@ const BasicInfomation = ({ navigation }) => {
                 <View style={styles.textContainer}>
                   <Text style={styles.property}>생년월일</Text>
                 </View>
-                <TouchableOpacity onPress={() => setShow(true)}>
-                  <View style={styles.birthdayContainer}>
-                    <Text
-                      style={styles.birthdayText}
-                    >{`${birthday.getFullYear()}년 ${
-                      birthday.getMonth() + 1
-                    }월 ${birthday.getDate()}일`}</Text>
-                  </View>
-                </TouchableOpacity>
+                <ShadowInput
+                  placeholder="생년월일 8자리, 예시 : 20000523"
+                  num
+                  value={birthdayText}
+                  onChangeText={setBirthdayText}
+                  maxLength={8}
+                />
               </View>
             </View>
             <View style={styles.buttonContainer}>
@@ -166,7 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   inner: {
     width: "100%",

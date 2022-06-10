@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 20,
   },
   inner: {
     width: "100%",

@@ -9,6 +9,7 @@ const ShadowInput = ({
   secure,
   email,
   num,
+  maxLength,
 }) => {
   return (
     <View style={styles.container}>
@@ -23,6 +24,7 @@ const ShadowInput = ({
         autoCorrect={false}
         contextMenuHidden={true}
         textContentType="none"
+        maxLength={maxLength}
       />
     </View>
   );
