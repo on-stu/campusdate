@@ -9,11 +9,13 @@ import { TouchableOpacity } from "react-native";
 import { useContext, useMemo } from "react";
 import { UserContext } from "../../context/user";
 import BottomTabIcon from "../../components/BottomTabIcon";
+import SocketContext from "../../context/socket";
 
 const Tab = createBottomTabNavigator();
 
 function BottomTab({ navigation }) {
   const { userChatList, userInfo } = useContext(UserContext);
+  const socket = useContext(SocketContext);
 
   const getTotalNotCount = () => {
     let count = 0;
@@ -27,7 +29,10 @@ function BottomTab({ navigation }) {
     return count;
   };
 
-  const totalNotRead = useMemo(() => getTotalNotCount(), [userChatList]);
+  const totalNotRead = useMemo(
+    () => getTotalNotCount(),
+    [userChatList, socket]
+  );
   return (
     <Tab.Navigator
       screenOptions={{

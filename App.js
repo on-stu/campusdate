@@ -163,6 +163,7 @@ export default function App() {
   //notification
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
   const notificationListener = useRef();
   const responseListener = useRef();
 
@@ -177,14 +178,28 @@ export default function App() {
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
+        if (socket.disconnected) {
+          socket.connect();
+          const shouldJoin = [user.id, ...user.chatRooms];
+          shouldJoin.map((roomId) => {
+            socket.emit("join", roomId);
+          });
+          refreshChatList();
+        }
         setNotification(notification);
       });
 
     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        const url = response.notification.request.content.data.url;
-        Linking.openURL(url);
+        if (socket.disconnected) {
+          socket.connect();
+          const shouldJoin = [user.id, ...user.chatRooms];
+          shouldJoin.map((roomId) => {
+            socket.emit("join", roomId);
+          });
+          refreshChatList();
+        }
       });
 
     return () => {
@@ -194,6 +209,18 @@ export default function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  // useEffect(() => {
+  //   if (
+  //     lastNotificationResponse &&
+  //     lastNotificationResponse.notification.request.content.data.url &&
+  //     lastNotificationResponse.actionIdentifier ===
+  //       Notifications.DEFAULT_ACTION_IDENTIFIER
+  //   ) {
+  //     Linking.openURL(
+  //       lastNotificationResponse.notification.request.content.data.url
+  //     );
+  //   }
+  // }, [lastNotificationResponse]);
 
   useEffect(() => {
     if (
@@ -294,6 +321,7 @@ export default function App() {
     socket.on("accepted", (userInfo) => {
       setUser(userInfo);
     });
+    return () => socket.disconnect();
   }, [socket]);
 
   useEffect(() => {

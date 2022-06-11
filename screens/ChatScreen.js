@@ -19,7 +19,6 @@ import key from "../lib/key.json";
 import { Feather } from "@expo/vector-icons";
 import colors from "../lib/colors.json";
 import SocketContext from "../context/socket";
-import { useEffectOnce } from "../functions/useEffectOnce";
 import MyChat from "../components/MyChat";
 import { UserContext } from "../context/user";
 import YourChat from "../components/YourChat";
@@ -43,11 +42,10 @@ const ChatScreen = ({ route }) => {
 
   const socket = useContext(SocketContext);
 
-  const { userInfo, userChatList, setReadingScreen, readingScreen } =
-    useContext(UserContext);
+  const { userInfo, userChatList, setReadingScreen } = useContext(UserContext);
 
   const isAccepted = useMemo(
-    () => userInfo.accepted.includes(counterPartId),
+    () => userInfo?.accepted?.includes(counterPartId),
     [userInfo, counterPartId]
   );
 
@@ -117,11 +115,13 @@ const ChatScreen = ({ route }) => {
     if (socket.disconnected) {
       socket.connect();
     }
-    const shouldJoin = [userInfo.id, ...userInfo.chatRooms];
-    shouldJoin.map((roomId) => {
-      socket.emit("join", roomId);
-    });
-  }, [socket]);
+    if (userInfo) {
+      const shouldJoin = [userInfo?.id, ...userInfo?.chatRooms];
+      shouldJoin.map((roomId) => {
+        socket.emit("join", roomId);
+      });
+    }
+  }, [socket, AppState.currentState]);
 
   const onSendMessage = () => {
     socket.emit(
@@ -133,7 +133,7 @@ const ChatScreen = ({ route }) => {
     );
     sendPushNotification(
       profileInfo.userNotificationToken,
-      userInfo.accepted.includes(counterPartId)
+      userInfo?.accepted?.includes(counterPartId)
         ? userInfo.nickname
         : getBlurNickname(userInfo.nickname),
       message,
@@ -159,12 +159,23 @@ const ChatScreen = ({ route }) => {
           <TouchableWithoutFeedback>
             <>
               <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.pop()}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (navigation.canGoBack()) {
+                      navigation.pop();
+                    } else {
+                      navigation.reset({
+                        routes: [{ name: "BottomTab" }],
+                      });
+                    }
+                    console.log(navigation.canGoBack());
+                  }}
+                >
                   <Feather name="chevron-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
                   <Text style={styles.title}>
-                    {userInfo.accepted.includes(counterPartId)
+                    {userInfo?.accepted?.includes(counterPartId)
                       ? profileInfo?.nickname
                       : getBlurNickname(profileInfo?.nickname)}
                   </Text>
