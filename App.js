@@ -49,6 +49,8 @@ export default function App() {
         if (userInfo.status === 200) {
           setIsLogin(true);
           setFetchingDone(true);
+        } else {
+          setFetchingDone(true);
         }
       }
     } catch (error) {
@@ -215,18 +217,6 @@ export default function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-  // useEffect(() => {
-  //   if (
-  //     lastNotificationResponse &&
-  //     lastNotificationResponse.notification.request.content.data.url &&
-  //     lastNotificationResponse.actionIdentifier ===
-  //       Notifications.DEFAULT_ACTION_IDENTIFIER
-  //   ) {
-  //     Linking.openURL(
-  //       lastNotificationResponse.notification.request.content.data.url
-  //     );
-  //   }
-  // }, [lastNotificationResponse]);
 
   useEffect(() => {
     if (

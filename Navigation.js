@@ -54,7 +54,6 @@ const Stack = createStackNavigator();
 const prefix = ExpoLinking.createURL("/");
 
 export default function Navigation({ isLogin }) {
-  console.log(prefix);
   return (
     <NavigationContainer
       linking={{
