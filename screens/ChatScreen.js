@@ -38,6 +38,8 @@ const ChatScreen = ({ route }) => {
     params: { id },
   } = route;
 
+  console.log(route);
+
   const scrollViewRef = useRef(null);
 
   const socket = useContext(SocketContext);
@@ -164,9 +166,7 @@ const ChatScreen = ({ route }) => {
                     if (navigation.canGoBack()) {
                       navigation.pop();
                     } else {
-                      navigation.reset({
-                        routes: [{ name: "BottomTab" }],
-                      });
+                      navigation.replace("BottomTab");
                     }
                     console.log(navigation.canGoBack());
                   }}

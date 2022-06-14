@@ -47,9 +47,7 @@ import NoticeSearch from "./screens/notice/NoticeSearch";
 import ReviewSearch from "./screens/review/ReviewSearch";
 import AgreeTerms from "./screens/register/AgreeTerms";
 import ChangePassword from "./screens/my/ChangePassword";
-import { Linking } from "react-native";
 import * as ExpoLinking from "expo-linking";
-import * as Notifications from "expo-notifications";
 
 const Stack = createStackNavigator();
 

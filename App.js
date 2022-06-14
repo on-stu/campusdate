@@ -73,6 +73,9 @@ export default function App() {
         }
       );
       setUser(response.data);
+      setFetchingDone(true);
+    } else {
+      setFetchingDone(true);
     }
   };
 
@@ -199,6 +202,9 @@ export default function App() {
             socket.emit("join", roomId);
           });
           refreshChatList();
+          if (Linking.canOpenURL()) {
+            Linking.openURL(response.notification.request.content?.data?.url);
+          }
         }
       });
 
@@ -258,6 +264,8 @@ export default function App() {
           await refreshUser();
           if (expoPushToken) {
             await uploadToken();
+          } else {
+            setFetchingDone(true);
           }
         } else {
           setUser({});

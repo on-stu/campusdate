@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "com.codingssu.campusdate",
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
@@ -40,8 +40,7 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "softwareKeyboardLayoutMode": "pan",
-      "useNextNotificationsApi": true
+      "softwareKeyboardLayoutMode": "pan"
     },
     "androidStatusBar": {
       "backgroundColor": "#000000"
