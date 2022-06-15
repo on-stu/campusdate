@@ -14,6 +14,8 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Linking } from "react-native";
 
+SplashScreen.preventAutoHideAsync();
+
 //fonts
 const customFont = {
   WaterMelon: require("./assets/116watermelon.otf"),
@@ -204,9 +206,11 @@ export default function App() {
             socket.emit("join", roomId);
           });
           refreshChatList();
-          if (Linking.canOpenURL()) {
-            Linking.openURL(response.notification.request.content?.data?.url);
-          }
+        }
+        if (
+          Linking.canOpenURL(response.notification.request.content?.data?.url)
+        ) {
+          Linking.openURL(response.notification.request.content?.data?.url);
         }
       });
 
@@ -246,7 +250,6 @@ export default function App() {
   useEffect(() => {
     (async () => {
       try {
-        await SplashScreen.preventAutoHideAsync();
         await Font.loadAsync(customFont);
         await new Promise((resolve) => setTimeout(resolve, 2000));
         const token = await getValue("token");

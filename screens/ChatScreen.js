@@ -38,8 +38,6 @@ const ChatScreen = ({ route }) => {
     params: { id },
   } = route;
 
-  console.log(route);
-
   const scrollViewRef = useRef(null);
 
   const socket = useContext(SocketContext);

@@ -2,7 +2,7 @@
   "expo": {
     "name": "캠퍼스 데이트",
     "slug": "campusDate",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,7 +18,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.codingssu.campusdate",
-      "buildNumber": "0.1.8",
+      "buildNumber": "0.1.9",
       "supportsTablet": false,
       "icon": "./assets/iosIcon.png",
       "config": {
@@ -27,7 +27,7 @@
     },
     "android": {
       "package": "com.codingssu.campusdate",
-      "versionCode": 8,
+      "versionCode": 9,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
