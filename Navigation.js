@@ -48,6 +48,10 @@ import ReviewSearch from "./screens/review/ReviewSearch";
 import AgreeTerms from "./screens/register/AgreeTerms";
 import ChangePassword from "./screens/my/ChangePassword";
 import * as ExpoLinking from "expo-linking";
+import Report from "./screens/report/Report";
+import ReportPost from "./screens/report/ReportPost";
+import ReportDetail from "./screens/report/ReportDetail";
+import ReportSearch from "./screens/report/ReportSearch";
 
 const Stack = createStackNavigator();
 
@@ -118,6 +122,10 @@ export default function Navigation({ isLogin }) {
         <Stack.Screen name="EventPost" component={EventPost} />
         <Stack.Screen name="EventDetail" component={EventDetail} />
         <Stack.Screen name="EventSearch" component={EventSearch} />
+        <Stack.Screen name="Report" component={Report} />
+        <Stack.Screen name="ReportPost" component={ReportPost} />
+        <Stack.Screen name="ReportDetail" component={ReportDetail} />
+        <Stack.Screen name="ReportSearch" component={ReportSearch} />
         <Stack.Screen name="OpenSourceList" component={OpenSourceList} />
         <Stack.Screen name="OpenSourceDetail" component={OpenSourceDetail} />
         <Stack.Screen name="ServiceTerms" component={ServiceTerms} />

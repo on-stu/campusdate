@@ -6,7 +6,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
-  TouchableOpacity,
   Platform,
   Alert,
 } from "react-native";
@@ -20,7 +19,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import colors from "../../lib/colors.json";
 import Check from "../../components/Check";
 import { UserContext } from "../../context/user";
-import PopUp from "../../components/PopUp";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
 
 const BasicInfomation = ({ navigation }) => {

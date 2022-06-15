@@ -18,31 +18,31 @@ import { getValue } from "../../functions/secureStore";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "../../lib/colors.json";
 import Comment from "../../components/Comment";
-import { setFaq } from "../../redux/reducers/faqSlice";
-import { setFaqs, setFaqsById } from "../../redux/reducers/faqsSlice";
-import FaqContent from "../../components/FaqContent";
+import { setReport } from "../../redux/reducers/reportSlice";
+import { setReports, setReportsById } from "../../redux/reducers/reportsSlice";
 import { UserContext } from "../../context/user";
 import SafeAreaAndroid from "../../components/SafeAreaAndroid";
+import FaqContent from "../../components/FaqContent";
 
-const FaqDetail = ({ navigation }) => {
+const ReportDetail = ({ navigation }) => {
   const [author, setAuthor] = useState({});
   const [comment, setComment] = useState("");
   const { userInfo } = useContext(UserContext);
   const [dropMenuVisible, setDropMenuVisible] = useState(false);
 
-  const faq = useSelector((state) => state.faq);
-  const faqs = useSelector((state) => state.faqs);
+  const report = useSelector((state) => state.report);
+  const reports = useSelector((state) => state.reports);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (faq.authorId && author !== {}) {
+    if (report.authorId && author !== {}) {
       (async () => {
         const token = await getValue("token");
         const headers = {
           Authorization: `Token ${token}`,
         };
         const authorResponse = await axios.get(
-          `${key.API}/user/${faq.authorId}/`,
+          `${key.API}/user/${report.authorId}/`,
           {
             headers,
           }
@@ -50,7 +50,7 @@ const FaqDetail = ({ navigation }) => {
         setAuthor(authorResponse.data);
       })();
     }
-  }, [faq]);
+  }, [report]);
 
   const onCommentSubmit = async () => {
     try {
@@ -59,23 +59,23 @@ const FaqDetail = ({ navigation }) => {
         answer: comment,
         createdAt: new Date(),
       };
-      dispatch(setFaq({ answers: [...faq.answers, commentObj] }));
-      const response = await axios.put(`${key.API}/faq/${faq.id}/`, {
-        answers: [...faq.answers, commentObj],
+      dispatch(setReport({ answers: [...report.answers, commentObj] }));
+      const response = await axios.put(`${key.API}/report/${report.id}/`, {
+        answers: [...report.answers, commentObj],
         done: true,
       });
-      dispatch(setFaq(response.data));
-      dispatch(setFaqsById(response.data));
+      dispatch(setReport(response.data));
+      dispatch(setReportsById(response.data));
     } catch (error) {
       console.log(error);
     }
   };
 
   const onDelete = async () => {
-    const newState = faqs.filter((elm) => elm.id !== faq.id);
-    dispatch(setFaqs(newState));
+    const newState = reports.filter((elm) => elm.id !== report.id);
+    dispatch(setReports(newState));
     try {
-      const response = await axios.delete(`${key.API}/faq/${faq.id}/`);
+      const response = await axios.delete(`${key.API}/report/${report.id}/`);
       if (response.status === 204) {
         navigation.pop();
       }
@@ -84,10 +84,6 @@ const FaqDetail = ({ navigation }) => {
     }
   };
 
-  const onReport = () => {
-    navigation.navigate("ReportPost");
-    setDropMenuVisible(false);
-  };
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
@@ -102,7 +98,7 @@ const FaqDetail = ({ navigation }) => {
                   <Feather name="chevron-left" size={24} color="black" />
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
-                  <Text style={styles.title}>문의사항</Text>
+                  <Text style={styles.title}>신고내역</Text>
                 </View>
                 <View style={{ position: "relative" }}>
                   <TouchableOpacity
@@ -115,16 +111,9 @@ const FaqDetail = ({ navigation }) => {
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      {author.id === userInfo.id && (
-                        <TouchableOpacity onPress={onDelete}>
-                          <View style={styles.dropMenu}>
-                            <Text style={styles.deleteText}>삭제하기</Text>
-                          </View>
-                        </TouchableOpacity>
-                      )}
-                      <TouchableOpacity onPress={onReport}>
+                      <TouchableOpacity onPress={onDelete}>
                         <View style={styles.dropMenu}>
-                          <Text style={styles.deleteText}>신고하기</Text>
+                          <Text style={styles.deleteText}>삭제하기</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -135,7 +124,7 @@ const FaqDetail = ({ navigation }) => {
                 <FaqContent author={author} />
               </View>
               <View style={styles.commentsContainer}>
-                {faq?.answers?.map((item, i) => (
+                {report?.answers?.map((item, i) => (
                   <Comment
                     comment={item.answer}
                     key={i}
@@ -171,7 +160,7 @@ const FaqDetail = ({ navigation }) => {
   );
 };
 
-export default FaqDetail;
+export default ReportDetail;
 
 const styles = StyleSheet.create({
   container: {

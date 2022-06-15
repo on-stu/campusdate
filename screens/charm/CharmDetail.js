@@ -81,6 +81,10 @@ const CharmDetail = ({ navigation }) => {
       console.log(error);
     }
   };
+  const onReport = () => {
+    navigation.navigate("ReportPost");
+    setDropMenuVisible(false);
+  };
 
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
@@ -100,18 +104,22 @@ const CharmDetail = ({ navigation }) => {
                 </View>
                 <View style={{ position: "relative" }}>
                   <TouchableOpacity
-                    onPress={() =>
-                      author.id === userInfo.id &&
-                      setDropMenuVisible((prev) => !prev)
-                    }
+                    onPress={() => setDropMenuVisible((prev) => !prev)}
                   >
                     <Feather name="more-vertical" size={24} color="black" />
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      <TouchableOpacity onPress={onDelete}>
+                      {author.id === userInfo.id && (
+                        <TouchableOpacity onPress={onDelete}>
+                          <View style={styles.dropMenu}>
+                            <Text style={styles.deleteText}>삭제하기</Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
+                      <TouchableOpacity onPress={onReport}>
                         <View style={styles.dropMenu}>
-                          <Text style={styles.deleteText}>삭제하기</Text>
+                          <Text style={styles.deleteText}>신고하기</Text>
                         </View>
                       </TouchableOpacity>
                     </View>

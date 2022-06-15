@@ -9,6 +9,8 @@ import reviewSlice from "./reducers/reviewSlice";
 import reviewsSlice from "./reducers/reviewsSlice";
 import eventSlice from "./reducers/eventSlice";
 import eventsSlice from "./reducers/eventsSlice";
+import reportSlice from "./reducers/reportSlice";
+import reportsSlice from "./reducers/reportsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
     reviews: reviewsSlice,
     event: eventSlice,
     events: eventsSlice,
+    report: reportSlice,
+    reports: reportsSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

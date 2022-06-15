@@ -15,11 +15,8 @@ import Button from "../../components/Button";
 import { useState, useEffect } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import colors from "../../lib/colors.json";
-import BackButton from "../../components/BackButton";
-import { Picker } from "@react-native-picker/picker";
 import SelectButton from "../../components/SelectButton";
 import ShadowInput from "../../components/ShadowInput";
-import PopUp from "../../components/PopUp";
 import axios from "axios";
 import key from "../../lib/key.json";
 import emailValue from "../../lib/email.json";
@@ -34,7 +31,6 @@ const EmailVerification = ({ navigation }) => {
   const [university, setUniversity] = useState("부산대학교");
   const [univEmail, setUnivEmail] = useState("");
   const [verifiedEmail, setVerifiedEmail] = useState("");
-  const [visible, setVisible] = useState(false);
   const { setUserInfo, userInfo } = useContext(UserContext);
   const socket = useContext(SocketContext);
   useEffect(() => {
@@ -114,20 +110,6 @@ const EmailVerification = ({ navigation }) => {
 
   return (
     <>
-      <PopUp visible={visible} setVisible={setVisible}>
-        <View style={{ width: 300, height: 300, zIndex: 11 }}>
-          <Picker
-            selectedValue={university}
-            onValueChange={(itemValue, _) => setUniversity(itemValue)}
-          >
-            <Picker.Item
-              label="대학을 선택해주세요"
-              value="대학을 선택해주세요"
-            />
-            <Picker.Item label="부산대학교" value="부산대학교" />
-          </Picker>
-        </View>
-      </PopUp>
       <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.container}

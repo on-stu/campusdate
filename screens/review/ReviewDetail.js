@@ -81,6 +81,11 @@ const ReviewDetail = ({ navigation }) => {
       console.log(error);
     }
   };
+  const onReport = () => {
+    navigation.navigate("ReportPost");
+    setDropMenuVisible(false);
+  };
+
   return (
     <SafeAreaView style={SafeAreaAndroid.AndroidSafeArea}>
       <KeyboardAvoidingView
@@ -108,9 +113,16 @@ const ReviewDetail = ({ navigation }) => {
                   </TouchableOpacity>
                   {dropMenuVisible && (
                     <View style={styles.dropMenuContainer}>
-                      <TouchableOpacity onPress={onDelete}>
+                      {author.id === userInfo.id && (
+                        <TouchableOpacity onPress={onDelete}>
+                          <View style={styles.dropMenu}>
+                            <Text style={styles.deleteText}>삭제하기</Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
+                      <TouchableOpacity onPress={onReport}>
                         <View style={styles.dropMenu}>
-                          <Text style={styles.deleteText}>삭제하기</Text>
+                          <Text style={styles.deleteText}>신고하기</Text>
                         </View>
                       </TouchableOpacity>
                     </View>
