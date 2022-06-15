@@ -40,7 +40,7 @@ const ReportPost = ({ navigation }) => {
   }, [title, content]);
 
   const onSubmit = async () => {
-    const response = await axios.post(`${key.API}/faq/`, {
+    const response = await axios.post(`${key.API}/report/`, {
       title,
       content,
       isSecret: true,
