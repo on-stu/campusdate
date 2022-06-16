@@ -104,10 +104,7 @@ const ReviewDetail = ({ navigation }) => {
                 </View>
                 <View style={{ position: "relative" }}>
                   <TouchableOpacity
-                    onPress={() =>
-                      author.id === userInfo.id &&
-                      setDropMenuVisible((prev) => !prev)
-                    }
+                    onPress={() => setDropMenuVisible((prev) => !prev)}
                   >
                     <Feather name="more-vertical" size={24} color="black" />
                   </TouchableOpacity>
