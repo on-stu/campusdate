@@ -1,7 +1,7 @@
-export const getTimeString = (createdAt) => {
+export const getTimeString = (createdAt: number): string => {
   const createdTime = new Date(createdAt);
   const now = new Date();
-  let timeString;
+  let timeString: string;
 
   if (
     now.getFullYear() === createdTime.getFullYear() &&

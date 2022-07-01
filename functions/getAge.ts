@@ -1,4 +1,4 @@
-function addHours(numOfHours, date = new Date()) {
+function addHours(numOfHours: number, date = new Date()): Date {
   const dateCopy = new Date(date.getTime());
 
   dateCopy.setTime(dateCopy.getTime() + numOfHours * 60 * 60 * 1000);
@@ -6,7 +6,7 @@ function addHours(numOfHours, date = new Date()) {
   return dateCopy;
 }
 
-export const getAge = (birthday) => {
+export const getAge = (birthday: number) => {
   const birthdayDate = new Date(birthday);
   const now = new Date();
   const koreanDate = addHours(9, birthdayDate);

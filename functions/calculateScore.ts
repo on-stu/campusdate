@@ -1,11 +1,18 @@
 import scores from "../lib/scores.json";
 
-export const calculateIdeals = (idealsArray) => {
+type scoreObjectType = {
+  [key: string]: Array<number>;
+};
+
+const ideals: scoreObjectType = scores.ideals;
+const hobbies: scoreObjectType = scores.hobbies;
+
+export const calculateIdeals = (idealsArray: Array<string>): Array<number> => {
   let resultArray = [0, 0, 0, 0, 0, 0, 0];
   let tempArray = [];
   for (let i = 0; i < idealsArray.length; i++) {
     const tempIdeal = idealsArray[i];
-    const idealScore = scores.ideals[tempIdeal];
+    const idealScore: Array<number> = ideals[tempIdeal];
     tempArray.push(idealScore);
   }
   for (let i = 0; i < tempArray.length; i++) {
@@ -19,12 +26,14 @@ export const calculateIdeals = (idealsArray) => {
   return resultArray;
 };
 
-export const calculateHobbies = (hobbiesArray) => {
+export const calculateHobbies = (
+  hobbiesArray: Array<string>
+): Array<number> => {
   let resultArray = [0, 0, 0, 0];
   let tempArray = [];
   for (let i = 0; i < hobbiesArray.length; i++) {
     const tempHobbies = hobbiesArray[i];
-    const hobbyScore = scores.hobbies[tempHobbies];
+    const hobbyScore = hobbies[tempHobbies];
     tempArray.push(hobbyScore);
   }
   for (let i = 0; i < tempArray.length; i++) {
