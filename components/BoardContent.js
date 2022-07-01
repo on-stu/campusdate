@@ -12,7 +12,7 @@ import axios from "axios";
 import { setNoticeById } from "../redux/reducers/noticesSlice";
 import { UserContext } from "../context/user";
 
-const BoardContent = ({ author, fullVisible }) => {
+const BoardContent = ({ author }) => {
   const [timeString, setTimeString] = useState("");
   const { userInfo } = useContext(UserContext);
   const notice = useSelector((state) => state.notice);

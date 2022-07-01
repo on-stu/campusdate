@@ -1,9 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import { TouchableOpacity } from "react-native";
 import colors from "../lib/colors.json";
 
-const BackButton = ({ text, onPress }) => {
+type backButtonPropTypes = {
+  text: string;
+  onPress: () => {};
+};
+
+const BackButton: FC<backButtonPropTypes> = ({ text, onPress }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.button}>
