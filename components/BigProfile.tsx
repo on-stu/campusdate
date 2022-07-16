@@ -1,8 +1,13 @@
-import React from "react";
+import React, { FC } from "react";
 import { View, Image, StyleSheet } from "react-native";
 import colors from "../lib/colors.json";
 
-const BigProfile = ({ uri, fullVisible }) => {
+type BigProfileType = {
+  uri: string;
+  fullVisible: boolean;
+};
+
+const BigProfile: FC<BigProfileType> = ({ uri, fullVisible }) => {
   return (
     <View style={styles.circleContainer}>
       {uri && (

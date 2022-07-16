@@ -1,4 +1,4 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import noticeReducer from "./reducers/noticeSlice";
 import noticesReduceer from "./reducers/noticesSlice";
 import faqSlice from "./reducers/faqSlice";
