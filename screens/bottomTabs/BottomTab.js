@@ -1,21 +1,27 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Chat from "./Chat";
-import Home from "./Home";
+import Home from "./NewHome";
 import Notification from "./Notification";
 import Setting from "./Setting";
 import { Feather } from "@expo/vector-icons";
 import colors from "../../lib/colors.json";
-import { TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity, useColorScheme, View } from "react-native";
 import { useContext, useMemo } from "react";
 import { UserContext } from "../../context/user";
-import BottomTabIcon from "../../components/BottomTabIcon";
+import HomeIcon from "../../assets/bottomTab/homeIcon.png";
 import SocketContext from "../../context/socket";
+import SettingsIcon from "../../svg/SettingsIcon";
+import ProfileIcon from "../../svg/ProfileIcon";
+import ChatIcon from "../../svg/ChatIcon";
+import NotificationIcon from "../../svg/NotificationIcon";
 
 const Tab = createBottomTabNavigator();
 
 function BottomTab({ navigation }) {
   const { userChatList, userInfo } = useContext(UserContext);
   const socket = useContext(SocketContext);
+
+  const theme = useColorScheme();
 
   const getTotalNotCount = () => {
     let count = 0;
@@ -38,22 +44,23 @@ function BottomTab({ navigation }) {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarStyle: { backgroundColor: colors.pink },
+        tabBarStyle: {
+          backgroundColor: theme === "light" ? colors.white : colors.black,
+          borderTopWidth: 0,
+          paddingHorizontal: 8,
+          paddingVertical: 16,
+          paddingBottom: 40,
+        },
+
         tabBarButton: (props) => <TouchableOpacity {...props} />,
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="Profile"
         children={() => <Home stackNavigation={navigation} />}
         options={{
           tabBarIcon: ({ focused }) => {
-            return (
-              <Feather
-                name="home"
-                size={24}
-                color={focused ? "white" : colors.darkgray}
-              />
-            );
+            return <ProfileIcon />;
           },
         }}
       />
@@ -64,12 +71,30 @@ function BottomTab({ navigation }) {
         )}
         options={{
           tabBarIcon: ({ focused }) => {
+            return <ChatIcon />;
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={Home}
+        options={{
+          tabBarIcon: ({ focused }) => {
             return (
-              <BottomTabIcon
-                iconName="chat"
-                focused={focused}
-                totalNotRead={totalNotRead}
-              />
+              <View
+                style={{
+                  position: "absolute",
+                  width: 70,
+                  height: 70,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: colors.black,
+                  borderRadius: 45,
+                  bottom: -10,
+                }}
+              >
+                <Image source={HomeIcon} style={{ width: 70, height: 70 }} />
+              </View>
             );
           },
         }}
@@ -80,13 +105,7 @@ function BottomTab({ navigation }) {
         stackNavigation={navigation}
         options={{
           tabBarIcon: ({ focused }) => {
-            return (
-              <Feather
-                name="bell"
-                size={24}
-                color={focused ? "white" : colors.darkgray}
-              />
-            );
+            return <NotificationIcon />;
           },
         }}
       />
@@ -95,13 +114,7 @@ function BottomTab({ navigation }) {
         children={() => <Setting stackNavigation={navigation} />}
         options={{
           tabBarIcon: ({ focused }) => {
-            return (
-              <Feather
-                name="settings"
-                size={24}
-                color={focused ? "white" : colors.darkgray}
-              />
-            );
+            return <SettingsIcon />;
           },
         }}
       />

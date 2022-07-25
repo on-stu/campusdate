@@ -1,4 +1,4 @@
-import { StyleSheet, Platform, StatusBar } from "react-native";
+import { StyleSheet, Platform, StatusBar, useColorScheme } from "react-native";
 
 export default StyleSheet.create({
   AndroidSafeArea: {

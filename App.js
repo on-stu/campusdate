@@ -11,7 +11,7 @@ import key from "./lib/key.json";
 import SocketContext, { socket } from "./context/socket";
 import { UserContext } from "./context/user";
 import * as Notifications from "expo-notifications";
-import { Linking } from "react-native";
+import { Linking, useColorScheme } from "react-native";
 import { registerForPushNotificationsAsync } from "./functions/expoNotification";
 
 SplashScreen.preventAutoHideAsync();
@@ -331,6 +331,8 @@ export default function App() {
     }
   }, [isLoading]);
 
+  const theme = useColorScheme();
+
   return (
     <>
       <UserContext.Provider value={UserValue}>
@@ -340,7 +342,7 @@ export default function App() {
           </Provider>
         </SocketContext.Provider>
       </UserContext.Provider>
-      <StatusBar style="dark" />
+      <StatusBar style={theme === "light" ? "dark" : "light"} />
     </>
   );
 }

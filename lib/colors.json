@@ -3,5 +3,8 @@
   "purple": "#6C5CE7",
   "darkgray": "#636E72",
   "gray": "#DFE6E9",
-  "red": "#FF7675"
+  "red": "#FF7675",
+  "black": "#000000",
+  "white": "#FFFFFF",
+  "lightblack": "#1A1A1A"
 }

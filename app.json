@@ -5,7 +5,8 @@
     "version": "0.2.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+
     "scheme": "campusdate",
     "splash": {
       "image": "./assets/splash.png",
@@ -23,7 +24,8 @@
       "icon": "./assets/iosIcon.png",
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "userInterfaceStyle": "automatic"
     },
     "android": {
       "package": "com.codingssu.campusdate",
@@ -40,7 +42,8 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "softwareKeyboardLayoutMode": "pan"
+      "softwareKeyboardLayoutMode": "pan",
+      "userInterfaceStyle": "automatic"
     },
     "androidStatusBar": {
       "backgroundColor": "#000000"
